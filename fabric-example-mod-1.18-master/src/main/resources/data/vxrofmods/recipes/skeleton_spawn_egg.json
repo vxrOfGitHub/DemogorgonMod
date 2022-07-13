@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#D#",
+    "DBD",
+    "#D#"
+  ],
+  "key": {
+    "B": {
+      "item": "vxrofmods:foundation_egg"
+    },
+    "#": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "D": {
+      "item": "minecraft:bone_block"
+    }
+  },
+  "result": {
+    "item": "minecraft:skeleton_spawn_egg"
+  }
+}

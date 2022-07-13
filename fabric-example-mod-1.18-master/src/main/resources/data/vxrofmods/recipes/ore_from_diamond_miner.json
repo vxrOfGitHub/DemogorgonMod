@@ -1,0 +1,11 @@
+{
+  "type": "vxrofmods:diamond_miner",
+  "ingredients": [
+    {
+      "item": "vxrofmods:dream_star"
+    }
+  ],
+  "output": {
+    "item": "minecraft:diamond"
+  }
+}

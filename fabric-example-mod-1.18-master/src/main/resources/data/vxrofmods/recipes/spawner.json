@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#D#",
+    "DBD",
+    "#D#"
+  ],
+  "key": {
+    "B": {
+      "tag": "c:spawn_ingot"
+    },
+    "#": {
+      "item": "minecraft:blaze_rod"
+    },
+    "D": {
+      "item": "minecraft:iron_bars"
+    }
+  },
+  "result": {
+    "item": "minecraft:spawner"
+  }
+}

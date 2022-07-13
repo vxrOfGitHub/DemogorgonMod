@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "vxrofmods",
+  "version": "${version}",
+
+  "name": "WonderWorlds 2 Mods",
+  "description": "This is an example description! Tell everyone what your mod is about!",
+  "authors": [
+    "vxr!"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+
+  "license": "MIT",
+  "icon": "assets/modid/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.vxr.vxrofmods.WW2Mod"
+    ],
+    "client": [
+      "net.vxr.vxrofmods.WW2ClientMod"
+    ]
+  },
+  "mixins": [
+    "vxrofmods.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.6",
+    "fabric": "*",
+    "minecraft": "~1.18.2",
+    "java": ">=17",
+    "fabric-key-binding-api-v1": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}

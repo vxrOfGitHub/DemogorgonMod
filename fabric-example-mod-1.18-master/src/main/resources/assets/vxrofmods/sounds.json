@@ -1,0 +1,25 @@
+{
+  "demogorgon_idle": {
+    "subtitle": "vxrofmods.demogorgon_idle",
+    "sounds": [
+      "vxrofmods:demogorgon_idle_1",
+      "vxrofmods:demogorgon_idle_2",
+      "vxrofmods:demogorgon_idle_3"
+    ]
+  },
+
+  "demogorgon_hurt": {
+    "subtitle": "vxrofmods.demogorgon_hurt",
+    "sounds": [
+      "vxrofmods:demogorgon_hurt"
+    ]
+  },
+
+  "demogorgon_death": {
+    "subtitle": "vxrofmods.demogorgon_death",
+    "sounds": [
+      "vxrofmods:demogorgon_death"
+    ]
+  }
+
+}

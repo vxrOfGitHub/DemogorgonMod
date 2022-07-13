@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DDD",
+    "#B#",
+    "#D#"
+  ],
+  "key": {
+    "B": {
+      "item": "vxrofmods:heart_of_the_sea"
+    },
+    "#": {
+      "item": "minecraft:netherite_scrap"
+    },
+    "D": {
+      "item": "vxrofmods:foundation_egg"
+    }
+  },
+  "result": {
+    "item": "minecraft:spawn_ingot"
+  }
+}

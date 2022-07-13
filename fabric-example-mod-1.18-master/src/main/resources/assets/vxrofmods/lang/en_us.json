@@ -1,0 +1,42 @@
+{
+  "item.vxrofmods.spawn_ingot": "Spawn Ingot",
+  "item.vxrofmods.dream_star": "Dream Star",
+  "item.vxrofmods.waffle": "Waffle",
+  "item.vxrofmods.foundation_egg": "Foundation Egg",
+  "item.vxrofmods.rare_egg": "Rare Egg",
+  "item.vxrofmods.dowsing_rod": "Dowsing Rod",
+  "item.vxrofmods.dowsing_rod.no_valuables": "No Valuables found",
+  "item.vxrofmods.dowsing_rod.tooltip.shift": "Right Click to find valuables",
+  "item.vxrofmods.dowsing_rod.tooltip": "Press §eSHIFT§r for more Information",
+  "item.vxrofmods.dream_pickaxe": "Dream Pickaxe",
+  "item.vxrofmods.dream_axe.tooltip.shift": "Destroys all Wooden Block attached to each other",
+  "item.vxrofmods.dream_axe.tooltip": "Press §eSHIFT§r for more Information",
+  "item.vxrofmods.dream_axe.no_break": "No attached Wood to break",
+  "item.vxrofmods.dream_axe": "Dream Axe",
+  "item.vxrofmods.dream_sword": "Dream Sword",
+  "item.vxrofmods.dream_helmet": "Dream Helmet",
+  "item.vxrofmods.dream_chestplate": "Dream Chestplate",
+  "item.vxrofmods.dream_leggings": "Dream Leggings",
+  "item.vxrofmods.dream_boots": "Dream Boots",
+  "item.vxrofmods.demogorgon_spawn_egg": "Demogorgon Spawn Egg",
+
+  "block.vxrofmods.test_block": "Test Block",
+  "block.vxrofmods.speedy_block": "Speedy Block",
+  "block.vxrofmods.diamond_miner_block": "Diamond Miner",
+
+  "itemGroup.vxrofmods.custom_mods": "WonderWorlds 2",
+
+  "key.vxrofmods.jetpack": "Use Jetpack",
+
+  "category.vxrofmods.ww2mods": "Wonder Worlds 2 Mods",
+
+  "effect.vxrofmods.jetpack": "Jetpack",
+
+  "entity.vxrofmods.demogorgon": "Demogorgon",
+
+  "vxrofmods.demogorgon_idle": "Strange Creature growls",
+  "vxrofmods.demogorgon_hurt": "Strange Creature takes damage",
+  "vxrofmods.demogorgon_death": "Strange Creature died",
+
+  "tooltip.vxrofmods.speedy_block": "Makes you fast, idiot"
+}
