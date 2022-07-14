@@ -49,7 +49,7 @@ import java.util.UUID;
 public class DemogorgonEntity extends HostileEntity implements IAnimatable{
     private AnimationFactory factory = new AnimationFactory(this);
 
-    protected DemogorgonEntity(EntityType<? extends HostileEntity> entityType, World world) {
+    public DemogorgonEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
     }
 

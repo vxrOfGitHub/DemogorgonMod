@@ -7,7 +7,7 @@ import net.minecraft.util.Identifier;
 import net.vxr.vxrofmods.WW2Mod;
 
 import net.minecraft.util.registry.Registry;
-import net.vxr.vxrofmods.entity.custom.ModEntities;
+import net.vxr.vxrofmods.entity.ModEntities;
 import net.vxr.vxrofmods.item.custom.*;
 import net.vxr.vxrofmods.sound.ModSounds;
 
@@ -57,7 +57,11 @@ public class ModItems {
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
     public static final Item DEMOGORGON_SPAWN_EGG = registerItem("demogorgon_spawn_egg",
-            new SpawnEggItem(ModEntities.DEMOGORGON,0x820000, 0xd4d4d4,
+            new SpawnEggItem(ModEntities.DEMOGORGON,0x707070, 0x755b5b,
+                    new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
+
+    public static final Item PENGUIN_SPAWN_EGG = registerItem("penguin_spawn_egg",
+            new SpawnEggItem(ModEntities.PENGUIN_AVATAR,0x46487d, 0xffffff,
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
     public static final Item DREAM_BOW = registerItem("dream_bow",

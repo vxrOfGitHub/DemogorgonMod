@@ -11,10 +11,10 @@ import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.screen.ScreenHandler;
 import net.vxr.vxrofmods.block.ModBlocks;
 import net.vxr.vxrofmods.entity.client.DemogorgonRenderer;
-import net.vxr.vxrofmods.entity.custom.ModEntities;
+import net.vxr.vxrofmods.entity.ModEntities;
+import net.vxr.vxrofmods.entity.client.PenguinAvatarRenderer;
 import net.vxr.vxrofmods.screen.DiamondMinerScreen;
 import net.vxr.vxrofmods.screen.ModScreenHandlers;
 import net.vxr.vxrofmods.util.ModModelPredicateProvider;
@@ -28,6 +28,7 @@ public class WW2ClientMod implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         EntityRendererRegistry.register(ModEntities.DEMOGORGON, DemogorgonRenderer::new);
+        EntityRendererRegistry.register(ModEntities.PENGUIN_AVATAR, PenguinAvatarRenderer::new);
 
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.DIAMOND_MINER_BLOCK, RenderLayer.getCutout());
 

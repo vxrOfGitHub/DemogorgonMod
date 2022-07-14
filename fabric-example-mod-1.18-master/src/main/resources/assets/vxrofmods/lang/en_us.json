@@ -19,6 +19,7 @@
   "item.vxrofmods.dream_leggings": "Dream Leggings",
   "item.vxrofmods.dream_boots": "Dream Boots",
   "item.vxrofmods.demogorgon_spawn_egg": "Demogorgon Spawn Egg",
+  "item.vxrofmods.penguin_spawn_egg": "Penguin Spawn Egg",
 
   "item.vxrofmods.dream_bow": "Dream Bow",
 
@@ -35,6 +36,7 @@
   "effect.vxrofmods.jetpack": "Jetpack",
 
   "entity.vxrofmods.demogorgon": "Demogorgon",
+  "entity.vxrofmods.penguin_avatar": "Penguin",
 
   "vxrofmods.demogorgon_idle": "Strange Creature growls",
   "vxrofmods.demogorgon_hurt": "Strange Creature takes damage",

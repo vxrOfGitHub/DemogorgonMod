@@ -6,10 +6,8 @@ import net.fabricmc.fabric.mixin.object.builder.SpawnRestrictionAccessor;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.world.Heightmap;
-import net.minecraft.world.biome.Biome;
-import net.vxr.vxrofmods.entity.custom.ModEntities;
+import net.vxr.vxrofmods.entity.ModEntities;
 
 public class ModEntitySpawn {
     public static void addEntitySpawn() {
