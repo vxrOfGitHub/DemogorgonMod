@@ -19,6 +19,6 @@ public class ModEntities {
     public static final EntityType<vxrPenguinAvatarEntity> PENGUIN_AVATAR = Registry.register(
             Registry.ENTITY_TYPE, new Identifier(WW2Mod.MOD_ID, "penguin_avatar"),
             FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, vxrPenguinAvatarEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.4f, 0.6f)).build());
+                    .dimensions(EntityDimensions.fixed(0.4f, 0.55f)).build());
 
 }
