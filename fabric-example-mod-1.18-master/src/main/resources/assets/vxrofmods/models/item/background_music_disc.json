@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "vxrofmods:item/background_music_disc"
+  }
+}

@@ -9,6 +9,7 @@ import net.vxr.vxrofmods.WW2Mod;
 import net.minecraft.util.registry.Registry;
 import net.vxr.vxrofmods.entity.custom.ModEntities;
 import net.vxr.vxrofmods.item.custom.*;
+import net.vxr.vxrofmods.sound.ModSounds;
 
 public class ModItems {
     public static final Item Spawn_Ingot = registerItem("spawn_ingot",
@@ -58,6 +59,13 @@ public class ModItems {
     public static final Item DEMOGORGON_SPAWN_EGG = registerItem("demogorgon_spawn_egg",
             new SpawnEggItem(ModEntities.DEMOGORGON,0x820000, 0xd4d4d4,
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
+
+    public static final Item DREAM_BOW = registerItem("dream_bow",
+            new BowItem(new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxDamage(1000)));
+
+    public static final Item BACKGROUND_MUSIC_DISC = registerItem("background_music_disc",
+            new ModMusicDiskItem(7, ModSounds.BACKGROUND_MUSIC,
+                    new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
 
 
     private static Item registerItem(String name, Item item) {

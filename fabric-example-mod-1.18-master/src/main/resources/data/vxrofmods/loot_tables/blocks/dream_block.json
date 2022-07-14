@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "vxrofmods:test_block"
+          "name": "vxrofmods:dream_block"
         }
       ],
       "conditions": [

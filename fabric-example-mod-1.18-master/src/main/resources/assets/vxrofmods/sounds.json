@@ -20,6 +20,14 @@
     "sounds": [
       "vxrofmods:demogorgon_death"
     ]
-  }
+  },
 
+  "background_music": {
+    "sounds": [
+      {
+        "name": "vxrofmods:background_music",
+        "stream": true
+      }
+    ]
+  }
 }

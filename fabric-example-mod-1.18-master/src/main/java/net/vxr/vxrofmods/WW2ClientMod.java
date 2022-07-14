@@ -17,6 +17,7 @@ import net.vxr.vxrofmods.entity.client.DemogorgonRenderer;
 import net.vxr.vxrofmods.entity.custom.ModEntities;
 import net.vxr.vxrofmods.screen.DiamondMinerScreen;
 import net.vxr.vxrofmods.screen.ModScreenHandlers;
+import net.vxr.vxrofmods.util.ModModelPredicateProvider;
 import org.lwjgl.glfw.GLFW;
 
 @Environment(EnvType.CLIENT)
@@ -28,11 +29,12 @@ public class WW2ClientMod implements ClientModInitializer {
     public void onInitializeClient() {
         EntityRendererRegistry.register(ModEntities.DEMOGORGON, DemogorgonRenderer::new);
 
-
-
-
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.DIAMOND_MINER_BLOCK, RenderLayer.getCutout());
+
         ScreenRegistry.register(ModScreenHandlers.DIAMOND_MINER_SCREEN_HANDLER, DiamondMinerScreen::new);
+
+        ModModelPredicateProvider.registerModModels();
+
 
         // Keybinds
         Jetpack = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.vxrofmods.jetpack", InputUtil.Type.KEYSYM,

@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-
+    "vxrofmods:dream_block",
+    "vxrofmods:diamond_miner_block"
   ]
 }

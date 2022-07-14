@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "vxrofmods:block/test_block"
+    "all": "vxrofmods:block/dream_block_off"
   }
 }

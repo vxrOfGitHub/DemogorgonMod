@@ -10,6 +10,7 @@ public class ModSounds {
     public static SoundEvent DEMOGORGON_IDLE = registerSoundEvent("demogorgon_idle");
     public static SoundEvent DEMOGORGON_HURT = registerSoundEvent("demogorgon_hurt");
     public static SoundEvent DEMOGORGON_DEATH = registerSoundEvent("demogorgon_death");
+    public static SoundEvent BACKGROUND_MUSIC = registerSoundEvent("background_music");
 
 
     private static SoundEvent registerSoundEvent(String name) {
