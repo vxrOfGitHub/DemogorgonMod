@@ -1,5 +1,7 @@
 package net.vxr.vxrofmods.entity.custom;
 
+import net.minecraft.entity.Bucketable;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -12,11 +14,13 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.resource.ResourceManager;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
@@ -24,6 +28,9 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+import net.vxr.vxrofmods.block.custom.DreamBlock;
+import net.vxr.vxrofmods.item.ModItems;
+import net.vxr.vxrofmods.item.custom.DreamSword;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -61,6 +68,7 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
         this.goalSelector.add(0, new SwimGoal(this));
         this.goalSelector.add(1, new SitGoal(this));
         this.goalSelector.add(2, new EscapeDangerGoal(this, 1.25));
+        this.goalSelector.add(3, new FollowOwnerGoal(this, 1.0, 10.0F, 2.0F, false));
         this.goalSelector.add(4, new LookAtEntityGoal(this, PlayerEntity.class, 10));
         this.goalSelector.add(5, new LookAroundGoal(this));
     }
@@ -116,6 +124,8 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getStackInHand(hand);
         Item item = itemstack.getItem();
+        Item penguinInInventory = ModItems.PENGUIN_SPAWN_EGG;
+        ItemStack penguinInInventoryStack = new ItemStack(penguinInInventory);
 
         Item itemForTaming = Items.COD;
 
@@ -142,6 +152,12 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
 
         if(isTamed() && !this.world.isClient() && hand == Hand.MAIN_HAND) {
             setSit(!isSitting());
+            return ActionResult.SUCCESS;
+        }
+
+        if (isTamed() && !this.world.isClient() && player.getPose() == EntityPose.CROUCHING && itemstack == ItemStack.EMPTY) {
+            player.setStackInHand(hand, penguinInInventoryStack);
+            this.discard();
             return ActionResult.SUCCESS;
         }
 
