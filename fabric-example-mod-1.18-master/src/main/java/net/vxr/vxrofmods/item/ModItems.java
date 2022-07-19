@@ -71,6 +71,10 @@ public class ModItems {
             new ModMusicDiskItem(7, ModSounds.BACKGROUND_MUSIC,
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
 
+    public static final Item PENGUIN_HELMET = registerItem("penguin_helmet",
+            new PenguinAvatarHelmetItem(ModArmorMaterials.Dream, EquipmentSlot.HEAD,
+                    new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
+
 
     private static Item registerItem(String name, Item item) {
         return Registry.register(Registry.ITEM, new Identifier(WW2Mod.MOD_ID, name), item);

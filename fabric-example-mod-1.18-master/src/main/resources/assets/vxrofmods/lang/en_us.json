@@ -10,8 +10,8 @@
   "item.vxrofmods.dowsing_rod.tooltip": "Press §eSHIFT§r for more Information",
   "item.vxrofmods.dream_pickaxe": "Dream Pickaxe",
   "item.vxrofmods.dream_axe.tooltip.shift": "Destroys all Wooden Block attached to each other",
-  "item.vxrofmods.dream_axe.tooltip": "Press §eSHIFT§r for more Information",
-  "item.vxrofmods.dream_axe.no_break": "No attached Wood to break",
+  "item.vxrofmods.dream_axe.tooltip": "Press §bSHIFT§r for more Information",
+  "item.vxrofmods.dream_axe.no_wood": "No Wood",
   "item.vxrofmods.dream_axe": "Dream Axe",
   "item.vxrofmods.dream_sword": "Dream Sword",
   "item.vxrofmods.dream_helmet": "Dream Helmet",
@@ -20,6 +20,8 @@
   "item.vxrofmods.dream_boots": "Dream Boots",
   "item.vxrofmods.demogorgon_spawn_egg": "Demogorgon Spawn Egg",
   "item.vxrofmods.penguin_spawn_egg": "Penguin Spawn Egg",
+  "item.vxrofmods.penguin_helmet": "Penguin",
+
 
   "item.vxrofmods.dream_bow": "Dream Bow",
 

@@ -124,7 +124,7 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getStackInHand(hand);
         Item item = itemstack.getItem();
-        Item penguinInInventory = ModItems.PENGUIN_SPAWN_EGG;
+        Item penguinInInventory = ModItems.PENGUIN_HELMET;
         ItemStack penguinInInventoryStack = new ItemStack(penguinInInventory);
 
         Item itemForTaming = Items.COD;
@@ -155,8 +155,8 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
             return ActionResult.SUCCESS;
         }
 
-        if (isTamed() && !this.world.isClient() && player.getPose() == EntityPose.CROUCHING && itemstack == ItemStack.EMPTY) {
-            player.setStackInHand(hand, penguinInInventoryStack);
+        if (isTamed() && !this.world.isClient() && player.getPose() == EntityPose.CROUCHING) {
+            player.giveItemStack(penguinInInventoryStack);
             this.discard();
             return ActionResult.SUCCESS;
         }
