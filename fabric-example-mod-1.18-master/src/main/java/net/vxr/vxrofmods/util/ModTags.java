@@ -18,6 +18,9 @@ public class ModTags {
         public static final TagKey<Block> DREAM_AXE_DETECTABLE_BLOCKS =
                 createTag("dream_axe_detectable_blocks");
 
+        public static final TagKey<Block> DREAM_PICKAXE_DETECTABLE_BLOCKS =
+                createTag("dream_pickaxe_detectable_blocks");
+
         private static TagKey<Block> createTag(String name) {
             return TagKey.of(Registry.BLOCK_KEY,new Identifier(WW2Mod.MOD_ID, name));
         }

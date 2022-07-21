@@ -44,8 +44,6 @@ public class DreamAxeItem extends AxeItem {
             breakBlockSouth(world, pos);
             breakBlockWest(world, pos);
         }
-
-
         return super.postMine(stack, world, state, pos, miner);
     }
 
@@ -132,39 +130,6 @@ public class DreamAxeItem extends AxeItem {
                 break;
             }
         }
-    }
-
-    @Override
-    public ActionResult useOnBlock(ItemUsageContext context) {
-        if(context.getWorld().isClient()) {
-            BlockPos positionClicked = context.getBlockPos();
-            PlayerEntity player = context.getPlayer();
-            boolean foundBlock = false;
-
-            for(int i = 0; i <= positionClicked.getY() + 64; i++) {
-                Block blockBelow = context.getWorld().getBlockState(positionClicked.down(i)).getBlock();
-
-                if(isValuableBlock(blockBelow)) {
-                    outputValuableCoordinates(positionClicked.down(i), player, blockBelow);
-                    foundBlock = true;
-                    break;
-                }
-            }
-
-            if(!foundBlock) {
-                player.sendMessage(new TranslatableText("item.vxrofmods.dream_axe.no_wood"), false);
-            }
-        }
-
-        context.getStack().damage(1, context.getPlayer(),
-                (player) -> player.sendToolBreakStatus(player.getActiveHand()));
-
-        return super.useOnBlock(context);
-    }
-
-    private void outputValuableCoordinates(BlockPos blockPos, PlayerEntity player, Block blockBelow) {
-        player.sendMessage(new LiteralText("Found " + blockBelow.asItem().getName().getString() + " at: " +
-                "(" + blockPos.getX() + ", " + blockPos.getY() + ", " + blockPos.getZ() + ")"), false);
     }
 
     private boolean isValuableBlock(Block block) {
