@@ -21,7 +21,7 @@ public class DreamPickAxeItem extends PickaxeItem {
 
     @Override
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
-        if(pos.getY() + 1 > miner.getPos().getY() || pos.getY() < miner.getPos().getY()) {
+        if(pos.getY() - 1 > miner.getPos().getY() || pos.getY() < miner.getPos().getY()) {
             breakBlockUp(world, pos, state);
         }  else if(miner.getHorizontalFacing() == Direction.NORTH || miner.getHorizontalFacing() == Direction.SOUTH) {
             breakBlockNorth(world, pos, state);
