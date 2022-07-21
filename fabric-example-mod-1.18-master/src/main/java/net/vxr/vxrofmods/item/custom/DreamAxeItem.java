@@ -38,7 +38,7 @@ public class DreamAxeItem extends AxeItem {
     @Override
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
         breakStatusCount = 0;
-        if(isValuableBlock(state.getBlock())) {
+        if(isValuableBlock(state.getBlock()) && modeSetter == 3) {
             breakBlockBelow(world, pos);
             breakBlockOnTop(world, pos);
             breakBlockNorth(world, pos);
@@ -159,26 +159,22 @@ public class DreamAxeItem extends AxeItem {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         if(modeSetter == 2) {
             modeSetter = 3;
+            user.sendMessage(new LiteralText("§bTree-Breaker activated§r"), true);
         } else if (modeSetter >= 3){
             modeSetter = 0;
+            user.sendMessage(new LiteralText("§bTree-Breaker activated§r"), true);
         } else if(modeSetter <= 0) {
             modeSetter = 1;
+            user.sendMessage(new LiteralText("§bTree-Breaker deactivated§r"), true);
         } else if(modeSetter == 1) {
             modeSetter = 2;
+            user.sendMessage(new LiteralText("§bTree-Breaker deactivated§r"), true);
         }
-        switch (modeSetter) {
-            case 3: user.sendMessage(new LiteralText("§bTree-Breaker activated§r"), true);
-            case 2: user.sendMessage(new LiteralText("§bTree-Breaker activated§r"), true);
-            case 1: user.sendMessage(new LiteralText("§bTree-Breaker deactivated§r"), true);
-            case 0: user.sendMessage(new LiteralText("§bTree-Breaker deactivated§r"), true);
-            default: user.sendMessage(new LiteralText("§bTree-Breaker deactivated§r"), true);
-        }
-        user.sendMessage(new LiteralText("" + modeSetter), false);
 
         return super.use(world, user, hand);
     }
 
-    private int modeSetter = 0;
+    private int modeSetter = 3;
 
     private int breakStatusCount;
 

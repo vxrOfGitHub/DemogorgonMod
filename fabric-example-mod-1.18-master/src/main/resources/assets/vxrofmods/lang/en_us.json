@@ -9,6 +9,8 @@
   "item.vxrofmods.dowsing_rod.tooltip.shift": "Right Click to find valuables",
   "item.vxrofmods.dowsing_rod.tooltip": "Press §eSHIFT§r for more Information",
   "item.vxrofmods.dream_pickaxe": "Dream Pickaxe",
+  "item.vxrofmods.dream_pickaxe.tooltip.shift": "Destroys a 3x3 Stone-blocks",
+  "item.vxrofmods.dream_pickaxe.tooltip": "Press §bSHIFT§r for more Information",
   "item.vxrofmods.dream_axe.tooltip.shift": "Destroys all Wooden Block attached to each other",
   "item.vxrofmods.dream_axe.tooltip": "Press §bSHIFT§r for more Information",
   "item.vxrofmods.dream_axe.no_wood": "No Wood",

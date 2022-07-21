@@ -12,7 +12,10 @@
     "minecraft:calcite",
     "minecraft:netherrack",
     "minecraft:end_stone",
-    "minecraft:tuff"
+    "minecraft:tuff",
+    "minecraft:polished_basalt",
+    "minecraft:basalt",
+    "minecraft:black_stone"
 
   ]
 }
