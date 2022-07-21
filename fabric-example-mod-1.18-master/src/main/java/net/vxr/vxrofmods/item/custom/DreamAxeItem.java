@@ -1,5 +1,6 @@
 package net.vxr.vxrofmods.item.custom;
 
+import net.minecraft.block.AirBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.screen.Screen;
@@ -10,6 +11,9 @@ import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.ToolMaterial;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -32,8 +36,102 @@ public class DreamAxeItem extends AxeItem {
 
     @Override
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
+        if(isValuableBlock(state.getBlock())) {
+            breakBlockBelow(world, pos);
+            breakBlockOnTop(world, pos);
+            breakBlockNorth(world, pos);
+            breakBlockEast(world, pos);
+            breakBlockSouth(world, pos);
+            breakBlockWest(world, pos);
+        }
+
 
         return super.postMine(stack, world, state, pos, miner);
+    }
+
+    private void breakBlockNorth(World world, BlockPos pos) {
+        for(int i = 1; i <= 15; i++) {
+            Block blockNorth = world.getBlockState(pos.north(i)).getBlock();
+            BlockPos posNorth = pos.north(i);
+            if(isValuableBlock(blockNorth)) {
+                world.breakBlock(pos.north(i), true);
+                breakBlockOnTop(world, posNorth);
+                breakBlockBelow(world, posNorth);
+                breakBlockWest(world, posNorth);
+                breakBlockEast(world, posNorth);
+            } else {
+                break;
+            }
+        }
+    }
+    private void breakBlockWest(World world, BlockPos pos) {
+        for(int i = 1; i <= 15; i++) {
+            Block blockWest = world.getBlockState(pos.west(i)).getBlock();
+            BlockPos posWest = pos.west(i);
+            if(isValuableBlock(blockWest)) {
+                world.breakBlock(pos.west(i), true);
+                breakBlockOnTop(world, posWest);
+                breakBlockBelow(world, posWest);
+                breakBlockNorth(world, posWest);
+                breakBlockSouth(world, posWest);
+            } else {
+                break;
+            }
+        }
+    }
+
+    private void breakBlockSouth(World world, BlockPos pos) {
+        for(int i = 1; i <= 15; i++) {
+            Block blockSouth = world.getBlockState(pos.south(i)).getBlock();
+            BlockPos posSouth = pos.south(i);
+            if(isValuableBlock(blockSouth)) {
+                world.breakBlock(pos.south(i), true);
+                breakBlockOnTop(world, posSouth);
+                breakBlockBelow(world, posSouth);
+                breakBlockWest(world, posSouth);
+                breakBlockEast(world, posSouth);
+            } else {
+                break;
+            }
+        }
+    }
+
+    private void breakBlockEast(World world, BlockPos pos) {
+        for(int i = 1; i <= 15; i++) {
+            Block blockEast = world.getBlockState(pos.east(i)).getBlock();
+            BlockPos posEast = pos.east(i);
+            if(isValuableBlock(blockEast)) {
+                world.breakBlock(pos.east(i), true);
+                breakBlockOnTop(world, posEast);
+                breakBlockBelow(world, posEast);
+                breakBlockNorth(world, posEast);
+                breakBlockWest(world, posEast);
+            } else {
+                break;
+            }
+        }
+    }
+
+    private void breakBlockBelow(World world, BlockPos pos) {
+        for(int i = 1; i <= 15; i++) {
+            Block blockBelow = world.getBlockState(pos.down(i)).getBlock();
+            if(isValuableBlock(blockBelow)) {
+                world.breakBlock(pos.down(i), true);
+            } else {
+                break;
+            }
+        }
+    }
+
+    private void breakBlockOnTop(World world, BlockPos pos) {
+        for(int i = 1; i <= 15; i++) {
+            Block blockBelow = world.getBlockState(pos.up(i)).getBlock();
+            if(isValuableBlock(blockBelow)) {
+                world.breakBlock(pos.up(i), true);
+            } else {
+                break;
+            }
+        }
     }
 
     @Override
