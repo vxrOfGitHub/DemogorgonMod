@@ -8,9 +8,10 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.PickaxeItem;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.*;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -24,6 +25,7 @@ import net.vxr.vxrofmods.util.ModTags;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class DreamPickAxeItem extends PickaxeItem {
 
@@ -187,7 +189,6 @@ public class DreamPickAxeItem extends PickaxeItem {
             modeSetter = 2;
             user.sendMessage(new LiteralText("§b3x3-Breaker deactivated§r"), true);
         }
-
         return super.use(world, user, hand);
     }
 
