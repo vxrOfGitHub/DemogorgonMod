@@ -159,13 +159,11 @@ public class DreamAxeItem extends AxeItem {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         if(modeSetter == 2) {
             modeSetter = 3;
-            user.sendMessage(new LiteralText("§bTree-Breaker activated§r"), true);
         } else if (modeSetter >= 3){
             modeSetter = 0;
             user.sendMessage(new LiteralText("§bTree-Breaker activated§r"), true);
         } else if(modeSetter <= 0) {
             modeSetter = 1;
-            user.sendMessage(new LiteralText("§bTree-Breaker deactivated§r"), true);
         } else if(modeSetter == 1) {
             modeSetter = 2;
             user.sendMessage(new LiteralText("§bTree-Breaker deactivated§r"), true);
