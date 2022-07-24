@@ -46,8 +46,13 @@ public class DreamAxeItem extends AxeItem {
             breakBlockSouth(world, pos);
             breakBlockWest(world, pos);
         }
-        stack.damage(breakStatusCount, miner, (e) -> {
-            e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);});
+        if(breakStatusCount > 749) {
+            stack.damage(749, miner, (e) -> {
+                e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);});
+        } else {
+            stack.damage(breakStatusCount, miner, (e) -> {
+                e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);});
+        }
         return super.postMine(stack, world, state, pos, miner);
     }
 

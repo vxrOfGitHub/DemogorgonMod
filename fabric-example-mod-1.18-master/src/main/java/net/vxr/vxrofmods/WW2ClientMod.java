@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.text.LiteralText;
 import net.vxr.vxrofmods.block.ModBlocks;
 import net.vxr.vxrofmods.entity.client.DemogorgonRenderer;
 import net.vxr.vxrofmods.entity.ModEntities;
@@ -26,7 +27,9 @@ import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 @Environment(EnvType.CLIENT)
 public class WW2ClientMod implements ClientModInitializer {
     private static KeyBinding Jetpack;
-    private boolean UseJetpack;
+    private static KeyBinding JetpackGlider;
+    private static boolean UseJetpack;
+    private static boolean UseJetpackGlider;
 
     @Override
     public void onInitializeClient() {
@@ -44,13 +47,35 @@ public class WW2ClientMod implements ClientModInitializer {
         // Keybinds
         Jetpack = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.vxrofmods.jetpack", InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_O, "category.vxrofmods.ww2mods"));
+        JetpackGlider = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.vxrofmods.jetpack_glider", InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_Y, "category.vxrofmods.ww2mods"));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (Jetpack.wasPressed()) {
-                UseJetpack = true;
+                setUseJetpack(!UseJetpack);
+                client.player.sendMessage(new LiteralText("UseJetpack: " + UseJetpack), false);
+            } while (JetpackGlider.wasPressed()) {
+                setUseJetpackGlider(!UseJetpackGlider);
+                client.player.sendMessage(new LiteralText("UseJetpackGlider: " + UseJetpackGlider), false);
             }
         });
         // Keybinds end
 
+    }
+
+    private void setUseJetpack(boolean useJetpack) {
+        UseJetpack = useJetpack;
+    }
+
+    private void setUseJetpackGlider(boolean useJetpackGlider) {
+        UseJetpackGlider = useJetpackGlider;
+    }
+
+    public static boolean isUseJetpack() {
+        return UseJetpack;
+    }
+
+    public static boolean isUseJetpackGlider() {
+        return UseJetpackGlider;
     }
 }

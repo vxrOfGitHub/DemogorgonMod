@@ -45,7 +45,7 @@ public class ModItems {
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
     public static final Item Dream_Chestplate = registerItem("dream_chestplate",
-            new ArmorItem(ModArmorMaterials.Dream, EquipmentSlot.CHEST,
+            new ModChestplateItem(ModArmorMaterials.Dream, EquipmentSlot.CHEST,
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
     public static final Item Dream_Leggings = registerItem("dream_leggings",

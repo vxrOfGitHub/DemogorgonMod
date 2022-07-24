@@ -45,9 +45,13 @@ public class DreamPickAxeItem extends PickaxeItem {
                 breakBlockEast(world, pos, state);
             }
         }
-        stack.damage(breakStatusCount, miner, (e) -> {
-            e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);});
-
+        if(breakStatusCount > 749) {
+            stack.damage(749, miner, (e) -> {
+                e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);});
+        } else {
+            stack.damage(breakStatusCount, miner, (e) -> {
+                e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);});
+        }
         return super.postMine(stack, world, state, pos, miner);
     }
 
