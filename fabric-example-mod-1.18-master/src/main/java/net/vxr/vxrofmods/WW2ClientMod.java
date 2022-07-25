@@ -60,7 +60,7 @@ public class WW2ClientMod implements ClientModInitializer {
                 setUseJetpack(!UseJetpack);
             } if (JetpackLifter.isPressed()) {
                 setUseJetpackLifter(true);
-            } while (DreamBoots.wasPressed() && DreamBootsItem.dreamJumpCooldown <= 0) {
+            } while (DreamBoots.wasPressed() && DreamBootsItem.dreamJumpCooldown <= 0 && client.player.isOnGround()) {
                 UseDreamBoots = true;
             }
         });
