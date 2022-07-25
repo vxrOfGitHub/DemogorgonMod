@@ -10,10 +10,12 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.MovementType;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.sound.SoundEvent;
@@ -21,6 +23,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.vxr.vxrofmods.WW2ClientMod;
 import net.vxr.vxrofmods.WW2Mod;
@@ -69,22 +72,32 @@ public class ModChestplateItem extends ArmorItem {
 
             if(hasCorrectChestplateOn(mapArmorMaterial, player)) {
                 addStatusEffectForMaterial(player, mapArmorMaterial, mapStatusEffect);
-            } else if(!hasCorrectChestplateOn(mapArmorMaterial, player)) {
-                removeStatusEffect(player, mapArmorMaterial, mapStatusEffect);
             }
         }
     }
 
     private void addStatusEffectForMaterial(PlayerEntity player, ArmorMaterial mapArmorMaterial, StatusEffectInstance mapStatusEffect) {
         boolean hasPlayerEffect = player.hasStatusEffect(mapStatusEffect.getEffectType());
+        boolean hasPlayerEffectLevitation = player.hasStatusEffect(StatusEffects.LEVITATION);
+        if(hasCorrectChestplateOn(mapArmorMaterial, player) && WW2ClientMod.isUseJetpack()) {
 
-        if(hasCorrectChestplateOn(mapArmorMaterial, player) && WW2ClientMod.isUseJetpack()  && !hasPlayerEffect) {
-            player.addStatusEffect(new StatusEffectInstance(mapStatusEffect.getEffectType(),
-                    mapStatusEffect.getDuration(), mapStatusEffect.getAmplifier()));
-
-            // if(new Random().nextFloat() > 0.6f) { // 40% of damaging the armor! Possibly!
-            //     player.getInventory().damageArmor(DamageSource.MAGIC, 1f, new int[]{0, 1, 2, 3});
-            // }
+            if(hasCorrectChestplateOn(mapArmorMaterial, player) && WW2ClientMod.isUseJetpack()  && !hasPlayerEffect && player.isInSneakingPose()) {
+                player.setNoGravity(false);
+                player.addStatusEffect(new StatusEffectInstance(mapStatusEffect.getEffectType(),
+                        mapStatusEffect.getDuration(), mapStatusEffect.getAmplifier()));
+            } else if (hasCorrectChestplateOn(mapArmorMaterial, player) && WW2ClientMod.isUseJetpack() && WW2ClientMod.isUseJetpackLifter() && !hasPlayerEffectLevitation) {
+                player.setNoGravity(false);
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.LEVITATION, 3, 5));
+                WW2ClientMod.setUseJetpackLifter(false);
+            } else if(hasCorrectChestplateOn(mapArmorMaterial, player) && WW2ClientMod.isUseJetpack() && !player.isInSneakingPose() && !hasPlayerEffectLevitation) {
+                player.setNoGravity(true);
+                player.addStatusEffect(new StatusEffectInstance(mapStatusEffect.getEffectType(),
+                        mapStatusEffect.getDuration(), mapStatusEffect.getAmplifier()));
+            } else {
+                player.setNoGravity(false);
+            }
+        } else {
+            player.setNoGravity(false);
         }
     }
 

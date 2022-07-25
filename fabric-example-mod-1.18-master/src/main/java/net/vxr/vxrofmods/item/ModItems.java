@@ -45,7 +45,7 @@ public class ModItems {
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
     public static final Item Dream_Chestplate = registerItem("dream_chestplate",
-            new ModChestplateItem(ModArmorMaterials.Dream, EquipmentSlot.CHEST,
+            new ArmorItem(ModArmorMaterials.Dream, EquipmentSlot.CHEST,
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
     public static final Item Dream_Leggings = registerItem("dream_leggings",
@@ -53,7 +53,7 @@ public class ModItems {
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
     public static final Item Dream_Boots = registerItem("dream_boots",
-            new ArmorItem(ModArmorMaterials.Dream, EquipmentSlot.FEET,
+            new DreamBootsItem(ModArmorMaterials.Dream, EquipmentSlot.FEET,
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
     public static final Item DEMOGORGON_SPAWN_EGG = registerItem("demogorgon_spawn_egg",

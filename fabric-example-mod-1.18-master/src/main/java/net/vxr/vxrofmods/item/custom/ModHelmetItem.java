@@ -46,8 +46,6 @@ public class ModHelmetItem extends ArmorItem {
 
             if(hasCorrectHelmetOn(mapArmorMaterial, player)) {
                 addStatusEffectForMaterial(player, mapArmorMaterial, mapStatusEffect);
-            } else if(!hasCorrectHelmetOn(mapArmorMaterial, player)) {
-                removeStatusEffect(player, mapArmorMaterial, mapStatusEffect);
             }
         }
     }
@@ -64,15 +62,6 @@ public class ModHelmetItem extends ArmorItem {
             // }
         }
     }
-
-    private void removeStatusEffect(PlayerEntity player, ArmorMaterial mapArmorMaterial, StatusEffectInstance mapStatusEffect) {
-        boolean hasPlayerEffect = player.hasStatusEffect(mapStatusEffect.getEffectType());
-
-        if(!hasCorrectHelmetOn(mapArmorMaterial, player) && hasPlayerEffect) {
-            player.removeStatusEffect(mapStatusEffect.getEffectType());
-        }
-    }
-
 
     private boolean hasHelmetOn(PlayerEntity player) {
         ItemStack helmet = player.getInventory().getArmorStack(3);
