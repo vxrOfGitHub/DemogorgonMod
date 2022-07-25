@@ -72,7 +72,7 @@ public class ModItems {
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
 
     public static final Item PENGUIN_HELMET = registerItem("penguin_helmet",
-            new PenguinAvatarHelmetItem(ModArmorMaterials.Dream, EquipmentSlot.HEAD,
+            new PenguinAvatarHelmetItem(ModArmorMaterials.AVATAR, EquipmentSlot.HEAD,
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
 
 

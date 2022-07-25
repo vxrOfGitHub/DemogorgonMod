@@ -15,7 +15,8 @@ public enum ModArmorMaterials implements ArmorMaterial {
 
 
 
-    Dream("dream", 45, new int[]{4, 7, 9, 4}, 25, SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 3.0f, 0.1f, () -> Ingredient.ofItems(ModItems.Dream_Star));
+    Dream("dream", 45, new int[]{4, 7, 9, 4}, 25, SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 3.0f, 0.2f, () -> Ingredient.ofItems(ModItems.Dream_Star)),
+    AVATAR("avatar", 999999999, new int[]{0, 0, 0, 0}, 0, SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 0.0f, 0.1f, () -> Ingredient.ofItems(ModItems.Dream_Star));
 
     private static final int[] BASE_DURABILITY;
     private final String name;
