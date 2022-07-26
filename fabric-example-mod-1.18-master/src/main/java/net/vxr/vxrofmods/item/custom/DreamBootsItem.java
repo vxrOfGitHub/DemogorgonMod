@@ -1,6 +1,7 @@
 package net.vxr.vxrofmods.item.custom;
 
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -9,6 +10,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
@@ -44,7 +47,7 @@ public class DreamBootsItem extends ArmorItem {
                             player.sendMessage(new LiteralText("§2Dream-Jump Cooldown: finished§r"), true);
                         }
                     }
-                    evaluateArmorEffects(player, world);
+                    evaluateArmorEffects(player, world, stack);
                 } else {
                     WW2ClientMod.UseDreamBoots = false;
                 }
@@ -54,28 +57,39 @@ public class DreamBootsItem extends ArmorItem {
         super.inventoryTick(stack, world, entity, slot, selected);
     }
 
-    private void evaluateArmorEffects(PlayerEntity player, World world) {
+    private void evaluateArmorEffects(PlayerEntity player, World world, ItemStack stack) {
         for (Map.Entry<ArmorMaterial, StatusEffectInstance> entry : MATERIAL_TO_EFFECT_MAP.entrySet()) {
             ArmorMaterial mapArmorMaterial = entry.getKey();
             StatusEffectInstance mapStatusEffect = entry.getValue();
             if(hasCorrectBootsOn(mapArmorMaterial, player)) {
-                addStatusEffectForMaterial(player, mapArmorMaterial, mapStatusEffect, world);
+                addStatusEffectForMaterial(player, mapArmorMaterial, mapStatusEffect, world, stack);
             } else {
                 WW2ClientMod.UseDreamBoots = false;
             }
         }
     }
 
-    private void addStatusEffectForMaterial(PlayerEntity player, ArmorMaterial mapArmorMaterial, StatusEffectInstance mapStatusEffect, World world) {
+    private void spawnFlyingParticles(World world, PlayerEntity player) {
+        for(int i = 0; i < 999999999; i++) {
+            if(i % 20 == 0) {
+                world.addParticle(ParticleTypes.FLAME,
+                        player.getX(), player.getY(), player.getZ(),
+                        Math.cos(i) * 0.25d, -1d, Math.sin(i) * 0.25d);
+            }
+        }
+    }
+
+    private void addStatusEffectForMaterial(PlayerEntity player, ArmorMaterial mapArmorMaterial, StatusEffectInstance mapStatusEffect, World world, ItemStack stack) {
         boolean hasPlayerEffect = player.hasStatusEffect(mapStatusEffect.getEffectType());
 
         if(hasCorrectBootsOn(mapArmorMaterial, player) && WW2ClientMod.UseDreamBoots && player.isOnGround() && dreamJumpCooldown <= 0) {
             player.addStatusEffect(new StatusEffectInstance(mapStatusEffect.getEffectType(),
                     mapStatusEffect.getDuration(), mapStatusEffect.getAmplifier()));
             if(world.isClient()) {
-                world.playSound(player, player.getBlockPos(), SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.PLAYERS,
-                        1f, 1f);
+                player.playSound(SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1);
             }
+            stack.damage(1,player, (e) -> {
+                e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);});
             dreamJumpCooldown = maxDreamJumpCooldown;
             WW2ClientMod.UseDreamBoots = false;
 

@@ -29,7 +29,6 @@ import net.vxr.vxrofmods.WW2ClientMod;
 import net.vxr.vxrofmods.WW2Mod;
 import net.vxr.vxrofmods.block.entity.DiamondMinerBlockEntity;
 import net.vxr.vxrofmods.block.entity.ModBlockEntities;
-import net.vxr.vxrofmods.effect.JetPackEffect;
 import net.vxr.vxrofmods.effect.ModEffects;
 import net.vxr.vxrofmods.item.ModArmorMaterials;
 import org.jetbrains.annotations.Nullable;
