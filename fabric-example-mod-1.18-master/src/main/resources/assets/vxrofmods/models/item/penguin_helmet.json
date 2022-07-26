@@ -1,6 +1,5 @@
 {
 	"credit": "Made with Blockbench",
-	"parent": "penguin_helmet",
 	"textures": {
 		"0": "vxrofmods:item/penguin_helmet_item"
 	},

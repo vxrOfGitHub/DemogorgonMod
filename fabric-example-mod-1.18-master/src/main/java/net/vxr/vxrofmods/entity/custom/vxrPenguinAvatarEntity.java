@@ -47,7 +47,15 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
         super(entityType, world);
     }
 
-
+    @Override
+    protected void onTamedChanged() {
+        if(isTamed()) {
+            this.setInvulnerable(true);
+        } else {
+            this.setInvulnerable(false);
+        }
+        super.onTamedChanged();
+    }
 
     @Nullable
     @Override
