@@ -18,6 +18,7 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.vxr.vxrofmods.WW2ClientMod;
+import net.vxr.vxrofmods.event.KeyInputHandler;
 import net.vxr.vxrofmods.item.ModArmorMaterials;
 
 import java.util.Map;
@@ -49,7 +50,7 @@ public class DreamBootsItem extends ArmorItem {
                     }
                     evaluateArmorEffects(player, world, stack);
                 } else {
-                    WW2ClientMod.UseDreamBoots = false;
+                    KeyInputHandler.UseDreamBoots = false;
                 }
             }
         }
@@ -64,7 +65,7 @@ public class DreamBootsItem extends ArmorItem {
             if(hasCorrectBootsOn(mapArmorMaterial, player)) {
                 addStatusEffectForMaterial(player, mapArmorMaterial, mapStatusEffect, world, stack);
             } else {
-                WW2ClientMod.UseDreamBoots = false;
+                KeyInputHandler.UseDreamBoots = false;
             }
         }
     }
@@ -82,7 +83,7 @@ public class DreamBootsItem extends ArmorItem {
     private void addStatusEffectForMaterial(PlayerEntity player, ArmorMaterial mapArmorMaterial, StatusEffectInstance mapStatusEffect, World world, ItemStack stack) {
         boolean hasPlayerEffect = player.hasStatusEffect(mapStatusEffect.getEffectType());
 
-        if(hasCorrectBootsOn(mapArmorMaterial, player) && WW2ClientMod.UseDreamBoots && player.isOnGround() && dreamJumpCooldown <= 0) {
+        if(hasCorrectBootsOn(mapArmorMaterial, player) && KeyInputHandler.UseDreamBoots && player.isOnGround() && dreamJumpCooldown <= 0) {
             player.addStatusEffect(new StatusEffectInstance(mapStatusEffect.getEffectType(),
                     mapStatusEffect.getDuration(), mapStatusEffect.getAmplifier()));
             if(world.isClient()) {
@@ -91,7 +92,7 @@ public class DreamBootsItem extends ArmorItem {
             stack.damage(1,player, (e) -> {
                 e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);});
             dreamJumpCooldown = maxDreamJumpCooldown;
-            WW2ClientMod.UseDreamBoots = false;
+            KeyInputHandler.UseDreamBoots = false;
 
             // if(new Random().nextFloat() > 0.6f) { // 40% of damaging the armor! Possibly!
             //     player.getInventory().damageArmor(DamageSource.MAGIC, 1f, new int[]{0, 1, 2, 3});

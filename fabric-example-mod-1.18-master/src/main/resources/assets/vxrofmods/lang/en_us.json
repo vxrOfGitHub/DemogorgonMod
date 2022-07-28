@@ -33,11 +33,10 @@
 
   "itemGroup.vxrofmods.custom_mods": "WonderWorlds 2",
 
-  "key.vxrofmods.jetpack": "Use Jetpack",
-  "key.vxrofmods.jetpack_glider": "Use Lifter (Jetpack)",
-  "key.vxrofmods.dream_boots": "Use Dream-Jump",
+  "key.vxrofmods.dream_boost": "Use Dream-Jump",
+  "key.vxrofmods.example": "Example",
 
-  "category.vxrofmods.ww2mods": "Wonder Worlds 2 Mods",
+  "key.category.vxrofmods.ww2mod": "Wonder Worlds 2 Mods",
 
   "entity.vxrofmods.demogorgon": "Demogorgon",
   "entity.vxrofmods.penguin_avatar": "Penguin",

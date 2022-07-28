@@ -14,6 +14,7 @@ import net.vxr.vxrofmods.block.entity.ModBlockEntities;
 import net.vxr.vxrofmods.effect.ModEffects;
 import net.vxr.vxrofmods.item.ModItems;
 import net.vxr.vxrofmods.item.custom.KeyBinds;
+import net.vxr.vxrofmods.networking.ModMessages;
 import net.vxr.vxrofmods.recipe.ModRecipes;
 import net.vxr.vxrofmods.screen.ModScreenHandlers;
 import net.vxr.vxrofmods.sound.ModSounds;
@@ -51,6 +52,7 @@ public class WW2Mod implements ModInitializer {
 		ModBlockEntities.registerAllBlockEntities();
 		ModRecipes.registerRecipes();
 		ModScreenHandlers.registerAllScreenHandlers();
+		ModMessages.registerC2SPackets();
 
 		GeckoLib.initialize();
 	}

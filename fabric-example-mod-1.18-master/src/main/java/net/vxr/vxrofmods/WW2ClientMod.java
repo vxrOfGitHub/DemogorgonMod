@@ -17,8 +17,10 @@ import net.vxr.vxrofmods.entity.client.DemogorgonRenderer;
 import net.vxr.vxrofmods.entity.ModEntities;
 import net.vxr.vxrofmods.entity.client.PenguinAvatarRenderer;
 import net.vxr.vxrofmods.entity.client.armor.PenguinAvatarHelmetRenderer;
+import net.vxr.vxrofmods.event.KeyInputHandler;
 import net.vxr.vxrofmods.item.ModItems;
 import net.vxr.vxrofmods.item.custom.DreamBootsItem;
+import net.vxr.vxrofmods.networking.ModMessages;
 import net.vxr.vxrofmods.screen.DiamondMinerScreen;
 import net.vxr.vxrofmods.screen.ModScreenHandlers;
 import net.vxr.vxrofmods.util.ModModelPredicateProvider;
@@ -32,7 +34,6 @@ public class WW2ClientMod implements ClientModInitializer {
     private static KeyBinding DreamBoots;
     private static boolean UseJetpack;
     private static boolean UseJetpackLifter;
-    public static boolean UseDreamBoots;
 
     @Override
     public void onInitializeClient() {
@@ -46,25 +47,10 @@ public class WW2ClientMod implements ClientModInitializer {
 
         ModModelPredicateProvider.registerModModels();
 
+        KeyInputHandler.register();
 
-        // Keybinds
-        Jetpack = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.vxrofmods.jetpack", InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_O, "category.vxrofmods.ww2mods"));
-        JetpackLifter = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.vxrofmods.jetpack_lifter", InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_SPACE, "category.vxrofmods.ww2mods"));
-        DreamBoots = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.vxrofmods.dream_boots", InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_H, "category.vxrofmods.ww2mods"));
+        ModMessages.registerS2CPackets();
 
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            while (Jetpack.wasPressed()) {
-                setUseJetpack(!UseJetpack);
-            } if (JetpackLifter.isPressed()) {
-                setUseJetpackLifter(true);
-            } while (DreamBoots.wasPressed() && DreamBootsItem.dreamJumpCooldown <= 0 && client.player.isOnGround()) {
-                UseDreamBoots = true;
-            }
-        });
-        // Keybinds end
 
     }
 
