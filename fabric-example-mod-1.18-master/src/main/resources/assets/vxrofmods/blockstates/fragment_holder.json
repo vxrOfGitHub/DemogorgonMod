@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "swapped=true": {"model": "vxrofmods:block/fragment_holder_standard"},
+    "swapped=false": {"model": "vxrofmods:block/fragment_holder_swapped"}
+  }
+}

@@ -23,6 +23,7 @@
   "item.vxrofmods.demogorgon_spawn_egg": "Demogorgon Spawn Egg",
   "item.vxrofmods.penguin_spawn_egg": "Penguin Spawn Egg",
   "item.vxrofmods.penguin_helmet": "Penguin",
+  "item.vxrofmods.diamond_fragment": "Diamond Fragment",
 
 
   "item.vxrofmods.dream_bow": "Dream Bow",
@@ -30,6 +31,7 @@
   "block.vxrofmods.dream_block": "Dream Block",
   "block.vxrofmods.speedy_block": "Speedy Block",
   "block.vxrofmods.diamond_miner_block": "Diamond Miner",
+  "block.vxrofmods.fragment_holder": "Fragment Holder",
 
   "itemGroup.vxrofmods.custom_mods": "WonderWorlds 2",
 

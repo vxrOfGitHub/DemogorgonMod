@@ -75,6 +75,9 @@ public class ModItems {
             new PenguinAvatarHelmetItem(ModArmorMaterials.AVATAR, EquipmentSlot.HEAD,
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
 
+    public static final Item DIAMOND_FRAGMENT = registerItem("diamond_fragment",
+            new FragmentItem(new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
+
 
     private static Item registerItem(String name, Item item) {
         return Registry.register(Registry.ITEM, new Identifier(WW2Mod.MOD_ID, name), item);

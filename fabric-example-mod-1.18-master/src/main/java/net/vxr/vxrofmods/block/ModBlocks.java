@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import net.vxr.vxrofmods.WW2Mod;
 import net.vxr.vxrofmods.block.custom.DiamondMinerBlock;
 import net.vxr.vxrofmods.block.custom.DreamBlock;
+import net.vxr.vxrofmods.block.custom.FragmentHolderBlock;
 import net.vxr.vxrofmods.block.custom.SpeedyBlock;
 import net.vxr.vxrofmods.item.ModItemGroup;
 
@@ -25,6 +26,9 @@ public class ModBlocks {
     public static final Block DREAM_BLOCK =  registerBlock("dream_block",
             new DreamBlock(FabricBlockSettings.of(Material.METAL).strength(6f).requiresTool()
                     .luminance((state) -> state.get(DreamBlock.CLICKED) ? 15:0)), ModItemGroup.Custom_Mods);
+
+    public static final Block FRAGMENT_HOLDER =  registerBlock("fragment_holder",
+            new FragmentHolderBlock(FabricBlockSettings.of(Material.METAL).nonOpaque().strength(12f)), ModItemGroup.Custom_Mods);
 
     public static final Block SPEEDY_BLOCK =  registerBlock("speedy_block",
             new SpeedyBlock(FabricBlockSettings.of(Material.METAL).strength(2f).requiresTool()), ModItemGroup.Custom_Mods, "tooltip.vxrofmods.speedy_block");
