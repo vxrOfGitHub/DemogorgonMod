@@ -15,15 +15,15 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.vxr.vxrofmods.block.ModBlocks;
 import net.vxr.vxrofmods.item.ModItems;
 import org.jetbrains.annotations.Nullable;
 
 public class FragmentHolderBlock extends Block {
     public static final BooleanProperty SWAPPED = BooleanProperty.of("swapped");
 
-    public FragmentHolderBlock(Settings settings) {
+    public FragmentHolderBlock(Settings settings, Item fragmentItem) {
         super(settings);
+        super(fragmentItem);
     }
 
     @Override
