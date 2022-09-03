@@ -18,12 +18,15 @@ import net.minecraft.world.World;
 import net.vxr.vxrofmods.item.ModItems;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class FragmentHolderBlock extends Block {
     public static final BooleanProperty SWAPPED = BooleanProperty.of("swapped");
 
-    public FragmentHolderBlock(Settings settings, Item fragmentItem) {
+    public FragmentHolderBlock(Settings settings) {
         super(settings);
-        super(fragmentItem);
     }
 
     @Override
@@ -39,8 +42,7 @@ public class FragmentHolderBlock extends Block {
                 player.sendMessage(new LiteralText("SWAPPED"), false);
 
                 world.setBlockState(pos, state.with(SWAPPED, false), Block.NOTIFY_ALL);
-                itemStack.decrement(1);
-                player.giveItemStack(new ItemStack(ModItems.DIAMOND_FRAGMENT));
+                randomFragment(itemStack, player, world);
 
 
             } if(itemStack.getItem() != item  && state.get(SWAPPED)) {
@@ -49,7 +51,7 @@ public class FragmentHolderBlock extends Block {
                 world.breakBlock(pos, false);
 
                 breakBlocks(world, pos);
-                player.giveItemStack(new ItemStack(ModItems.DIAMOND_FRAGMENT));
+                randomFragment(itemStack, player, world);
 
             } if(itemStack.getItem() != item && !state.get(SWAPPED)) {
                 player.sendMessage(new LiteralText("SWAPPED STOLEN"), false);
@@ -63,6 +65,20 @@ public class FragmentHolderBlock extends Block {
 
 
         return ActionResult.SUCCESS;
+    }
+
+
+    private static void randomFragment(ItemStack itemStack, PlayerEntity player, World world) {
+        Random random = new Random();
+        List<Item> fragmentList = new ArrayList<>(); // No need to define length
+        fragmentList.add(ModItems.DIAMOND_FRAGMENT);
+        fragmentList.add(ModItems.IRON_FRAGMENT);
+        fragmentList.add(ModItems.EMERALD_FRAGMENT);
+        fragmentList.add(ModItems.REDSTONE_FRAGMENT);
+        fragmentList.add(ModItems.GOLD_FRAGMENT);
+        fragmentList.add(ModItems.LAPIS_LAZULI_FRAGMENT);
+        fragmentList.add(ModItems.COPPER_FRAGMENT);
+        player.giveItemStack(new ItemStack(fragmentList.get(random.nextInt(fragmentList.size()))));
     }
 
     @Override

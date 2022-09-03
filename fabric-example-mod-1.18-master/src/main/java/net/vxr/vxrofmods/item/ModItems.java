@@ -45,7 +45,7 @@ public class ModItems {
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
     public static final Item Dream_Chestplate = registerItem("dream_chestplate",
-            new ArmorItem(ModArmorMaterials.Dream, EquipmentSlot.CHEST,
+            new ModChestplateItem(ModArmorMaterials.Dream, EquipmentSlot.CHEST,
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
     public static final Item Dream_Leggings = registerItem("dream_leggings",
@@ -76,6 +76,24 @@ public class ModItems {
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
 
     public static final Item DIAMOND_FRAGMENT = registerItem("diamond_fragment",
+            new FragmentItem(new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
+
+    public static final Item IRON_FRAGMENT = registerItem("iron_fragment",
+            new FragmentItem(new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
+
+    public static final Item EMERALD_FRAGMENT = registerItem("emerald_fragment",
+            new FragmentItem(new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
+
+    public static final Item REDSTONE_FRAGMENT = registerItem("redstone_fragment",
+            new FragmentItem(new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
+
+    public static final Item GOLD_FRAGMENT = registerItem("gold_fragment",
+            new FragmentItem(new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
+
+    public static final Item LAPIS_LAZULI_FRAGMENT = registerItem("lapis_lazuli_fragment",
+            new FragmentItem(new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
+
+    public static final Item COPPER_FRAGMENT = registerItem("copper_fragment",
             new FragmentItem(new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
 
 

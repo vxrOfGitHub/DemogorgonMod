@@ -29,7 +29,7 @@ public class ModBlocks {
                     .luminance((state) -> state.get(DreamBlock.CLICKED) ? 15:0)), ModItemGroup.Custom_Mods);
 
     public static final Block FRAGMENT_HOLDER =  registerBlock("fragment_holder",
-            new FragmentHolderBlock(FabricBlockSettings.of(Material.METAL).nonOpaque().strength(12f), ModItems.DIAMOND_FRAGMENT), ModItemGroup.Custom_Mods);
+            new FragmentHolderBlock(FabricBlockSettings.of(Material.METAL).nonOpaque().strength(12f)), ModItemGroup.Custom_Mods);
 
     public static final Block SPEEDY_BLOCK =  registerBlock("speedy_block",
             new SpeedyBlock(FabricBlockSettings.of(Material.METAL).strength(2f).requiresTool()), ModItemGroup.Custom_Mods, "tooltip.vxrofmods.speedy_block");
