@@ -59,7 +59,7 @@ public class FragmentHolderBlock extends Block {
                 world.breakBlock(pos, false);
 
                 breakBlocks(world, pos);
-                player.giveItemStack(new ItemStack(item));
+                player.dropItem(item);
             }
         }
 
@@ -78,7 +78,8 @@ public class FragmentHolderBlock extends Block {
         fragmentList.add(ModItems.GOLD_FRAGMENT);
         fragmentList.add(ModItems.LAPIS_LAZULI_FRAGMENT);
         fragmentList.add(ModItems.COPPER_FRAGMENT);
-        player.giveItemStack(new ItemStack(fragmentList.get(random.nextInt(fragmentList.size()))));
+        player.dropItem(fragmentList.get(random.nextInt(fragmentList.size())));
+
     }
 
     @Override
