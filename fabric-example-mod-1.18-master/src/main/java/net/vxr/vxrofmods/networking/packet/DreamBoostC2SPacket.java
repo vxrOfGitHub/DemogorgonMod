@@ -29,8 +29,8 @@ public class DreamBoostC2SPacket {
         ServerWorld world = player.getWorld();
 
         if(hasBootsOn && hasCorrectBootsOn && player.isOnGround()) {
-            world.playSound(null, player.getBlockPos(), SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.PLAYERS,
-                    0.5F, world.random.nextFloat() * 0.1F + 0.9F);
+            world.playSound(null, player.getBlockPos(), SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.PLAYERS,
+                    1F, world.random.nextFloat() * 0.1F - 0.4F);
             player.removeStatusEffect(StatusEffects.NIGHT_VISION);
         }
     }

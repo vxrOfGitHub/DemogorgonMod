@@ -24,8 +24,7 @@ public class KeyInputHandler {
 
     public static void registerKeyInputs() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (dreamBoostKey.wasPressed() && DreamBootsItem.dreamJumpCooldown <= 0 && client.player.isOnGround()) {
-                    UseDreamBoots = true;
+            if (dreamBoostKey.wasPressed()) {
                 ClientPlayNetworking.send(ModMessages.DREAM_BOOST_ID, PacketByteBufs.create());
             }
             if (dreamVisionKey.wasPressed()) {
