@@ -18,11 +18,13 @@ public class ModHelmetItem extends ArmorItem {
     private static final Map<ArmorMaterial, StatusEffectInstance> MATERIAL_TO_EFFECT_MAP =
             (new ImmutableMap.Builder<ArmorMaterial, StatusEffectInstance>())
                     .put(ModArmorMaterials.Dream,
-                            new StatusEffectInstance(StatusEffects.NIGHT_VISION, 200, 1)).build();
+                            new StatusEffectInstance(StatusEffects.NIGHT_VISION, 2147400000, 1)).build();
 
     public ModHelmetItem(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
         super(material, slot, settings);
     }
+
+    private boolean hadPlayerEffect;
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
@@ -32,6 +34,9 @@ public class ModHelmetItem extends ArmorItem {
 
                 if(hasHelmetOn(player)) {
                     evaluateArmorEffects(player);
+                } else if(!hasHelmetOn(player) && hadPlayerEffect) {
+                    player.removeStatusEffect(StatusEffects.NIGHT_VISION);
+                    hadPlayerEffect = false;
                 }
             }
         }
@@ -46,6 +51,9 @@ public class ModHelmetItem extends ArmorItem {
 
             if(hasCorrectHelmetOn(mapArmorMaterial, player)) {
                 addStatusEffectForMaterial(player, mapArmorMaterial, mapStatusEffect);
+            } else if(!hasCorrectHelmetOn(mapArmorMaterial, player) && hadPlayerEffect) {
+                player.removeStatusEffect(StatusEffects.NIGHT_VISION);
+                hadPlayerEffect = false;
             }
         }
     }
@@ -54,6 +62,7 @@ public class ModHelmetItem extends ArmorItem {
         boolean hasPlayerEffect = player.hasStatusEffect(mapStatusEffect.getEffectType());
 
         if(hasCorrectHelmetOn(mapArmorMaterial, player) && !hasPlayerEffect) {
+            hadPlayerEffect = true;
             player.addStatusEffect(new StatusEffectInstance(mapStatusEffect.getEffectType(),
                     mapStatusEffect.getDuration(), mapStatusEffect.getAmplifier()));
 

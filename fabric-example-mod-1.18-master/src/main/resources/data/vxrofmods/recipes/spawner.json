@@ -7,7 +7,7 @@
   ],
   "key": {
     "B": {
-      "tag": "c:spawn_ingot"
+      "item": "vxrofmods:spawn_ingot"
     },
     "#": {
       "item": "minecraft:blaze_rod"

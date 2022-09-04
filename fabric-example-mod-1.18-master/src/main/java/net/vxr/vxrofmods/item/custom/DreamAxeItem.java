@@ -166,12 +166,12 @@ public class DreamAxeItem extends AxeItem {
             modeSetter = 3;
         } else if (modeSetter >= 3){
             modeSetter = 0;
-            user.sendMessage(new LiteralText("§bTree-Breaker activated§r"), true);
+            user.sendMessage(new LiteralText("§bTree-Breaker deactivated§r"), true);
         } else if(modeSetter <= 0) {
             modeSetter = 1;
         } else if(modeSetter == 1) {
             modeSetter = 2;
-            user.sendMessage(new LiteralText("§bTree-Breaker deactivated§r"), true);
+            user.sendMessage(new LiteralText("§bTree-Breaker activated§r"), true);
         }
 
         return super.use(world, user, hand);
