@@ -26,4 +26,9 @@ public class DreamBoostCooldownData {
         return dream_boost_cooldown;
     }
 
+    public static int getCooldown(IEntityDataSaver player) {
+        NbtCompound nbt = player.getPersistentData();
+        return nbt.getInt("dream_boost_cooldown");
+    }
+
 }

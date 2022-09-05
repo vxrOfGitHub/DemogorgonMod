@@ -17,6 +17,8 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.vxr.vxrofmods.item.ModArmorMaterials;
+import net.vxr.vxrofmods.util.DreamBoostCooldownData;
+import net.vxr.vxrofmods.util.IEntityDataSaver;
 
 public class DreamBoostC2SPacket {
 
@@ -28,10 +30,11 @@ public class DreamBoostC2SPacket {
                 .getMaterial() == ModArmorMaterials.Dream;
         ServerWorld world = player.getWorld();
 
-        if(hasBootsOn && hasCorrectBootsOn && player.isOnGround()) {
+        if(hasBootsOn && hasCorrectBootsOn && player.isOnGround() && DreamBoostCooldownData.getCooldown(((IEntityDataSaver) player)) <= 0) {
             world.playSound(null, player.getBlockPos(), SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.PLAYERS,
                     1F, world.random.nextFloat() * 0.1F - 0.4F);
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.LEVITATION, 15, 40));
+            DreamBoostCooldownData.resetCooldown(((IEntityDataSaver) player));
         }
     }
 }
