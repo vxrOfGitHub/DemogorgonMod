@@ -33,7 +33,7 @@ public class DreamBootsItem extends ArmorItem {
         super(material, slot, settings);
     }
 
-    @Override
+    /*@Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         if(!world.isClient()) {
             if(entity instanceof PlayerEntity) {
@@ -49,8 +49,6 @@ public class DreamBootsItem extends ArmorItem {
                         }
                     }
                     evaluateArmorEffects(player, world, stack);
-                } else {
-                    KeyInputHandler.UseDreamBoots = false;
                 }
             }
         }
@@ -80,7 +78,7 @@ public class DreamBootsItem extends ArmorItem {
         }
     }
 
-    private void addStatusEffectForMaterial(PlayerEntity player, ArmorMaterial mapArmorMaterial, StatusEffectInstance mapStatusEffect, World world, ItemStack stack) {
+    /* private void addStatusEffectForMaterial(PlayerEntity player, ArmorMaterial mapArmorMaterial, StatusEffectInstance mapStatusEffect, World world, ItemStack stack) {
         boolean hasPlayerEffect = player.hasStatusEffect(mapStatusEffect.getEffectType());
 
         if(hasCorrectBootsOn(mapArmorMaterial, player) && KeyInputHandler.UseDreamBoots && player.isOnGround() && dreamJumpCooldown <= 0) {
@@ -98,7 +96,7 @@ public class DreamBootsItem extends ArmorItem {
             //     player.getInventory().damageArmor(DamageSource.MAGIC, 1f, new int[]{0, 1, 2, 3});
             // }
         }
-    }
+    } */
 
     private boolean hasBootsOn(PlayerEntity player) {
         ItemStack boots = player.getInventory().getArmorStack(0);

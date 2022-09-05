@@ -18,7 +18,7 @@ import net.vxr.vxrofmods.item.ModArmorMaterials;
 
 public class DreamVisionC2SPacket {
 
-    /* public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,
+    public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,
                                PacketByteBuf buf, PacketSender responseSender) {
         // Everything here only happens on the Server
         boolean hasHelmetOn = !player.getInventory().getArmorStack(3).isEmpty();
@@ -29,8 +29,10 @@ public class DreamVisionC2SPacket {
         if(hasHelmetOn && hasCorrectHelmetOn && hasPlayerEffect) {
 
             player.removeStatusEffect(StatusEffects.NIGHT_VISION);
+
         } else if(hasHelmetOn && hasCorrectHelmetOn && !hasPlayerEffect) {
+
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 2147400000, 1));
         }
-    } */
+    }
 }

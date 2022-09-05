@@ -25,7 +25,6 @@ public class ModHelmetItem extends ArmorItem {
     }
 
     private boolean hadPlayerEffect;
-
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         if(!world.isClient()) {
@@ -34,6 +33,7 @@ public class ModHelmetItem extends ArmorItem {
 
                 if(hasHelmetOn(player)) {
                     evaluateArmorEffects(player);
+
                 } else if(!hasHelmetOn(player) && hadPlayerEffect) {
                     player.removeStatusEffect(StatusEffects.NIGHT_VISION);
                     hadPlayerEffect = false;
@@ -49,8 +49,12 @@ public class ModHelmetItem extends ArmorItem {
             ArmorMaterial mapArmorMaterial = entry.getKey();
             StatusEffectInstance mapStatusEffect = entry.getValue();
 
-            if(hasCorrectHelmetOn(mapArmorMaterial, player)) {
-                addStatusEffectForMaterial(player, mapArmorMaterial, mapStatusEffect);
+            boolean hasPlayerEffect = player.hasStatusEffect(mapStatusEffect.getEffectType());
+
+            if(hasCorrectHelmetOn(mapArmorMaterial, player) && hasPlayerEffect) {
+                //addStatusEffectForMaterial(player, mapArmorMaterial, mapStatusEffect);
+                hadPlayerEffect = true;
+
             } else if(!hasCorrectHelmetOn(mapArmorMaterial, player) && hadPlayerEffect) {
                 player.removeStatusEffect(StatusEffects.NIGHT_VISION);
                 hadPlayerEffect = false;
@@ -58,7 +62,7 @@ public class ModHelmetItem extends ArmorItem {
         }
     }
 
-    private void addStatusEffectForMaterial(PlayerEntity player, ArmorMaterial mapArmorMaterial, StatusEffectInstance mapStatusEffect) {
+    /* private void addStatusEffectForMaterial(PlayerEntity player, ArmorMaterial mapArmorMaterial, StatusEffectInstance mapStatusEffect) {
         boolean hasPlayerEffect = player.hasStatusEffect(mapStatusEffect.getEffectType());
 
         if(hasCorrectHelmetOn(mapArmorMaterial, player) && !hasPlayerEffect) {
@@ -70,7 +74,7 @@ public class ModHelmetItem extends ArmorItem {
             //     player.getInventory().damageArmor(DamageSource.MAGIC, 1f, new int[]{0, 1, 2, 3});
             // }
         }
-    }
+    } */
 
     private boolean hasHelmetOn(PlayerEntity player) {
         ItemStack helmet = player.getInventory().getArmorStack(3);
