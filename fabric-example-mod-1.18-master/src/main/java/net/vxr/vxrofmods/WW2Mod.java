@@ -3,6 +3,7 @@ package net.vxr.vxrofmods;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.LiteralText;
@@ -12,6 +13,7 @@ import net.minecraft.world.timer.Timer;
 import net.vxr.vxrofmods.block.ModBlocks;
 import net.vxr.vxrofmods.block.entity.ModBlockEntities;
 import net.vxr.vxrofmods.effect.ModEffects;
+import net.vxr.vxrofmods.event.PlayerTickHandler;
 import net.vxr.vxrofmods.item.ModItems;
 import net.vxr.vxrofmods.networking.ModMessages;
 import net.vxr.vxrofmods.recipe.ModRecipes;
@@ -52,6 +54,8 @@ public class WW2Mod implements ModInitializer {
 		ModRecipes.registerRecipes();
 		ModScreenHandlers.registerAllScreenHandlers();
 		ModMessages.registerC2SPackets();
+
+		ServerTickEvents.START_SERVER_TICK.register(new PlayerTickHandler());
 
 		GeckoLib.initialize();
 	}
