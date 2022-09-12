@@ -39,16 +39,17 @@ import java.util.Scanner;
 
 public class ModChestplateItem extends ArmorItem {
 
-    private static final Map<ArmorMaterial, StatusEffectInstance> MATERIAL_TO_EFFECT_MAP =
+    /* private static final Map<ArmorMaterial, StatusEffectInstance> MATERIAL_TO_EFFECT_MAP =
             (new ImmutableMap.Builder<ArmorMaterial, StatusEffectInstance>())
                     .put(ModArmorMaterials.Dream,
-                            new StatusEffectInstance(StatusEffects.SLOW_FALLING, 6, 1)).build();
+                            new StatusEffectInstance(StatusEffects.SLOW_FALLING, 6, 1)).build(); */
 
     public ModChestplateItem(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
         super(material, slot, settings);
 
     }
 
+    /*
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         if(!world.isClient()) {
@@ -119,7 +120,7 @@ public class ModChestplateItem extends ArmorItem {
         ArmorItem chestplate = ((ArmorItem)player.getInventory().getArmorStack(2).getItem());
 
         return chestplate.getMaterial() == material;
-    }
+    } */
 
 }
 
