@@ -3,7 +3,6 @@ package net.vxr.vxrofmods.entity.client.armor;
 import net.minecraft.util.Identifier;
 import net.vxr.vxrofmods.WW2Mod;
 import net.vxr.vxrofmods.item.custom.ModHelmetItem;
-import net.vxr.vxrofmods.item.custom.PenguinAvatarHelmetItem;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class DreamHelmetModel extends AnimatedGeoModel<ModHelmetItem> {
