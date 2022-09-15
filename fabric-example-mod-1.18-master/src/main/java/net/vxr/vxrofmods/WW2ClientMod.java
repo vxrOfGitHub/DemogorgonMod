@@ -16,6 +16,7 @@ import net.vxr.vxrofmods.block.ModBlocks;
 import net.vxr.vxrofmods.entity.client.DemogorgonRenderer;
 import net.vxr.vxrofmods.entity.ModEntities;
 import net.vxr.vxrofmods.entity.client.PenguinAvatarRenderer;
+import net.vxr.vxrofmods.entity.client.armor.DreamChestplateRenderer;
 import net.vxr.vxrofmods.entity.client.armor.DreamHelmetRenderer;
 import net.vxr.vxrofmods.entity.client.armor.PenguinAvatarHelmetRenderer;
 import net.vxr.vxrofmods.event.KeyInputHandler;
@@ -42,6 +43,7 @@ public class WW2ClientMod implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.PENGUIN_AVATAR, PenguinAvatarRenderer::new);
         GeoArmorRenderer.registerArmorRenderer(new PenguinAvatarHelmetRenderer(), ModItems.PENGUIN_HELMET);
         GeoArmorRenderer.registerArmorRenderer(new DreamHelmetRenderer(), ModItems.Dream_Helmet);
+        GeoArmorRenderer.registerArmorRenderer(new DreamChestplateRenderer(), ModItems.Dream_Chestplate);
 
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.DIAMOND_MINER_BLOCK, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.FRAGMENT_HOLDER, RenderLayer.getCutout());
