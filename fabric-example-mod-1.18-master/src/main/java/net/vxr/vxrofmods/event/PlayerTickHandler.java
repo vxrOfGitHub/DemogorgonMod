@@ -1,11 +1,17 @@
 package net.vxr.vxrofmods.event;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.client.option.ParticlesMode;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.ItemUsageContext;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.vxr.vxrofmods.util.DreamBoostCooldownData;
 import net.vxr.vxrofmods.util.DreamJetpackData;
 import net.vxr.vxrofmods.util.IEntityDataSaver;
@@ -26,6 +32,7 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
             player.setNoGravity(false);
             DreamJetpackData.setJetpackUp(((IEntityDataSaver) player), false);
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 6, 1));
+            DreamJetpackData.setJetpackUp(((IEntityDataSaver) player), false);
         } if(DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player)) && !player.isSneaking() &&
                 !DreamJetpackData.getJetpackUp(((IEntityDataSaver) player))) {
             DreamJetpackData.setJetpackUp(((IEntityDataSaver) player), false);
@@ -34,6 +41,18 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
                 DreamJetpackData.getJetpackUp(((IEntityDataSaver) player))) {
             player.setNoGravity(false);
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.LEVITATION, 3, 5));
+        } if(DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player))) {
+            spawnJetpackParticles(player.getWorld(), player.getBlockPos());
+        }
+    }
+
+    private void spawnJetpackParticles(World world, BlockPos playerPos) {
+        for(int i = 0; i < 360; i++) {
+            if(i % 20 == 0) {
+                world.addParticle(ParticleTypes.FLAME,
+                        playerPos.getX() + 0.5d, playerPos.getY() + 1, playerPos.getZ() + 0.5d,
+                        Math.cos(i) * 0.25d, 0.15d, Math.sin(i) * 0.25d);
+            }
         }
     }
 

@@ -26,6 +26,7 @@ public class DreamJetpackC2SPacket {
             DreamJetpackData.switchJetpackOnOff(((IEntityDataSaver) player));
             if(!DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player))) {
                 player.setNoGravity(false);
+                DreamJetpackData.setJetpackUp(((IEntityDataSaver) player), false);
             }
         }
 

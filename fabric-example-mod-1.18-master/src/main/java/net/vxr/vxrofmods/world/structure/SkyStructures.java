@@ -96,7 +96,7 @@ public class SkyStructures extends StructureFeature<StructurePoolFeatureConfig> 
         if(structurePiecesGenerator.isPresent()) {
             // I use to debug and quickly find out if the structure is spawning or not and where it is.
             // This is returning the coordinates of the center starting piece.
-            // WW2Mod.LOGGER.log(Level.DEBUG, "Sky Structure at {}", blockpos);
+            WW2Mod.LOGGER.log(Level.DEBUG, "Sky Structure at {}", blockpos);
         }
 
         // Return the pieces generator that is now set up so that the game runs it when it needs to create the layout of structure pieces.
