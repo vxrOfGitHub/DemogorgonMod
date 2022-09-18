@@ -3,6 +3,7 @@ package net.vxr.vxrofmods.entity.custom;
 import com.eliotlash.mclib.math.functions.classic.Mod;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -15,6 +16,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.*;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
@@ -36,6 +38,7 @@ import net.vxr.vxrofmods.entity.ai.goal.custom.DemogorgonAttackGoal;
 import net.vxr.vxrofmods.entity.variant.DemogorgonVariant;
 import net.vxr.vxrofmods.sound.ModSounds;
 import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -44,6 +47,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class DemogorgonEntity extends HostileEntity implements IAnimatable{
@@ -92,7 +97,28 @@ public class DemogorgonEntity extends HostileEntity implements IAnimatable{
     public void registerControllers(AnimationData animationData) {
         animationData.addAnimationController(new AnimationController(this, "controller",
                 0, this::predicate));
+        animationData   .addAnimationController(new AnimationController(this, "attackController",
+                0, this::attackPredicate));
     }
+
+    private PlayState attackPredicate(AnimationEvent animationEvent) {
+        PlayerEntity closestPlayer = world.getClosestPlayer(this.getX(), this.getY(), this.getZ(), 15, true);
+        if (closestPlayer != null && random.nextInt(11) == 10) {
+            this.teleport(closestPlayer.getX(), closestPlayer.getY(), closestPlayer.getZ());
+        } else {
+            if (this.handSwinging && animationEvent.getController().getAnimationState().equals(AnimationState.Stopped)) {
+                animationEvent.getController().markNeedsReload();
+                List<String> attackAnimationsList = new ArrayList<>();
+                attackAnimationsList.add("animation.demogorgon.attack1");
+                attackAnimationsList.add("animation.demogorgon.attack2");
+                animationEvent.getController().setAnimation(new AnimationBuilder().addAnimation(
+                        attackAnimationsList.get(random.nextInt(attackAnimationsList.size())), false));
+            }
+        }
+        return PlayState.CONTINUE;
+    }
+
+
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putInt("Variant", this.getTypeVariant());

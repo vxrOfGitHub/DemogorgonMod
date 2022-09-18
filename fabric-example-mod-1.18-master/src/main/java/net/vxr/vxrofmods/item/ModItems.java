@@ -18,15 +18,10 @@ public class ModItems {
     public static final Item Dream_Star = registerItem("dream_star",
             new Item(new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
-    public static final Item WAFFLE = registerItem("waffle",
-            new Item(new FabricItemSettings().group(ModItemGroup.Custom_Mods).food(ModFoodComponents.WAFFLE)));
 
     public static final Item Foundation_Egg = registerItem("foundation_egg",
             new Item(new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
-
-    public static final Item Dowsing_Rod = registerItem("dowsing_rod",
-            new DowsingRodItem(new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxDamage(16)));
 
     public static final Item Dream_Sword = registerItem("dream_sword",
             new DreamSword(ModToolMaterials.DREAM, 2, -2.0f,
@@ -63,9 +58,6 @@ public class ModItems {
     public static final Item PENGUIN_SPAWN_EGG = registerItem("penguin_spawn_egg",
             new SpawnEggItem(ModEntities.PENGUIN_AVATAR,0x46487d, 0xffffff,
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
-
-    public static final Item DREAM_BOW = registerItem("dream_bow",
-            new BowItem(new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxDamage(1000)));
 
     public static final Item BACKGROUND_MUSIC_DISC = registerItem("background_music_disc",
             new ModMusicDiskItem(7, ModSounds.BACKGROUND_MUSIC,

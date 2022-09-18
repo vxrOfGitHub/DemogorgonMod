@@ -7,7 +7,7 @@ import net.vxr.vxrofmods.item.ModItems;
 
 public class ModModelPredicateProvider {
     public static void registerModModels() {
-        registerBow(ModItems.DREAM_BOW);
+
     }
 
     private static void registerBow(Item bow) {
