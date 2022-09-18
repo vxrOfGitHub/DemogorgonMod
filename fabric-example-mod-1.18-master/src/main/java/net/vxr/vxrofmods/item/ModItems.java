@@ -61,7 +61,7 @@ public class ModItems {
 
     public static final Item BACKGROUND_MUSIC_DISC = registerItem("background_music_disc",
             new ModMusicDiskItem(7, ModSounds.BACKGROUND_MUSIC,
-                    new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
+                    new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1), 54));
 
     public static final Item PENGUIN_HELMET = registerItem("penguin_helmet",
             new PenguinAvatarHelmetItem(ModArmorMaterials.AVATAR, EquipmentSlot.HEAD,

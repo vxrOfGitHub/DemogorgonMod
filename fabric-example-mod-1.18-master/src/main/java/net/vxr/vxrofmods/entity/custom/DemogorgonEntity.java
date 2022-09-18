@@ -186,7 +186,7 @@ public class DemogorgonEntity extends HostileEntity implements IAnimatable{
         this.dataTracker.set(DATA_ID_TYPE_VARIANT, variant.getId() & 255);
     }
 
-    @Override
+    /*@Override
     public void tick() {
         for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
             double distanceToPlayer = player.getBlockPos().getSquaredDistance(this.getPos());
@@ -198,5 +198,5 @@ public class DemogorgonEntity extends HostileEntity implements IAnimatable{
                 }
             }
         }
-    }
+    } */
  }
