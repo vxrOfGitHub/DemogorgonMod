@@ -1,8 +1,6 @@
 package net.vxr.vxrofmods.item.custom;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -10,15 +8,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.LiteralText;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
-import net.vxr.vxrofmods.WW2ClientMod;
-import net.vxr.vxrofmods.event.KeyInputHandler;
 import net.vxr.vxrofmods.item.ModArmorMaterials;
 
 import java.util.Map;
@@ -42,10 +31,10 @@ public class DreamBootsItem extends ArmorItem {
                 if(hasBootsOn(player)) {
                     if(dreamJumpCooldown > 0) {
                         int x = dreamJumpCooldown / 20;
-                        player.sendMessage(new LiteralText("§3Dream-Jump Cooldown§l: §5" + x + "s§r"), true);
+                        player.sendMessage(Text.literal("§3Dream-Jump Cooldown§l: §5" + x + "s§r"), true);
                         dreamJumpCooldown--;
                         if(dreamJumpCooldown == 0) {
-                            player.sendMessage(new LiteralText("§2Dream-Jump Cooldown: finished§r"), true);
+                            player.sendMessage(Text.literal("§2Dream-Jump Cooldown: finished§r"), true);
                         }
                     }
                     evaluateArmorEffects(player, world, stack);

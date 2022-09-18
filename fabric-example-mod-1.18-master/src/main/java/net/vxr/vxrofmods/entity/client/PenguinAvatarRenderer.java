@@ -18,7 +18,7 @@ public class PenguinAvatarRenderer extends GeoEntityRenderer<vxrPenguinAvatarEnt
     }
 
     @Override
-    public Identifier getTextureLocation(vxrPenguinAvatarEntity instance) {
+    public Identifier getTextureResource(vxrPenguinAvatarEntity instance) {
         return new Identifier(WW2Mod.MOD_ID, "textures/entity/vxr_penguin/vxr_penguin.png");
     }
 }

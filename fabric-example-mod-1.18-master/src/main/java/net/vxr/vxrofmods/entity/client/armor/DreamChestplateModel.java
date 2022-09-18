@@ -8,17 +8,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class DreamChestplateModel extends AnimatedGeoModel<ModChestplateItem> {
     @Override
-    public Identifier getModelLocation(ModChestplateItem object) {
+    public Identifier getModelResource(ModChestplateItem object) {
         return new Identifier(WW2Mod.MOD_ID, "geo/dream_chestplate.geo.json");
     }
 
     @Override
-    public Identifier getTextureLocation(ModChestplateItem object) {
+    public Identifier getTextureResource(ModChestplateItem object) {
         return new Identifier(WW2Mod.MOD_ID, "textures/models/armor/dream_chestplate.png");
     }
 
     @Override
-    public Identifier getAnimationFileLocation(ModChestplateItem animatable) {
+    public Identifier getAnimationResource(ModChestplateItem animatable) {
         return new Identifier(WW2Mod.MOD_ID, "animations/dream_chestplate.animation.json");
     }
 }

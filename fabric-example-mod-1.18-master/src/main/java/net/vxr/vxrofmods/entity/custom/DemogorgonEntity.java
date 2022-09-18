@@ -23,6 +23,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -53,6 +54,8 @@ import java.util.UUID;
 
 public class DemogorgonEntity extends HostileEntity implements IAnimatable{
     private AnimationFactory factory = new AnimationFactory(this);
+
+    private int dimensionDriftCooldown = 0;
 
     public DemogorgonEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
@@ -102,10 +105,6 @@ public class DemogorgonEntity extends HostileEntity implements IAnimatable{
     }
 
     private PlayState attackPredicate(AnimationEvent animationEvent) {
-        PlayerEntity closestPlayer = world.getClosestPlayer(this.getX(), this.getY(), this.getZ(), 15, true);
-        if (closestPlayer != null && random.nextInt(11) == 10) {
-            this.teleport(closestPlayer.getX(), closestPlayer.getY(), closestPlayer.getZ());
-        } else {
             if (this.handSwinging && animationEvent.getController().getAnimationState().equals(AnimationState.Stopped)) {
                 animationEvent.getController().markNeedsReload();
                 List<String> attackAnimationsList = new ArrayList<>();
@@ -114,7 +113,6 @@ public class DemogorgonEntity extends HostileEntity implements IAnimatable{
                 animationEvent.getController().setAnimation(new AnimationBuilder().addAnimation(
                         attackAnimationsList.get(random.nextInt(attackAnimationsList.size())), false));
             }
-        }
         return PlayState.CONTINUE;
     }
 
@@ -122,12 +120,14 @@ public class DemogorgonEntity extends HostileEntity implements IAnimatable{
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putInt("Variant", this.getTypeVariant());
+        nbt.putInt("demogorgon.dimension_drift.cooldown", dimensionDriftCooldown);
     }
 
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         this.dataTracker.set(DATA_ID_TYPE_VARIANT, nbt.getInt("Variant"));
+        dimensionDriftCooldown = nbt.getInt("demogorgon.dimension_drift.cooldown");
     }
     @Override
     public AnimationFactory getFactory() {
@@ -184,5 +184,8 @@ public class DemogorgonEntity extends HostileEntity implements IAnimatable{
         this.dataTracker.set(DATA_ID_TYPE_VARIANT, variant.getId() & 255);
     }
 
+    @Override
+    public void tick() {
 
+    }
 }

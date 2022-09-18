@@ -30,7 +30,7 @@ public class DemogorgonRenderer extends GeoEntityRenderer<DemogorgonEntity> {
     }
 
     @Override
-    public Identifier getTextureLocation(DemogorgonEntity instance) {
+    public Identifier getTextureResource(DemogorgonEntity instance) {
         return LOCATION_BY_VARIANT.get(instance.getVariant());
     }
 }

@@ -1,6 +1,5 @@
 package net.vxr.vxrofmods.block.entity;
 
-import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,18 +13,14 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.vxr.vxrofmods.item.ModItems;
 import net.vxr.vxrofmods.item.inventory.ImplementedInventory;
-import net.vxr.vxrofmods.recipe.DiamondMinerRecipe;
 import net.vxr.vxrofmods.screen.DiamondMinerScreenHandler;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
 
 public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, ImplementedInventory {
     private final DefaultedList<ItemStack> inventory =
@@ -71,7 +66,7 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
 
     @Override
     public Text getDisplayName() {
-        return new LiteralText("Ore Miner");
+        return Text.literal("Ore Miner");
     }
 
     @Nullable

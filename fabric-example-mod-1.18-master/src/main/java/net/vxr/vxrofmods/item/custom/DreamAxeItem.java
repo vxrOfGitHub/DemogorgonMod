@@ -1,6 +1,5 @@
 package net.vxr.vxrofmods.item.custom;
 
-import net.minecraft.block.AirBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.screen.Screen;
@@ -10,15 +9,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.ToolMaterial;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
@@ -28,7 +20,6 @@ import net.vxr.vxrofmods.util.ModTags;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.UUID;
 
 public class DreamAxeItem extends AxeItem {
     public DreamAxeItem(ToolMaterial material, float attackDamage, float attackSpeed, Settings settings) {
@@ -154,9 +145,9 @@ public class DreamAxeItem extends AxeItem {
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         if(Screen.hasShiftDown()) {
-            tooltip.add(new TranslatableText("item.vxrofmods.dream_axe.tooltip.shift"));
+            tooltip.add(Text.translatable("item.vxrofmods.dream_axe.tooltip.shift"));
         } else {
-            tooltip.add(new TranslatableText("item.vxrofmods.dream_axe.tooltip"));
+            tooltip.add(Text.translatable("item.vxrofmods.dream_axe.tooltip"));
         }
     }
 
@@ -166,12 +157,12 @@ public class DreamAxeItem extends AxeItem {
             modeSetter = 3;
         } else if (modeSetter >= 3){
             modeSetter = 0;
-            user.sendMessage(new LiteralText("§bTree-Breaker deactivated§r"), true);
+            user.sendMessage(Text.literal("§bTree-Breaker deactivated§r"), true);
         } else if(modeSetter <= 0) {
             modeSetter = 1;
         } else if(modeSetter == 1) {
             modeSetter = 2;
-            user.sendMessage(new LiteralText("§bTree-Breaker activated§r"), true);
+            user.sendMessage(Text.literal("§bTree-Breaker activated§r"), true);
         }
 
         return super.use(world, user, hand);

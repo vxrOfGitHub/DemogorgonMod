@@ -11,17 +11,17 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 public class PenguinAvatarModel extends AnimatedGeoModel<vxrPenguinAvatarEntity> {
     @Override
-    public Identifier getModelLocation(vxrPenguinAvatarEntity object) {
+    public Identifier getModelResource(vxrPenguinAvatarEntity object) {
         return new Identifier(WW2Mod.MOD_ID, "geo/vxr_penguin.geo.json");
     }
 
     @Override
-    public Identifier getTextureLocation(vxrPenguinAvatarEntity object) {
+    public Identifier getTextureResource(vxrPenguinAvatarEntity object) {
         return new Identifier(WW2Mod.MOD_ID, "textures/entity/vxr_penguin/vxr_penguin.png");
     }
 
     @Override
-    public Identifier getAnimationFileLocation(vxrPenguinAvatarEntity animatable) {
+    public Identifier getAnimationResource(vxrPenguinAvatarEntity animatable) {
         return new Identifier(WW2Mod.MOD_ID, "animations/vxr_penguin.animation.json");
     }
     @SuppressWarnings({ "unchecked", "rawtypes" })

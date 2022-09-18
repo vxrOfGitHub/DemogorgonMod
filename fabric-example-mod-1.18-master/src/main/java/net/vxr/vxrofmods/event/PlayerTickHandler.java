@@ -1,15 +1,12 @@
 package net.vxr.vxrofmods.event;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.client.option.ParticlesMode;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.ItemUsageContext;
-import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.vxr.vxrofmods.util.DreamBoostCooldownData;
@@ -62,7 +59,7 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
             int tick2Secconds = DreamBoostCooldownData.getCooldown(((IEntityDataSaver) player)) / 20;
             int x = DreamBoostCooldownData.getCooldown(((IEntityDataSaver) player)) % 20;
             if(x <= 0) {
-                player.sendMessage(new LiteralText("§3Dream-Boost Cooldown§l: §5" +
+                player.sendMessage(Text.literal("§3Dream-Boost Cooldown§l: §5" +
                         tick2Secconds + "s§r"), true);
             }
         }

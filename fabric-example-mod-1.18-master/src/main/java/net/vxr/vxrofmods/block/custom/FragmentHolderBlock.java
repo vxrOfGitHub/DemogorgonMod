@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -39,14 +39,14 @@ public class FragmentHolderBlock extends Block {
             Item item = Items.EMERALD_BLOCK;
 
             if(itemStack.getItem() == item && state.get(SWAPPED)) {
-                player.sendMessage(new LiteralText("SWAPPED"), false);
+                player.sendMessage(Text.literal("SWAPPED"), false);
 
                 world.setBlockState(pos, state.with(SWAPPED, false), Block.NOTIFY_ALL);
                 randomFragment(itemStack, player, world);
 
 
             } if(itemStack.getItem() != item  && state.get(SWAPPED)) {
-                player.sendMessage(new LiteralText("STOLEN"), false);
+                player.sendMessage(Text.literal("STOLEN"), false);
 
                 world.breakBlock(pos, false);
 
@@ -54,7 +54,7 @@ public class FragmentHolderBlock extends Block {
                 randomFragment(itemStack, player, world);
 
             } if(itemStack.getItem() != item && !state.get(SWAPPED)) {
-                player.sendMessage(new LiteralText("SWAPPED STOLEN"), false);
+                player.sendMessage(Text.literal("SWAPPED STOLEN"), false);
 
                 world.breakBlock(pos, false);
 

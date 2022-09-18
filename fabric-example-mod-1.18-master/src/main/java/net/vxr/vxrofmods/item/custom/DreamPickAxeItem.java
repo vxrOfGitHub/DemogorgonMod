@@ -8,13 +8,10 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.LiteralText;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.PickaxeItem;
+import net.minecraft.item.ToolMaterial;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
@@ -25,7 +22,6 @@ import net.vxr.vxrofmods.util.ModTags;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class DreamPickAxeItem extends PickaxeItem {
 
@@ -169,9 +165,9 @@ public class DreamPickAxeItem extends PickaxeItem {
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         if(Screen.hasShiftDown()) {
-            tooltip.add(new TranslatableText("item.vxrofmods.dream_pickaxe.tooltip.shift"));
+            tooltip.add(Text.translatable("item.vxrofmods.dream_pickaxe.tooltip.shift"));
         } else {
-            tooltip.add(new TranslatableText("item.vxrofmods.dream_pickaxe.tooltip"));
+            tooltip.add(Text.translatable("item.vxrofmods.dream_pickaxe.tooltip"));
         }
     }
 
@@ -182,16 +178,16 @@ public class DreamPickAxeItem extends PickaxeItem {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         if(modeSetter == 2) {
             modeSetter = 3;
-            user.sendMessage(new LiteralText("§b3x3-Breaker activated§r"), true);
+            user.sendMessage(Text.literal("§b3x3-Breaker activated§r"), true);
         } else if (modeSetter >= 3){
             modeSetter = 0;
-            user.sendMessage(new LiteralText("§b3x3-Breaker activated§r"), true);
+            user.sendMessage(Text.literal("§b3x3-Breaker activated§r"), true);
         } else if(modeSetter <= 0) {
             modeSetter = 1;
-            user.sendMessage(new LiteralText("§b3x3-Breaker deactivated§r"), true);
+            user.sendMessage(Text.literal("§b3x3-Breaker deactivated§r"), true);
         } else if(modeSetter == 1) {
             modeSetter = 2;
-            user.sendMessage(new LiteralText("§b3x3-Breaker deactivated§r"), true);
+            user.sendMessage(Text.literal("§b3x3-Breaker deactivated§r"), true);
         }
         return super.use(world, user, hand);
     }

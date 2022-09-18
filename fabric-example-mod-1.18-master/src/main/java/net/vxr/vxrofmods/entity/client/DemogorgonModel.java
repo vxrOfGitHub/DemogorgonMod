@@ -10,17 +10,17 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 public class DemogorgonModel extends AnimatedGeoModel<DemogorgonEntity> {
     @Override
-    public Identifier getModelLocation(DemogorgonEntity object) {
+    public Identifier getModelResource(DemogorgonEntity object) {
         return new Identifier(WW2Mod.MOD_ID, "geo/demogorgon.geo.json");
     }
 
     @Override
-    public Identifier getTextureLocation(DemogorgonEntity object) {
+    public Identifier getTextureResource(DemogorgonEntity object) {
         return DemogorgonRenderer.LOCATION_BY_VARIANT.get(object.getVariant());
     }
 
     @Override
-    public Identifier getAnimationFileLocation(DemogorgonEntity animatable) {
+    public Identifier getAnimationResource(DemogorgonEntity animatable) {
         return new Identifier(WW2Mod.MOD_ID, "animations/demogorgon.animation.json");
     }
     @SuppressWarnings({ "unchecked", "rawtypes" })
