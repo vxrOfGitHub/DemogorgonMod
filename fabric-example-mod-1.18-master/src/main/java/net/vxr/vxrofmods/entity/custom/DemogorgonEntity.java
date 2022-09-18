@@ -23,6 +23,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
@@ -56,6 +57,7 @@ public class DemogorgonEntity extends HostileEntity implements IAnimatable{
     private AnimationFactory factory = new AnimationFactory(this);
 
     private int dimensionDriftCooldown = 0;
+    private int dimensionDriftMaxCooldown = 400;
 
     public DemogorgonEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
@@ -127,7 +129,7 @@ public class DemogorgonEntity extends HostileEntity implements IAnimatable{
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         this.dataTracker.set(DATA_ID_TYPE_VARIANT, nbt.getInt("Variant"));
-        dimensionDriftCooldown = nbt.getInt("demogorgon.dimension_drift.cooldown");
+        this.dimensionDriftCooldown = nbt.getInt("demogorgon.dimension_drift.cooldown");
     }
     @Override
     public AnimationFactory getFactory() {
@@ -186,6 +188,15 @@ public class DemogorgonEntity extends HostileEntity implements IAnimatable{
 
     @Override
     public void tick() {
-
+        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+            double distanceToPlayer = player.getBlockPos().getSquaredDistance(this.getPos());
+            if(distanceToPlayer <= 40) {
+                this.dimensionDriftCooldown++;
+                System.out.println("Du bei einem Demogorgon");
+                if(this.dimensionDriftCooldown >= dimensionDriftMaxCooldown) {
+                    this.dimensionDriftCooldown = 0;
+                }
+            }
+        }
     }
-}
+ }
