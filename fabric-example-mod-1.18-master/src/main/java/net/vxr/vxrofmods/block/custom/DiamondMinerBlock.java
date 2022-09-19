@@ -48,6 +48,14 @@ public class DiamondMinerBlock extends BlockWithEntity implements BlockEntityPro
     // Block Entity
 
 
+
+
+
+
+
+    // BLOCK ENTITY //
+
+
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;

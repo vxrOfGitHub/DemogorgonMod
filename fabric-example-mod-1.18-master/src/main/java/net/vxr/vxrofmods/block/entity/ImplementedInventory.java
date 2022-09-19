@@ -1,4 +1,4 @@
-package net.vxr.vxrofmods.item.inventory;
+package net.vxr.vxrofmods.block.entity;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
@@ -31,8 +31,6 @@ public interface ImplementedInventory extends SidedInventory {
      * @return the item list
      */
     DefaultedList<ItemStack> getItems();
-
-    // Creation
 
     /**
      * Creates an inventory from the item list.

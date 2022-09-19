@@ -40,7 +40,7 @@ public class WW2Mod implements ModInitializer {
 		ModEffects.registerEffects();
 		ModSounds.registerSounds();
 		ModWorldGen.generateModWorldGen();
-		ModBlockEntities.registerAllBlockEntities();
+		ModBlockEntities.registerBlockEntities();
 		ModRecipes.registerRecipes();
 		ModScreenHandlers.registerAllScreenHandlers();
 		ModMessages.registerC2SPackets();

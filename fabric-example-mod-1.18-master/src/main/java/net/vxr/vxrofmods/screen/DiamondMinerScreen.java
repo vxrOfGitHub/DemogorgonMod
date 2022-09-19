@@ -32,15 +32,13 @@ public class DiamondMinerScreen extends HandledScreen<DiamondMinerScreenHandler>
         int y = (height - backgroundHeight) / 2;
         drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight);
 
+        renderProgressArrow(matrices, x, y);
+    }
+
+    private void renderProgressArrow(MatrixStack matrices, int x, int y) {
         if(handler.isCrafting()) {
-            drawTexture(matrices, x + 67, y + 43, 177, 1, handler.getScaledProgress(), 36);
+            drawTexture(matrices, x + 66, y + 41, 176, 0, handler.getScaledProgress(), 36);
         }
-
-        if(handler.hasFuel()) {
-            drawTexture(matrices, x + 18, y + 33 + 14 - handler.getScaledFuelProgress(), x + 20,
-                    14 - handler.getScaledFuelProgress(), 14, handler.getScaledFuelProgress());
-        }
-
     }
 
     @Override
@@ -49,5 +47,4 @@ public class DiamondMinerScreen extends HandledScreen<DiamondMinerScreenHandler>
         super.render(matrices, mouseX, mouseY, delta);
         drawMouseoverTooltip(matrices, mouseX, mouseY);
     }
-
 }

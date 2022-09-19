@@ -11,7 +11,7 @@ import net.vxr.vxrofmods.block.ModBlocks;
 public class ModBlockEntities {
     public static BlockEntityType<DiamondMinerBlockEntity> DIAMOND_MINER;
 
-    public static void registerAllBlockEntities() {
+    public static void registerBlockEntities() {
         DIAMOND_MINER = Registry.register(Registry.BLOCK_ENTITY_TYPE,
                 new Identifier(WW2Mod.MOD_ID, "diamond_miner"),
                         FabricBlockEntityTypeBuilder.create(DiamondMinerBlockEntity::new,

@@ -5,8 +5,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
-import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
 import net.vxr.vxrofmods.block.ModBlocks;
 import net.vxr.vxrofmods.entity.ModEntities;
@@ -25,11 +24,6 @@ import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 
 @Environment(EnvType.CLIENT)
 public class WW2ClientMod implements ClientModInitializer {
-    private static KeyBinding Jetpack;
-    private static KeyBinding JetpackLifter;
-    private static KeyBinding DreamBoots;
-    private static boolean UseJetpack;
-    private static boolean UseJetpackLifter;
 
     @Override
     public void onInitializeClient() {
@@ -42,7 +36,7 @@ public class WW2ClientMod implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.DIAMOND_MINER_BLOCK, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.FRAGMENT_HOLDER, RenderLayer.getCutout());
 
-        ScreenRegistry.register(ModScreenHandlers.DIAMOND_MINER_SCREEN_HANDLER, DiamondMinerScreen::new);
+        HandledScreens.register(ModScreenHandlers.DIAMOND_MINER_SCREEN_HANDLER, DiamondMinerScreen::new);
 
         ModModelPredicateProvider.registerModModels();
 
@@ -53,19 +47,4 @@ public class WW2ClientMod implements ClientModInitializer {
 
     }
 
-    private void setUseJetpack(boolean useJetpack) {
-        UseJetpack = useJetpack;
-    }
-
-    public static void setUseJetpackLifter(boolean useJetpackLifter) {
-        UseJetpackLifter = useJetpackLifter;
-    }
-
-    public static boolean isUseJetpack() {
-        return UseJetpack;
-    }
-
-    public static boolean isUseJetpackLifter() {
-        return UseJetpackLifter;
-    }
 }
