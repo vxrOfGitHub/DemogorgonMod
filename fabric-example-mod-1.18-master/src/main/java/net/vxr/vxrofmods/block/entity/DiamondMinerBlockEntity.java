@@ -18,8 +18,11 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.vxr.vxrofmods.item.ModItems;
+import net.vxr.vxrofmods.recipe.DiamondMinerRecipe;
 import net.vxr.vxrofmods.screen.DiamondMinerScreenHandler;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, ImplementedInventory {
 
@@ -118,11 +121,14 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
         for(int i = 0; i < entity.size(); i++) {
             inventory.setStack(i, entity.getStack(i));
         }
-
+        Optional<DiamondMinerRecipe> recipe = entity.getWorld().getRecipeManager()
+                .getFirstMatch(DiamondMinerRecipe.Type.INSTANCE, inventory, entity.getWorld());
         if(hasRecipe(entity)) {
-            entity.setStack(2, new ItemStack(Items.DIAMOND, entity.getStack(2).getCount() + 1));
-        }
+            entity.setStack(2, new ItemStack(recipe.get().getOutput().getItem(),
+                    entity.getStack(2).getCount() + 1));
 
+            entity.resetProgress();
+        }
     }
 
     private static boolean hasRecipe(DiamondMinerBlockEntity entity) {
@@ -131,10 +137,11 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
             inventory.setStack(i, entity.getStack(i));
         }
 
-        boolean hasDiamondFragmentInFirstSlot = entity.getStack(1).getItem().equals(ModItems.DIAMOND_FRAGMENT);
+        Optional<DiamondMinerRecipe> match = entity.getWorld().getRecipeManager()
+                .getFirstMatch(DiamondMinerRecipe.Type.INSTANCE, inventory, entity.getWorld());
 
-        return hasDiamondFragmentInFirstSlot && canInsertAmountIntoOutputSlot(inventory, 1)
-                && canInsertItemIntoOutputSlot(inventory, Items.DIAMOND);
+        return match.isPresent() && canInsertAmountIntoOutputSlot(inventory)
+                && canInsertItemIntoOutputSlot(inventory, match.get().getOutput().getItem());
 
     }
 
@@ -142,7 +149,7 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
         return inventory.getStack(2).getItem() == output || inventory.getStack(2).isEmpty();
     }
 
-    private static boolean canInsertAmountIntoOutputSlot(SimpleInventory inventory, int count) {
-        return inventory.getStack(2).getMaxCount() > inventory.getStack(2).getCount() + count;
+    private static boolean canInsertAmountIntoOutputSlot(SimpleInventory inventory) {
+        return inventory.getStack(2).getMaxCount() > inventory.getStack(2).getCount();
     }
 }

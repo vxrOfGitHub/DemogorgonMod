@@ -1,0 +1,11 @@
+{
+  "type": "vxrofmods:diamond_miner",
+  "ingredients": [
+    {
+      "item": "vxrofmods:redstone_fragment"
+    }
+  ],
+  "output": {
+    "item": "minecraft:redstone"
+  }
+}

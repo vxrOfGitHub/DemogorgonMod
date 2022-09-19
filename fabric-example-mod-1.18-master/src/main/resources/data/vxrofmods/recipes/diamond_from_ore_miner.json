@@ -1,0 +1,11 @@
+{
+  "type": "vxrofmods:diamond_miner",
+  "ingredients": [
+    {
+      "item": "vxrofmods:diamond_fragment"
+    }
+  ],
+  "output": {
+    "item": "minecraft:diamond"
+  }
+}

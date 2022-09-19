@@ -1,0 +1,11 @@
+{
+  "type": "vxrofmods:diamond_miner",
+  "ingredients": [
+    {
+      "item": "vxrofmods:copper_fragment"
+    }
+  ],
+  "output": {
+    "item": "minecraft:copper_ingot"
+  }
+}
