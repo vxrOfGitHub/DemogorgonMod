@@ -1,5 +1,8 @@
 package net.vxr.vxrofmods.block.entity;
 
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,14 +13,20 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import net.vxr.vxrofmods.block.custom.DiamondMinerBlock;
 import net.vxr.vxrofmods.item.ModItems;
+import net.vxr.vxrofmods.networking.ModMessages;
 import net.vxr.vxrofmods.recipe.DiamondMinerRecipe;
 import net.vxr.vxrofmods.screen.DiamondMinerScreenHandler;
 import org.jetbrains.annotations.Nullable;
@@ -28,6 +37,39 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
 
     private final DefaultedList<ItemStack> inventory =
             DefaultedList.ofSize(3, ItemStack.EMPTY);
+
+
+    public ItemStack getRenderStack() {
+        if(this.getStack(2).isEmpty()) {
+            return  this.getStack(1);
+        } else {
+            return this.getStack(2);
+        }
+    }
+
+    public void setInventory(DefaultedList<ItemStack> list) {
+        for(int i = 0; 0 < inventory.size(); i++) {
+            this.inventory.set(i, inventory.get(i));
+        }
+    }
+
+    @Override
+    public void markDirty() {
+        if(!world.isClient()) {
+            PacketByteBuf data = PacketByteBufs.create();
+            data.writeInt(inventory.size());
+            for(int i = 0; i < inventory.size(); i++) {
+                data.writeItemStack(inventory.get(i));
+            }
+            data.writeBlockPos(getPos());
+
+            for (ServerPlayerEntity player : PlayerLookup.tracking((ServerWorld) world, getPos())) {
+                ServerPlayNetworking.send(player, ModMessages.ITEM_SYNC, data);
+            }
+        }
+
+        super.markDirty();
+    }
 
     protected final PropertyDelegate propertyDelegate;
     private int progress = 0;
@@ -116,6 +158,27 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
         this.progress = 0;
     }
 
+    @Override
+    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction side) {
+        Direction localDir = this.getWorld().getBlockState(this.pos).get(DiamondMinerBlock.FACING);
+
+        if (side == Direction.UP) {
+                return slot == 1;
+        }
+        if (side == Direction.EAST || side == Direction.WEST || side == Direction.NORTH || side == Direction.SOUTH) {
+            return slot == 0;
+        }
+            return false;
+    }
+
+    @Override
+    public boolean canExtract(int slot, ItemStack stack, Direction side) {
+        if(side == Direction.DOWN) {
+            return slot == 2;
+        }
+        return false;
+    }
+
     private static void craftItem(DiamondMinerBlockEntity entity) {
         SimpleInventory inventory = new SimpleInventory(entity.size());
         for(int i = 0; i < entity.size(); i++) {
@@ -152,4 +215,7 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
     private static boolean canInsertAmountIntoOutputSlot(SimpleInventory inventory) {
         return inventory.getStack(2).getMaxCount() > inventory.getStack(2).getCount();
     }
+
+
+
 }
