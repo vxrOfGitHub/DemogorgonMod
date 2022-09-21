@@ -18,13 +18,13 @@ import net.minecraft.world.World;
 import net.vxr.vxrofmods.block.custom.DiamondMinerBlock;
 import net.vxr.vxrofmods.block.entity.DiamondMinerBlockEntity;
 
-public class DiamondMinerBlockEntityRenderer implements BlockEntityRenderer<DiamondMinerBlockEntity> {
+/* public class DiamondMinerBlockEntityRenderer implements BlockEntityRenderer<DiamondMinerBlockEntity> {
 
-    public DiamondMinerBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
+      public DiamondMinerBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
 
     }
 
-    @Override
+     @Override
     public void render(DiamondMinerBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
         ItemStack itemStack = entity.getRenderStack();
@@ -33,17 +33,19 @@ public class DiamondMinerBlockEntityRenderer implements BlockEntityRenderer<Diam
         matrices.scale(0.2f, 0.2f, 0.2f);
         matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90));
 
+
         switch (entity.getCachedState().get(DiamondMinerBlock.FACING)) {
             case NORTH -> matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(180));
             case EAST -> matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(270));
             case SOUTH -> matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(0));
             case WEST -> matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(90));
+
         }
+
 
         itemRenderer.renderItem(itemStack, ModelTransformation.Mode.GUI, getLightLevel(entity.getWorld(), entity.getPos()),
                 OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, 1);
         matrices.pop();
-
     }
 
     private int getLightLevel(World world, BlockPos pos) {
@@ -52,4 +54,5 @@ public class DiamondMinerBlockEntityRenderer implements BlockEntityRenderer<Diam
         return LightmapTextureManager.pack(bLight, sLight);
     }
 
-}
+} */
+

@@ -10,7 +10,7 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 
 public class ItemStackSyncS2CPacket {
-    public static void receive(MinecraftClient client, ClientPlayNetworkHandler handler,
+    /* public static void receive(MinecraftClient client, ClientPlayNetworkHandler handler,
                                PacketByteBuf buf, PacketSender responseSender) {
         int size = buf.readInt();
         DefaultedList<ItemStack> list = DefaultedList.ofSize(size, ItemStack.EMPTY);
@@ -22,5 +22,5 @@ public class ItemStackSyncS2CPacket {
         if(client.world.getBlockEntity(position) instanceof DiamondMinerBlockEntity blockEntity) {
             blockEntity.setInventory(list);
         }
-    }
+    } */
 }
