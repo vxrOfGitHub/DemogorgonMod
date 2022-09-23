@@ -113,7 +113,7 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
     }
 
     private static int getMineTimeFromItem (DiamondMinerBlockEntity entity) {
-        if(entity.getStack(1).equals(new ItemStack(ModItems.DIAMOND_FRAGMENT))) {
+        if(entity.getStack(1) == (new ItemStack(ModItems.DIAMOND_FRAGMENT))) {
             return entity.diamondMineTime;
         }else if(entity.getStack(1).equals(new ItemStack(ModItems.IRON_FRAGMENT))) {
             return entity.ironMineTime;
@@ -133,21 +133,22 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
     }
 
     private static int getMineTimeWithPickaxe (DiamondMinerBlockEntity entity) {
-        int mineTimeWithPickaxe = entity.maxProgress;
         if(entity.getStack(0).equals(Items.STONE_PICKAXE)) {
-            mineTimeWithPickaxe = getMineTimeFromItem(entity) * 95 / 100;
-        } if(entity.getStack(0).equals(Items.IRON_PICKAXE)) {
-            mineTimeWithPickaxe = getMineTimeFromItem(entity) * 90 / 100;
-        } if(entity.getStack(0).equals(Items.GOLDEN_PICKAXE)) {
-            mineTimeWithPickaxe = getMineTimeFromItem(entity) * 80 / 100;
-        } if(entity.getStack(0).equals(Items.DIAMOND_PICKAXE)) {
-            mineTimeWithPickaxe = getMineTimeFromItem(entity) * 80 / 100;
-        } if(entity.getStack(0).equals(Items.NETHERITE_PICKAXE)) {
-            mineTimeWithPickaxe = getMineTimeFromItem(entity) * 70 / 100;
-        } if(entity.getStack(0).equals(ModItems.Dream_Pickaxe)) {
-            mineTimeWithPickaxe = getMineTimeFromItem(entity) * 60 / 100;
+            return getMineTimeFromItem(entity) * 95 / 100;
+        } else if(entity.getStack(0).equals(Items.IRON_PICKAXE)) {
+            return getMineTimeFromItem(entity) * 90 / 100;
+        } else if(entity.getStack(0).equals(Items.GOLDEN_PICKAXE)) {
+            return getMineTimeFromItem(entity) * 80 / 100;
+        } else if(entity.getStack(0).equals(Items.DIAMOND_PICKAXE)) {
+            return getMineTimeFromItem(entity) * 80 / 100;
+        } else if(entity.getStack(0).equals(Items.NETHERITE_PICKAXE)) {
+            return getMineTimeFromItem(entity) * 70 / 100;
+        } else if(entity.getStack(0).equals(ModItems.Dream_Pickaxe)) {
+            return getMineTimeFromItem(entity) * 60 / 100;
+        } else {
+            return getMineTimeFromItem(entity);
         }
-        return mineTimeWithPickaxe;
+
     }
 
     @Override
@@ -184,11 +185,10 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
         if(world.isClient()) {
             return;
         }
-
         if(hasRecipe(entity)) {
             entity.progress++;
             markDirty(world, blockPos, state);
-            if(entity.progress >= entity.individualProgress) {
+            if(entity.progress >= getMineTimeWithPickaxe(entity)) {
                 craftItem(entity);
             }
         } else {
@@ -242,6 +242,27 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
             entity.resetProgress();
         }
     }
+    private static boolean hasCorrectPickaxeInSlot(SimpleInventory inventory) {
+        if(inventory.getStack(1).equals(ModItems.IRON_FRAGMENT) || inventory.getStack(1).equals(ModItems.COPPER_FRAGMENT) ||
+                inventory.getStack(1).equals(ModItems.LAPIS_LAZULI_FRAGMENT)) {
+            if (inventory.getStack(0).equals(Items.IRON_PICKAXE) ||
+                    inventory.getStack(0).equals(Items.STONE_PICKAXE) ||
+                    inventory.getStack(0).equals(Items.DIAMOND_PICKAXE) ||
+                    inventory.getStack(0).equals(Items.NETHERITE_PICKAXE) ||
+                    inventory.getStack(0).equals(ModItems.Dream_Pickaxe)) {
+                return true;
+            }
+        } else if(inventory.getStack(1).equals(ModItems.GOLD_FRAGMENT) || inventory.getStack(1).equals(ModItems.REDSTONE_FRAGMENT) ||
+                inventory.getStack(1).equals(ModItems.EMERALD_FRAGMENT) || inventory.getStack(1).equals(ModItems.DIAMOND_FRAGMENT)) {
+            if (inventory.getStack(0).equals(Items.IRON_PICKAXE) ||
+                    inventory.getStack(0).equals(Items.DIAMOND_PICKAXE) ||
+                    inventory.getStack(0).equals(Items.NETHERITE_PICKAXE) ||
+                    inventory.getStack(0).equals(ModItems.Dream_Pickaxe)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private static boolean hasRecipe(DiamondMinerBlockEntity entity) {
         SimpleInventory inventory = new SimpleInventory(entity.size());
@@ -251,7 +272,7 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
 
         Optional<DiamondMinerRecipe> match = entity.getWorld().getRecipeManager()
                 .getFirstMatch(DiamondMinerRecipe.Type.INSTANCE, inventory, entity.getWorld());
-        return match.isPresent() &&
+        return match.isPresent() && canInsertAmountIntoOutputSlot(inventory) //&& hasCorrectPickaxeInSlot(inventory)
                 && canInsertItemIntoOutputSlot(inventory, match.get().getOutput().getItem());
 
     }
