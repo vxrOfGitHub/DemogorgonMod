@@ -94,14 +94,6 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
                 switch (index) {
                     case 0: return DiamondMinerBlockEntity.this.progress;
                     case 1: return DiamondMinerBlockEntity.this.maxProgress;
-                    case 2: return DiamondMinerBlockEntity.this.diamondMineTime;
-                    case 3: return DiamondMinerBlockEntity.this.ironMineTime;
-                    case 4: return DiamondMinerBlockEntity.this.goldMineTime;
-                    case 5: return DiamondMinerBlockEntity.this.emeraldMineTime;
-                    case 6: return DiamondMinerBlockEntity.this.copperMineTime;
-                    case 7: return DiamondMinerBlockEntity.this.redstoneMineTime;
-                    case 8: return DiamondMinerBlockEntity.this.lapisMineTime;
-                    case 9: return DiamondMinerBlockEntity.this.individualProgress;
                     default: return 0;
                 }
             }
@@ -110,14 +102,6 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
                 switch(index) {
                     case 0: DiamondMinerBlockEntity.this.progress = value; break;
                     case 1: DiamondMinerBlockEntity.this.maxProgress = value; break;
-                    case 2: DiamondMinerBlockEntity.this.diamondMineTime = value; break;
-                    case 3: DiamondMinerBlockEntity.this.ironMineTime = value; break;
-                    case 4: DiamondMinerBlockEntity.this.goldMineTime = value; break;
-                    case 5: DiamondMinerBlockEntity.this.emeraldMineTime = value; break;
-                    case 6: DiamondMinerBlockEntity.this.copperMineTime = value; break;
-                    case 7: DiamondMinerBlockEntity.this.redstoneMineTime = value; break;
-                    case 8: DiamondMinerBlockEntity.this.lapisMineTime = value; break;
-                    case 9: DiamondMinerBlockEntity.this.individualProgress = value; break;
 
                 }
             }
@@ -128,24 +112,42 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
         };
     }
 
-    private static int getMineTimeFromItem (ItemStack output, DiamondMinerBlockEntity entity) {
-        if(output.getItem() == Items.DIAMOND) {
+    private static int getMineTimeFromItem (DiamondMinerBlockEntity entity) {
+        if(entity.getStack(1).equals(new ItemStack(ModItems.DIAMOND_FRAGMENT))) {
             return entity.diamondMineTime;
-        }else if(output.getItem() == Items.IRON_INGOT) {
+        }else if(entity.getStack(1).equals(new ItemStack(ModItems.IRON_FRAGMENT))) {
             return entity.ironMineTime;
-        }else if(output.getItem() == Items.GOLD_INGOT) {
+        }else if(entity.getStack(1).equals(new ItemStack(ModItems.GOLD_FRAGMENT))) {
             return entity.goldMineTime;
-        }else if(output.getItem() == Items.EMERALD) {
+        }else if(entity.getStack(1).equals(new ItemStack(ModItems.EMERALD_FRAGMENT))) {
             return entity.emeraldMineTime;
-        }else if(output.getItem() == Items.COPPER_INGOT) {
+        }else if(entity.getStack(1).equals(new ItemStack(ModItems.COPPER_FRAGMENT))) {
             return entity.copperMineTime;
-        }else if(output.getItem() == Items.REDSTONE) {
+        }else if(entity.getStack(1).equals(new ItemStack(ModItems.REDSTONE_FRAGMENT))) {
             return entity.redstoneMineTime;
-        }else if(output.getItem() == Items.LAPIS_LAZULI) {
+        }else if(entity.getStack(1).equals(new ItemStack(ModItems.LAPIS_LAZULI_FRAGMENT))) {
             return entity.lapisMineTime;
         } else {
-            return 2000;
+            return entity.maxProgress;
         }
+    }
+
+    private static int getMineTimeWithPickaxe (DiamondMinerBlockEntity entity) {
+        int mineTimeWithPickaxe = entity.maxProgress;
+        if(entity.getStack(0).equals(Items.STONE_PICKAXE)) {
+            mineTimeWithPickaxe = getMineTimeFromItem(entity) * 95 / 100;
+        } if(entity.getStack(0).equals(Items.IRON_PICKAXE)) {
+            mineTimeWithPickaxe = getMineTimeFromItem(entity) * 90 / 100;
+        } if(entity.getStack(0).equals(Items.GOLDEN_PICKAXE)) {
+            mineTimeWithPickaxe = getMineTimeFromItem(entity) * 80 / 100;
+        } if(entity.getStack(0).equals(Items.DIAMOND_PICKAXE)) {
+            mineTimeWithPickaxe = getMineTimeFromItem(entity) * 80 / 100;
+        } if(entity.getStack(0).equals(Items.NETHERITE_PICKAXE)) {
+            mineTimeWithPickaxe = getMineTimeFromItem(entity) * 70 / 100;
+        } if(entity.getStack(0).equals(ModItems.Dream_Pickaxe)) {
+            mineTimeWithPickaxe = getMineTimeFromItem(entity) * 60 / 100;
+        }
+        return mineTimeWithPickaxe;
     }
 
     @Override
@@ -249,8 +251,7 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
 
         Optional<DiamondMinerRecipe> match = entity.getWorld().getRecipeManager()
                 .getFirstMatch(DiamondMinerRecipe.Type.INSTANCE, inventory, entity.getWorld());
-        entity.individualProgress = getMineTimeFromItem(match.get().getOutput(), entity);
-        return match.isPresent() && canInsertAmountIntoOutputSlot(inventory)
+        return match.isPresent() &&
                 && canInsertItemIntoOutputSlot(inventory, match.get().getOutput().getItem());
 
     }
