@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
@@ -240,10 +241,35 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
 
             entity.setStack(2, new ItemStack(recipe.get().getOutput().getItem(),
                     entity.getStack(2).getCount() + 1));
+            damagePickaxeAfterCraft(inventory.getStack(1), inventory.getStack(0));
 
             entity.resetProgress();
         }
     }
+
+    private static void damagePickaxeAfterCraft(ItemStack stackFragment, ItemStack stackPickaxe) {
+        if(stackPickaxe.isDamageable()) {
+            if(stackFragment.getItem().equals(ModItems.DIAMOND_FRAGMENT)) {
+                stackPickaxe.setDamage(stackPickaxe.getDamage() + 20);
+            } if(stackFragment.getItem().equals(ModItems.IRON_FRAGMENT)) {
+                stackPickaxe.setDamage(stackPickaxe.getDamage() + 5);
+            } if(stackFragment.getItem().equals(ModItems.GOLD_FRAGMENT)) {
+                stackPickaxe.setDamage(stackPickaxe.getDamage() + 6);
+            } if(stackFragment.getItem().equals(ModItems.EMERALD_FRAGMENT)) {
+                stackPickaxe.setDamage(stackPickaxe.getDamage() + 8);
+            } if(stackFragment.getItem().equals(ModItems.LAPIS_LAZULI_FRAGMENT)) {
+                stackPickaxe.setDamage(stackPickaxe.getDamage() + 9);
+            } if(stackFragment.getItem().equals(ModItems.COPPER_FRAGMENT)) {
+                stackPickaxe.setDamage(stackPickaxe.getDamage() + 4);
+            } if(stackFragment.getItem().equals(ModItems.REDSTONE_FRAGMENT)) {
+                stackPickaxe.setDamage(stackPickaxe.getDamage() + 2);
+            }
+        }
+         if(stackPickaxe.getDamage() >= stackPickaxe.getMaxDamage()) {
+            stackPickaxe.setCount(stackPickaxe.getCount() - 1);
+        }
+    }
+
     private static boolean hasCorrectPickaxeInSlot(SimpleInventory inventory) {
         if(inventory.getStack(1).getItem().equals(ModItems.IRON_FRAGMENT) || inventory.getStack(1).getItem().equals(ModItems.COPPER_FRAGMENT) ||
                 inventory.getStack(1).getItem().equals(ModItems.LAPIS_LAZULI_FRAGMENT)) {
