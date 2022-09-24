@@ -33,6 +33,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, ImplementedInventory {
@@ -76,13 +77,13 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
     protected final PropertyDelegate propertyDelegate;
     private int progress = 0;
     private int maxProgress = 2000;
-    private int diamondMineTime = 72000;
-    private int ironMineTime = 24000;
-    private int goldMineTime = 24000;
-    private int emeraldMineTime = 48000;
-    private int copperMineTime = 20000;
-    private int redstoneMineTime = 16000;
-    private int lapisMineTime = 34000;
+    private final int diamondMineTime = 72000;
+    private final int ironMineTime = 24000;
+    private final int goldMineTime = 24000;
+    private final int emeraldMineTime = 48000;
+    private final int copperMineTime = 20000;
+    private final int redstoneMineTime = 16000;
+    private final int lapisMineTime = 34000;
 
     //private int fuelTime = 0;
     //private int maxFuelTime = 0;
@@ -113,37 +114,37 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
     }
 
     private static int getMineTimeFromItem (DiamondMinerBlockEntity entity) {
-        if(entity.getStack(1) == (new ItemStack(ModItems.DIAMOND_FRAGMENT))) {
+        if(entity.getStack(1).getItem().equals(ModItems.DIAMOND_FRAGMENT)) {
             return entity.diamondMineTime;
-        }else if(entity.getStack(1).equals(new ItemStack(ModItems.IRON_FRAGMENT))) {
+        }else if(entity.getStack(1).getItem().equals(ModItems.IRON_FRAGMENT)) {
             return entity.ironMineTime;
-        }else if(entity.getStack(1).equals(new ItemStack(ModItems.GOLD_FRAGMENT))) {
+        }else if(entity.getStack(1).getItem().equals(ModItems.GOLD_FRAGMENT)) {
             return entity.goldMineTime;
-        }else if(entity.getStack(1).equals(new ItemStack(ModItems.EMERALD_FRAGMENT))) {
+        }else if(entity.getStack(1).getItem().equals(ModItems.EMERALD_FRAGMENT)) {
             return entity.emeraldMineTime;
-        }else if(entity.getStack(1).equals(new ItemStack(ModItems.COPPER_FRAGMENT))) {
+        }else if(entity.getStack(1).getItem().equals(ModItems.COPPER_FRAGMENT)) {
             return entity.copperMineTime;
-        }else if(entity.getStack(1).equals(new ItemStack(ModItems.REDSTONE_FRAGMENT))) {
+        }else if(entity.getStack(1).getItem().equals(ModItems.REDSTONE_FRAGMENT)) {
             return entity.redstoneMineTime;
-        }else if(entity.getStack(1).equals(new ItemStack(ModItems.LAPIS_LAZULI_FRAGMENT))) {
+        }else if(entity.getStack(1).getItem().equals(ModItems.LAPIS_LAZULI_FRAGMENT)) {
             return entity.lapisMineTime;
         } else {
-            return entity.maxProgress;
+            return 2000;
         }
     }
 
     private static int getMineTimeWithPickaxe (DiamondMinerBlockEntity entity) {
-        if(entity.getStack(0).equals(Items.STONE_PICKAXE)) {
+         if(entity.getStack(0).getItem().equals(Items.STONE_PICKAXE)) {
             return getMineTimeFromItem(entity) * 95 / 100;
-        } else if(entity.getStack(0).equals(Items.IRON_PICKAXE)) {
+        } else if(entity.getStack(0).getItem().equals(Items.IRON_PICKAXE)) {
             return getMineTimeFromItem(entity) * 90 / 100;
-        } else if(entity.getStack(0).equals(Items.GOLDEN_PICKAXE)) {
+        } else if(entity.getStack(0).getItem().equals(Items.GOLDEN_PICKAXE)) {
             return getMineTimeFromItem(entity) * 80 / 100;
-        } else if(entity.getStack(0).equals(Items.DIAMOND_PICKAXE)) {
+        } else if(entity.getStack(0).getItem().equals(Items.DIAMOND_PICKAXE)) {
             return getMineTimeFromItem(entity) * 80 / 100;
-        } else if(entity.getStack(0).equals(Items.NETHERITE_PICKAXE)) {
+        } else if(entity.getStack(0).getItem().equals(Items.NETHERITE_PICKAXE)) {
             return getMineTimeFromItem(entity) * 70 / 100;
-        } else if(entity.getStack(0).equals(ModItems.Dream_Pickaxe)) {
+        } else if(entity.getStack(0).getItem().equals(ModItems.Dream_Pickaxe)) {
             return getMineTimeFromItem(entity) * 60 / 100;
         } else {
             return getMineTimeFromItem(entity);
@@ -186,9 +187,10 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
             return;
         }
         if(hasRecipe(entity)) {
+            entity.maxProgress = getMineTimeWithPickaxe(entity);
             entity.progress++;
             markDirty(world, blockPos, state);
-            if(entity.progress >= getMineTimeWithPickaxe(entity)) {
+            if(entity.progress >= entity.maxProgress) {
                 craftItem(entity);
             }
         } else {
@@ -234,8 +236,8 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
         }
         Optional<DiamondMinerRecipe> recipe = entity.getWorld().getRecipeManager()
                 .getFirstMatch(DiamondMinerRecipe.Type.INSTANCE, inventory, entity.getWorld());
-
         if(hasRecipe(entity)) {
+
             entity.setStack(2, new ItemStack(recipe.get().getOutput().getItem(),
                     entity.getStack(2).getCount() + 1));
 
@@ -243,25 +245,22 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
         }
     }
     private static boolean hasCorrectPickaxeInSlot(SimpleInventory inventory) {
-        if(inventory.getStack(1).equals(ModItems.IRON_FRAGMENT) || inventory.getStack(1).equals(ModItems.COPPER_FRAGMENT) ||
-                inventory.getStack(1).equals(ModItems.LAPIS_LAZULI_FRAGMENT)) {
-            if (inventory.getStack(0).equals(Items.IRON_PICKAXE) ||
-                    inventory.getStack(0).equals(Items.STONE_PICKAXE) ||
-                    inventory.getStack(0).equals(Items.DIAMOND_PICKAXE) ||
-                    inventory.getStack(0).equals(Items.NETHERITE_PICKAXE) ||
-                    inventory.getStack(0).equals(ModItems.Dream_Pickaxe)) {
-                return true;
-            }
-        } else if(inventory.getStack(1).equals(ModItems.GOLD_FRAGMENT) || inventory.getStack(1).equals(ModItems.REDSTONE_FRAGMENT) ||
-                inventory.getStack(1).equals(ModItems.EMERALD_FRAGMENT) || inventory.getStack(1).equals(ModItems.DIAMOND_FRAGMENT)) {
-            if (inventory.getStack(0).equals(Items.IRON_PICKAXE) ||
-                    inventory.getStack(0).equals(Items.DIAMOND_PICKAXE) ||
-                    inventory.getStack(0).equals(Items.NETHERITE_PICKAXE) ||
-                    inventory.getStack(0).equals(ModItems.Dream_Pickaxe)) {
-                return true;
-            }
+        if(inventory.getStack(1).getItem().equals(ModItems.IRON_FRAGMENT) || inventory.getStack(1).getItem().equals(ModItems.COPPER_FRAGMENT) ||
+                inventory.getStack(1).getItem().equals(ModItems.LAPIS_LAZULI_FRAGMENT)) {
+            return inventory.getStack(0).getItem().equals(Items.IRON_PICKAXE) ||
+                    inventory.getStack(0).getItem().equals(Items.STONE_PICKAXE) ||
+                    inventory.getStack(0).getItem().equals(Items.DIAMOND_PICKAXE) ||
+                    inventory.getStack(0).getItem().equals(Items.NETHERITE_PICKAXE) ||
+                    inventory.getStack(0).getItem().equals(ModItems.Dream_Pickaxe);
+            } else if(inventory.getStack(1).getItem().equals(ModItems.GOLD_FRAGMENT) || inventory.getStack(1).getItem().equals(ModItems.REDSTONE_FRAGMENT) ||
+                inventory.getStack(1).getItem().equals(ModItems.EMERALD_FRAGMENT) || inventory.getStack(1).getItem().equals(ModItems.DIAMOND_FRAGMENT)) {
+            return inventory.getStack(0).getItem().equals(Items.IRON_PICKAXE) ||
+                    inventory.getStack(0).getItem().equals(Items.DIAMOND_PICKAXE) ||
+                    inventory.getStack(0).getItem().equals(Items.NETHERITE_PICKAXE) ||
+                    inventory.getStack(0).getItem().equals(ModItems.Dream_Pickaxe);
+        } else {
+            return false;
         }
-        return false;
     }
 
     private static boolean hasRecipe(DiamondMinerBlockEntity entity) {
@@ -269,10 +268,11 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
         for(int i = 0; i < entity.size(); i++) {
             inventory.setStack(i, entity.getStack(i));
         }
+        boolean hasCorrectPickaxeInSlot = hasCorrectPickaxeInSlot(inventory);
 
         Optional<DiamondMinerRecipe> match = entity.getWorld().getRecipeManager()
                 .getFirstMatch(DiamondMinerRecipe.Type.INSTANCE, inventory, entity.getWorld());
-        return match.isPresent() && canInsertAmountIntoOutputSlot(inventory) //&& hasCorrectPickaxeInSlot(inventory)
+        return match.isPresent() && canInsertAmountIntoOutputSlot(inventory) && hasCorrectPickaxeInSlot
                 && canInsertItemIntoOutputSlot(inventory, match.get().getOutput().getItem());
 
     }
