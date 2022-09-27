@@ -11,18 +11,65 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.*;
+import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.vxr.vxrofmods.block.entity.DiamondMinerBlockEntity;
 import net.vxr.vxrofmods.block.entity.ModBlockEntities;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.stream.Stream;
 
 public class DiamondMinerBlock extends BlockWithEntity implements BlockEntityProvider {
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 
     public DiamondMinerBlock(Settings settings) {
         super(settings);
+    }
+
+    private static final VoxelShape SHAPE_N = Stream.of(
+            Block.createCuboidShape(7, 0, 9, 16, 16, 14),
+            Block.createCuboidShape(9, 0, 4, 16, 4, 9),
+            Block.createCuboidShape(1, 0, 1, 8, 7, 8)
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+
+    private static final VoxelShape SHAPE_W = Stream.of(
+            Block.createCuboidShape(9, 0, 0, 14, 16, 9),
+            Block.createCuboidShape(4, 0, 0, 9, 4, 7),
+            Block.createCuboidShape(1, 0, 8, 8, 7, 15)
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+
+    private static final VoxelShape SHAPE_S = Stream.of(
+            Block.createCuboidShape(0, 0, 2, 9, 16, 7),
+            Block.createCuboidShape(0, 0, 7, 7, 4, 12),
+            Block.createCuboidShape(8, 0, 8, 15, 7, 15)
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+
+
+    private static final VoxelShape SHAPE_E = Stream.of(
+            Block.createCuboidShape(2, 0, 7, 7, 16, 16),
+            Block.createCuboidShape(7, 0, 9, 12, 4, 16),
+            Block.createCuboidShape(8, 0, 1, 15, 7, 8)
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR)).get();
+
+    @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        switch (state.get(FACING)) {
+            case NORTH:
+                return SHAPE_N;
+            case SOUTH:
+                return SHAPE_S;
+            case WEST:
+                return SHAPE_W;
+            case EAST:
+                return SHAPE_E;
+            default:
+                return SHAPE_N;
+        }
     }
 
     @Nullable
