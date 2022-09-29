@@ -12,5 +12,6 @@ public class ModRegistries {
     private static void registerAttributes() {
         FabricDefaultAttributeRegistry.register(ModEntities.DEMOGORGON, DemogorgonEntity.setAttributes());
         FabricDefaultAttributeRegistry.register(ModEntities.PENGUIN_AVATAR, vxrPenguinAvatarEntity.setAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.MORITZ_DRAGON, vxrPenguinAvatarEntity.setAttributes());
     }
 }

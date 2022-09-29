@@ -59,12 +59,20 @@ public class ModItems {
             new SpawnEggItem(ModEntities.PENGUIN_AVATAR,0x46487d, 0xffffff,
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
+    public static final Item MORITZ_DRAGON_SPAWN_EGG = registerItem("moritz_dragon_spawn_egg",
+            new SpawnEggItem(ModEntities.MORITZ_DRAGON,0x161616, 0x000000,
+                    new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
+
     public static final Item BACKGROUND_MUSIC_DISC = registerItem("background_music_disc",
             new ModMusicDiskItem(7, ModSounds.BACKGROUND_MUSIC,
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1), 54));
 
     public static final Item PENGUIN_HELMET = registerItem("penguin_helmet",
             new PenguinAvatarHelmetItem(ModArmorMaterials.AVATAR, EquipmentSlot.HEAD,
+                    new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
+
+    public static final Item MORITZ_DRAGON_HELMET = registerItem("moritz_dragon_helmet",
+            new MoritzDragonAvatarHelmetItem(ModArmorMaterials.AVATAR, EquipmentSlot.HEAD,
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
 
     public static final Item DIAMOND_FRAGMENT = registerItem("diamond_fragment",

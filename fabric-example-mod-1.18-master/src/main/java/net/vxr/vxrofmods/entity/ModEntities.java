@@ -8,6 +8,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.vxr.vxrofmods.WW2Mod;
 import net.vxr.vxrofmods.entity.custom.DemogorgonEntity;
+import net.vxr.vxrofmods.entity.custom.MoritzDragonAvatarEntity;
 import net.vxr.vxrofmods.entity.custom.vxrPenguinAvatarEntity;
 
 public class ModEntities {
@@ -21,4 +22,8 @@ public class ModEntities {
             FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, vxrPenguinAvatarEntity::new)
                     .dimensions(EntityDimensions.fixed(0.4f, 0.55f)).build());
 
+    public static final EntityType<MoritzDragonAvatarEntity> MORITZ_DRAGON = Registry.register(
+            Registry.ENTITY_TYPE, new Identifier(WW2Mod.MOD_ID, "moritz_dragon"),
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, MoritzDragonAvatarEntity::new)
+                    .dimensions(EntityDimensions.fixed(0.4f, 0.55f)).build());
 }

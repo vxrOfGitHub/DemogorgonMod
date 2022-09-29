@@ -14,6 +14,7 @@ import net.vxr.vxrofmods.block.entity.ModBlockEntities;
 import net.vxr.vxrofmods.entity.ModEntities;
 import net.vxr.vxrofmods.entity.client.DemogorgonRenderer;
 import net.vxr.vxrofmods.entity.client.DiamondMinerBlockEntityRenderer;
+import net.vxr.vxrofmods.entity.client.MoritzDragonAvatarRenderer;
 import net.vxr.vxrofmods.entity.client.PenguinAvatarRenderer;
 import net.vxr.vxrofmods.entity.client.armor.DreamChestplateRenderer;
 import net.vxr.vxrofmods.entity.client.armor.DreamHelmetRenderer;
@@ -33,6 +34,7 @@ public class WW2ClientMod implements ClientModInitializer {
     public void onInitializeClient() {
         EntityRendererRegistry.register(ModEntities.DEMOGORGON, DemogorgonRenderer::new);
         EntityRendererRegistry.register(ModEntities.PENGUIN_AVATAR, PenguinAvatarRenderer::new);
+        EntityRendererRegistry.register(ModEntities.MORITZ_DRAGON, MoritzDragonAvatarRenderer::new);
         GeoArmorRenderer.registerArmorRenderer(new PenguinAvatarHelmetRenderer(), ModItems.PENGUIN_HELMET);
         GeoArmorRenderer.registerArmorRenderer(new DreamHelmetRenderer(), ModItems.Dream_Helmet);
         GeoArmorRenderer.registerArmorRenderer(new DreamChestplateRenderer(), ModItems.Dream_Chestplate);
