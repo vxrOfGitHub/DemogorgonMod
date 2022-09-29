@@ -43,16 +43,12 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
             DefaultedList.ofSize(3, ItemStack.EMPTY);
 
 
-    /*public ItemStack getRenderStack() {
-        if(this.getStack(2).isEmpty()) {
-            return  this.getStack(1);
-        } else {
-            return this.getStack(2);
-        }
+    public ItemStack getRenderStack() {
+        return this.getStack(0);
     }
 
-    public void setInventory(DefaultedList<ItemStack> list) {
-        for(int i = 0; 0 < inventory.size(); i++) {
+    public void setInventory(DefaultedList<ItemStack> inventory) {
+        for (int i = 0; i < inventory.size(); i++) {
             this.inventory.set(i, inventory.get(i));
         }
     }
@@ -71,9 +67,8 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
                 ServerPlayNetworking.send(player, ModMessages.ITEM_SYNC, data);
             }
         }
-
         super.markDirty();
-    } */
+    }
 
     protected final PropertyDelegate propertyDelegate;
     private int progress = 0;
@@ -310,7 +305,6 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
     private static boolean canInsertAmountIntoOutputSlot(SimpleInventory inventory) {
         return inventory.getStack(2).getMaxCount() > inventory.getStack(2).getCount();
     }
-
 
 
 }

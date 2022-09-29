@@ -13,6 +13,7 @@ import net.vxr.vxrofmods.block.entity.ModBlockEntities;
 //import net.vxr.vxrofmods.block.entity.client.DiamondMinerBlockEntityRenderer;
 import net.vxr.vxrofmods.entity.ModEntities;
 import net.vxr.vxrofmods.entity.client.DemogorgonRenderer;
+import net.vxr.vxrofmods.entity.client.DiamondMinerBlockEntityRenderer;
 import net.vxr.vxrofmods.entity.client.PenguinAvatarRenderer;
 import net.vxr.vxrofmods.entity.client.armor.DreamChestplateRenderer;
 import net.vxr.vxrofmods.entity.client.armor.DreamHelmetRenderer;
@@ -47,7 +48,7 @@ public class WW2ClientMod implements ClientModInitializer {
 
         ModMessages.registerS2CPackets();
 
-        //BlockEntityRendererRegistry.register(ModBlockEntities.DIAMOND_MINER, DiamondMinerBlockEntityRenderer::new);
+        BlockEntityRendererRegistry.register(ModBlockEntities.DIAMOND_MINER, DiamondMinerBlockEntityRenderer::new);
 
 
     }
