@@ -19,10 +19,12 @@ import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import net.vxr.vxrofmods.item.ModItems;
+import net.vxr.vxrofmods.util.InventoryUtil;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -31,6 +33,8 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+
+import java.util.Objects;
 
 public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatable {
     private boolean Dancing = false;
@@ -169,17 +173,16 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
             return ActionResult.SUCCESS;
         }
 
-        if(isTamed() && !this.world.isClient() && itemstack.getItem() == Items.CARROT && player.isInSneakingPose() && !this.isDancing()) {
-            this.setDancing(true);
-            return ActionResult.SUCCESS;
-        }
-        if(isTamed() && !this.world.isClient() && player.isInSneakingPose() && this.isDancing()) {
-            this.setDancing(false);
-            return ActionResult.SUCCESS;
-        }
 
-        if (isTamed() && !this.world.isClient() && player.isInSneakingPose() && itemstack.getItem() != Items.CARROT && !this.isDancing()) {
+
+        if (isTamed() && !this.world.isClient() && player.isInSneakingPose()) {
             player.giveItemStack(penguinInInventoryStack);
+            if(this.getCustomName() != null){
+                System.out.println("----------- Penguin Name = " + this.getName().getString() + "------------");
+                this.addNbtToHelmet(player, this.getName().getString());
+            } else {
+                System.out.println("-------- Hatte keinen Namen!!! -------------");
+            }
             this.discard();
             return ActionResult.SUCCESS;
         }
@@ -189,6 +192,23 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
         }
 
         return super.interactMob(player, hand);
+    }
+
+    private void addNbtToHelmet(PlayerEntity player, String nameOfAvatar) {
+        ItemStack avatarHelmet =
+                player.getInventory().getStack(InventoryUtil.getFirstWithoutNbtInventoryIndex(player, ModItems.PENGUIN_HELMET));
+
+        if(!avatarHelmet.isEmpty()) {
+            NbtCompound nbtData = new NbtCompound();
+            nbtData.putString("vxrofmods.avatar_name", nameOfAvatar);
+            if(avatarHelmet.getNbt() != null) {
+                System.out.println("----- Name des Avatars nach NBT: " + avatarHelmet.getNbt().getString("vxrofmods.avatar_name") + " ------------");
+                System.out.println("----- Der Avatar Helm ist ein: " + avatarHelmet + " ------------");
+            }
+
+            avatarHelmet.setNbt(nbtData);
+            avatarHelmet.setCustomName(Text.literal(avatarHelmet.getNbt().getString("vxrofmods.avatar_name")));
+        }
     }
 
     public void setSit(boolean sitting) {

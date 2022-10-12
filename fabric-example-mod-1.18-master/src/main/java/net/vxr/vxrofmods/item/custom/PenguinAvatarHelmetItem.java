@@ -4,12 +4,18 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.MobSpawnerBlockEntity;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.MobSpawnerLogic;
@@ -17,6 +23,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import net.vxr.vxrofmods.entity.ModEntities;
 import net.vxr.vxrofmods.item.ModItems;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -25,16 +32,27 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class PenguinAvatarHelmetItem extends ArmorItem implements IAnimatable {
     private final AnimationFactory factory = new AnimationFactory(this);
 
     public PenguinAvatarHelmetItem(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
         super(material, slot, settings);
+    }
+
+    @Override
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+        if(user.getStackInHand(hand).hasNbt()) {
+            user.sendMessage(Text.literal(user.getStackInHand(hand).getNbt().getString("vxrofmods.avatar_name")));
+        }
+        return super.use(world, user, hand);
+    }
+
+    @Override
+    public boolean hasGlint(ItemStack stack) {
+
+        return stack.hasNbt();
     }
 
     @Override
