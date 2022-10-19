@@ -13,7 +13,6 @@ import net.vxr.vxrofmods.screen.ModScreenHandlers;
 import net.vxr.vxrofmods.sound.ModSounds;
 import net.vxr.vxrofmods.util.ModRegistries;
 import net.vxr.vxrofmods.world.gen.ModWorldGen;
-import net.vxr.vxrofmods.world.structure.ModStructures;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
@@ -44,7 +43,6 @@ public class WW2Mod implements ModInitializer {
 		ModRecipes.registerRecipes();
 		ModScreenHandlers.registerAllScreenHandlers();
 		ModMessages.registerC2SPackets();
-		ModStructures.registerStructureFeatures();
 
 		ServerTickEvents.START_SERVER_TICK.register(new PlayerTickHandler());
 
