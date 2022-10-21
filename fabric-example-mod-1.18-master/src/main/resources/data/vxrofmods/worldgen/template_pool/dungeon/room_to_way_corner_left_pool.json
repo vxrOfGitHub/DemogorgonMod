@@ -1,0 +1,17 @@
+{
+
+
+  "name": "vxrofmods:dungeon/room_to_way_corner_left_pool",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "vxrofmods:dungeon_way_corner_left",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}
