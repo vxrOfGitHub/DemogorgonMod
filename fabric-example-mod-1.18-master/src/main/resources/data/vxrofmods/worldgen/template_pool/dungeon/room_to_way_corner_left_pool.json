@@ -5,7 +5,7 @@
   "fallback": "minecraft:empty",
   "elements": [
     {
-      "weight": 1,
+      "weight": 100,
       "element": {
         "location": "vxrofmods:dungeon_way_corner_left",
         "processors": "minecraft:empty",
