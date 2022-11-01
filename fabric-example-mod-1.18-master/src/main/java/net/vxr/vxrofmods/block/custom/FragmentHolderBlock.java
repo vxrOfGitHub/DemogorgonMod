@@ -101,6 +101,7 @@ public class FragmentHolderBlock extends Block {
     private void breakBlocks(World world, BlockPos pos) {
         BlockPos pos1 = pos.down(2);
         world.breakBlock(pos1, true);
+        world.breakBlock(pos.down(), true);
         world.breakBlock(pos1.north(), true);
         world.breakBlock(pos1.south(), true);
         world.breakBlock(pos1.west(), true);
