@@ -2,6 +2,7 @@ package net.vxr.vxrofmods.block.custom;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.util.math.Vector3d;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -14,6 +15,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.vxr.vxrofmods.item.ModItems;
 import org.jetbrains.annotations.Nullable;
@@ -32,37 +34,45 @@ public class FragmentHolderBlock extends Block {
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 
+        double xDistanceToBlock = Math.abs(pos.getX() - player.getBlockPos().getX());
+        double yDistanceToBlock = Math.abs(pos.getY() - player.getBlockPos().getY());
+        double zDistanceToBlock = Math.abs(pos.getZ() - player.getBlockPos().getZ());
 
-        if(!world.isClient() && hand == Hand.MAIN_HAND) {
+        double maxDistance = 2;
 
-            ItemStack itemStack = player.getStackInHand(hand);
-            Item item = Items.EMERALD_BLOCK;
+        boolean isInRangeToBlock = xDistanceToBlock <= maxDistance && yDistanceToBlock <= maxDistance && zDistanceToBlock <= maxDistance;
 
-            if(itemStack.getItem() == item && state.get(SWAPPED)) {
-                player.sendMessage(Text.literal("SWAPPED"), false);
+        if(isInRangeToBlock) {
+            if(!world.isClient() && hand == Hand.MAIN_HAND) {
 
-                world.setBlockState(pos, state.with(SWAPPED, false), Block.NOTIFY_ALL);
-                randomFragment(itemStack, player, world);
+                ItemStack itemStack = player.getStackInHand(hand);
+                Item item = Items.EMERALD_BLOCK;
+
+                if(itemStack.getItem() == item && state.get(SWAPPED)) {
+                    player.sendMessage(Text.literal("SWAPPED"), false);
+
+                    world.setBlockState(pos, state.with(SWAPPED, false), Block.NOTIFY_ALL);
+                    randomFragment(itemStack, player, world);
 
 
-            } if(itemStack.getItem() != item  && state.get(SWAPPED)) {
-                player.sendMessage(Text.literal("STOLEN"), false);
+                } if(itemStack.getItem() != item  && state.get(SWAPPED)) {
+                    player.sendMessage(Text.literal("STOLEN"), false);
 
-                world.breakBlock(pos, false);
+                    world.breakBlock(pos, false);
 
-                breakBlocks(world, pos);
-                randomFragment(itemStack, player, world);
+                    breakBlocks(world, pos);
+                    randomFragment(itemStack, player, world);
 
-            } if(itemStack.getItem() != item && !state.get(SWAPPED)) {
-                player.sendMessage(Text.literal("SWAPPED STOLEN"), false);
+                } if(itemStack.getItem() != item && !state.get(SWAPPED)) {
+                    player.sendMessage(Text.literal("SWAPPED STOLEN"), false);
 
-                world.breakBlock(pos, false);
+                    world.breakBlock(pos, false);
 
-                breakBlocks(world, pos);
-                player.dropItem(item);
+                    breakBlocks(world, pos);
+                    player.dropItem(item);
+                }
             }
         }
-
 
         return ActionResult.SUCCESS;
     }
