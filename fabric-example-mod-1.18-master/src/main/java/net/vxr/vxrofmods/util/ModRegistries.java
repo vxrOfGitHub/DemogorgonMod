@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.vxr.vxrofmods.command.AddMoneyCommand;
 import net.vxr.vxrofmods.command.GetMoneyCommand;
 import net.vxr.vxrofmods.command.SetMoneyCommand;
+import net.vxr.vxrofmods.command.WithdrawMoneyCommand;
 import net.vxr.vxrofmods.entity.custom.DemogorgonEntity;
 import net.vxr.vxrofmods.entity.ModEntities;
 import net.vxr.vxrofmods.entity.custom.vxrPenguinAvatarEntity;
@@ -28,6 +29,7 @@ public class ModRegistries {
         CommandRegistrationCallback.EVENT.register(GetMoneyCommand::register);
         CommandRegistrationCallback.EVENT.register(AddMoneyCommand::register);
         CommandRegistrationCallback.EVENT.register(SetMoneyCommand::register);
+        CommandRegistrationCallback.EVENT.register(WithdrawMoneyCommand::register);
     }
 
     private static void registerEvents() {

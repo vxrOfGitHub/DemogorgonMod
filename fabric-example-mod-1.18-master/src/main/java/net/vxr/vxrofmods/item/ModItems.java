@@ -18,6 +18,9 @@ public class ModItems {
     public static final Item Dream_Star = registerItem("dream_star",
             new Item(new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
+    public static final Item COIN = registerItem("coin",
+            new CoinItem(new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
+
 
     public static final Item Foundation_Egg = registerItem("foundation_egg",
             new Item(new FabricItemSettings().group(ModItemGroup.Custom_Mods)));

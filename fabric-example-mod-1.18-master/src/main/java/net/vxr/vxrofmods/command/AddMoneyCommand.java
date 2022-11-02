@@ -24,10 +24,12 @@ public class AddMoneyCommand {
 
 
         serverCommandSourceCommandDispatcher.register(CommandManager.literal("money")
-                .then(CommandManager.argument("targets", EntityArgumentType.entities()).then((CommandManager.argument("amount", IntegerArgumentType.integer()))
-                        .requires(source -> source.hasPermissionLevel(2))
+                        .then(CommandManager.literal("add").requires(source -> source.hasPermissionLevel(2))
+                        .then(CommandManager.argument("targets", EntityArgumentType.entities())
+                        .then((CommandManager.argument("amount", IntegerArgumentType.integer()))
                         .executes((context) -> runAddMoney(context, EntityArgumentType.getEntities(context, "targets"),
-                                IntegerArgumentType.getInteger(context, "amount"))))));
+                                IntegerArgumentType.getInteger(context, "amount")))))));
+
 
 
     }
@@ -43,8 +45,13 @@ public class AddMoneyCommand {
                 CustomMoneyData.addOrSubtractMoney(((IEntityDataSaver) targets.toArray()[i]), additionalMoney);
                 context.getSource().sendFeedback(Text.literal(((ServerPlayerEntity) targets.toArray()[i]).getName().getString() + " added " + "§6§l" + additionalMoney +
                         " Coins" + "§r§r" + " to " + ((ServerPlayerEntity) targets.toArray()[i]).getName().getString()), true);
+            if(CustomMoneyData.getMoney(((IEntityDataSaver) targets.toArray()[i])) == 0) {
+                context.getSource().sendFeedback(Text.literal(((ServerPlayerEntity) targets.toArray()[i]).getName().getString() + " has now " + "§c§lnothing!§r§r"),
+                        true);
+            } else {
                 context.getSource().sendFeedback(Text.literal(((ServerPlayerEntity) targets.toArray()[i]).getName().getString() + " has now " + "§6§l" + CustomMoneyData.getMoney(((IEntityDataSaver) targets.toArray()[i])) + " Coins" + "§r§r"),
                         true);
+            }
         }
 
         return 1;
