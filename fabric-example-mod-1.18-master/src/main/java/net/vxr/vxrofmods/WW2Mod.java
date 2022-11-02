@@ -6,6 +6,7 @@ import net.vxr.vxrofmods.block.ModBlocks;
 import net.vxr.vxrofmods.block.entity.ModBlockEntities;
 import net.vxr.vxrofmods.effect.ModEffects;
 import net.vxr.vxrofmods.event.PlayerTickHandler;
+import net.vxr.vxrofmods.event.ServerTickHandler;
 import net.vxr.vxrofmods.item.ModItems;
 import net.vxr.vxrofmods.networking.ModMessages;
 import net.vxr.vxrofmods.recipe.ModRecipes;
@@ -45,6 +46,7 @@ public class WW2Mod implements ModInitializer {
 		ModMessages.registerC2SPackets();
 
 		ServerTickEvents.START_SERVER_TICK.register(new PlayerTickHandler());
+		ServerTickEvents.START_SERVER_TICK.register(new ServerTickHandler());
 
 		GeckoLib.initialize();
 	}

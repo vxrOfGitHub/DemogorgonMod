@@ -3,10 +3,7 @@ package net.vxr.vxrofmods.util;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.vxr.vxrofmods.command.AddMoneyCommand;
-import net.vxr.vxrofmods.command.GetMoneyCommand;
-import net.vxr.vxrofmods.command.SetMoneyCommand;
-import net.vxr.vxrofmods.command.WithdrawMoneyCommand;
+import net.vxr.vxrofmods.command.*;
 import net.vxr.vxrofmods.entity.custom.DemogorgonEntity;
 import net.vxr.vxrofmods.entity.ModEntities;
 import net.vxr.vxrofmods.entity.custom.vxrPenguinAvatarEntity;
@@ -30,6 +27,7 @@ public class ModRegistries {
         CommandRegistrationCallback.EVENT.register(AddMoneyCommand::register);
         CommandRegistrationCallback.EVENT.register(SetMoneyCommand::register);
         CommandRegistrationCallback.EVENT.register(WithdrawMoneyCommand::register);
+        CommandRegistrationCallback.EVENT.register(MissionsCommand::register);
     }
 
     private static void registerEvents() {
