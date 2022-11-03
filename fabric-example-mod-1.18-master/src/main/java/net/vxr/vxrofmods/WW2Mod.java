@@ -1,10 +1,12 @@
 package net.vxr.vxrofmods;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.vxr.vxrofmods.block.ModBlocks;
 import net.vxr.vxrofmods.block.entity.ModBlockEntities;
 import net.vxr.vxrofmods.effect.ModEffects;
+import net.vxr.vxrofmods.event.KillEntityHandler;
 import net.vxr.vxrofmods.event.PlayerTickHandler;
 import net.vxr.vxrofmods.event.ServerTickHandler;
 import net.vxr.vxrofmods.item.ModItems;
@@ -47,6 +49,7 @@ public class WW2Mod implements ModInitializer {
 
 		ServerTickEvents.START_SERVER_TICK.register(new PlayerTickHandler());
 		ServerTickEvents.START_SERVER_TICK.register(new ServerTickHandler());
+		ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register(new KillEntityHandler());
 
 		GeckoLib.initialize();
 	}

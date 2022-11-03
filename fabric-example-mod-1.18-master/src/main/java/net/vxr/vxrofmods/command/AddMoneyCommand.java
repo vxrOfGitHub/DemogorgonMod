@@ -25,15 +25,15 @@ public class AddMoneyCommand {
 
         serverCommandSourceCommandDispatcher.register(CommandManager.literal("money")
                         .then(CommandManager.literal("add").requires(source -> source.hasPermissionLevel(2))
-                        .then(CommandManager.argument("targets", EntityArgumentType.entities())
+                        .then(CommandManager.argument("targets", EntityArgumentType.players())
                         .then((CommandManager.argument("amount", IntegerArgumentType.integer()))
-                        .executes((context) -> runAddMoney(context, EntityArgumentType.getEntities(context, "targets"),
+                        .executes((context) -> runAddMoney(context, EntityArgumentType.getPlayers(context, "targets"),
                                 IntegerArgumentType.getInteger(context, "amount")))))));
 
 
 
     }
-    private static int runAddMoney(CommandContext<ServerCommandSource> context, Collection<? extends Entity> targets , int additionalMoney) throws CommandSyntaxException {
+    private static int runAddMoney(CommandContext<ServerCommandSource> context, Collection<ServerPlayerEntity> targets , int additionalMoney) throws CommandSyntaxException {
 
         IEntityDataSaver player = (IEntityDataSaver)context.getSource().getPlayer();
 

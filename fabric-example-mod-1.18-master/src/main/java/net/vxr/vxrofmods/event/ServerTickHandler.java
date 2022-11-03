@@ -1,8 +1,11 @@
 package net.vxr.vxrofmods.event;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.MinecraftServer;
@@ -23,7 +26,7 @@ public class ServerTickHandler implements ServerTickEvents.StartTick{
     @Override
     public void onStartTick(MinecraftServer server) {
         // Server stuff
-        DailyMissionsTime();
+        DailyMissionsTime(server);
         WeeklyMissionsTime();
 
         // Sync with Players
@@ -37,10 +40,17 @@ public class ServerTickHandler implements ServerTickEvents.StartTick{
         MissionsData.setDailyMissionTime(((IEntityDataSaver) player), DailyMissionCountdown);
     }
 
-    private void DailyMissionsTime(){
+    private void PlayerSetDailyMissions(MinecraftServer server) {
+        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+            MissionsData.setRandomDailyMissions(((IEntityDataSaver)player), itemsForDailyMission, mobsForDailyMission);
+        }
+    }
+
+    private void DailyMissionsTime(MinecraftServer server){
         if(DailyMissionCountdown > 0) {
             DailyMissionCountdown--;
         } else {
+            PlayerSetDailyMissions(server);
             DailyMissionCountdown = MaxDailyMissionCountdown;
         }
     }
@@ -68,5 +78,9 @@ public class ServerTickHandler implements ServerTickEvents.StartTick{
     public static List<ItemStack> itemsForDailyMission = new ArrayList<>();
 
     public static List<Integer> amountOfItemsForDailyMission = new ArrayList<>();
+
+    public static List<EntityType> mobsForDailyMission = new ArrayList<>();
+
+    public static List<Integer> amountOfMobToKillForDailyMission = new ArrayList<>();
 
 }

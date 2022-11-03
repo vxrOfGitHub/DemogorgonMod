@@ -28,6 +28,8 @@ public class ModRegistries {
         CommandRegistrationCallback.EVENT.register(SetMoneyCommand::register);
         CommandRegistrationCallback.EVENT.register(WithdrawMoneyCommand::register);
         CommandRegistrationCallback.EVENT.register(MissionsCommand::register);
+        CommandRegistrationCallback.EVENT.register(TestCommand::register);
+
     }
 
     private static void registerEvents() {
