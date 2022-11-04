@@ -112,6 +112,7 @@ public class MissionsData {
             setDailyMission1(player, x);
             System.out.println("----GetMedthod1 bekommt: " + getDailyMission1(player));
         }
+        setDailyMissionProgress(player, 1, 0);
     }
     public static void setRandomDailyMission2(IEntityDataSaver player, List <ItemStack> itemStackList, List<EntityType> entityTypeList) {
         if(nextInt(0,2) == 0) {
@@ -131,6 +132,7 @@ public class MissionsData {
             setDailyMission2(player, x);
             System.out.println("----GetMedthod2 bekommt: " + getDailyMission2(player));
         }
+        setDailyMissionProgress(player, 2, 0);
     }
     public static void setRandomDailyMission3(IEntityDataSaver player, List <ItemStack> itemStackList, List<EntityType> entityTypeList) {
         if(nextInt(0,2) == 0) {
@@ -150,6 +152,7 @@ public class MissionsData {
             setDailyMission3(player, x);
             System.out.println("----GetMedthod3 bekommt: " + getDailyMission3(player));
         }
+        setDailyMissionProgress(player, 3, 0);
     }
 
     public static int getDailyMissionType1(IEntityDataSaver player) {
