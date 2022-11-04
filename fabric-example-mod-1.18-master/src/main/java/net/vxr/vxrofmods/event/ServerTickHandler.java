@@ -40,9 +40,19 @@ public class ServerTickHandler implements ServerTickEvents.StartTick{
         MissionsData.setDailyMissionTime(((IEntityDataSaver) player), DailyMissionCountdown);
     }
 
-    private void PlayerSetDailyMissions(MinecraftServer server) {
+    private void PlayerSetDailyMission1(MinecraftServer server) {
         for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-            MissionsData.setRandomDailyMissions(((IEntityDataSaver)player), itemsForDailyMission, mobsForDailyMission);
+            MissionsData.setRandomDailyMission1(((IEntityDataSaver) player), itemsForDailyMission, mobsForDailyMission);
+        }
+    }
+    private void PlayerSetDailyMission2(MinecraftServer server) {
+        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+            MissionsData.setRandomDailyMission2(((IEntityDataSaver) player), itemsForDailyMission, mobsForDailyMission);
+        }
+    }
+    private void PlayerSetDailyMission3(MinecraftServer server) {
+        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+            MissionsData.setRandomDailyMission3(((IEntityDataSaver) player), itemsForDailyMission, mobsForDailyMission);
         }
     }
 
@@ -50,7 +60,9 @@ public class ServerTickHandler implements ServerTickEvents.StartTick{
         if(DailyMissionCountdown > 0) {
             DailyMissionCountdown--;
         } else {
-            PlayerSetDailyMissions(server);
+            PlayerSetDailyMission1(server);
+            PlayerSetDailyMission2(server);
+            PlayerSetDailyMission3(server);
             DailyMissionCountdown = MaxDailyMissionCountdown;
         }
     }

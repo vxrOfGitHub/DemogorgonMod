@@ -16,18 +16,30 @@ public class KillEntityHandler implements ServerEntityCombatEvents.AfterKilledOt
 
             IEntityDataSaver player = ((IEntityDataSaver) entity);
 
-            for (int i = 1; i <= 3; i++) {
 
-                int x = MissionsData.getDailyMissionOfNumber(player, i);
+            if(MissionsData.getDailyMissionType1(player) == 1) {
 
-                if(!MissionsData.isDailyMissionOfNumberTypeItem(player, i)) {
+                EntityType<?> killedEntityType = killedEntity.getType();
 
-                    EntityType<?> killedEntityType = killedEntity.getType();
+                if(killedEntityType.equals(ServerTickHandler.mobsForDailyMission.get(MissionsData.getDailyMission1(player)))) {
 
-                    if(killedEntityType.equals(ServerTickHandler.mobsForDailyMission.get(x))) {
+                    MissionsData.addDailyMissionProgress(player, 1, 1);
+                }
+            } if(MissionsData.getDailyMissionType2(player) == 1) {
 
-                        MissionsData.addDailyMissionProgress(player, i, 1);
-                    }
+                EntityType<?> killedEntityType = killedEntity.getType();
+
+                if(killedEntityType.equals(ServerTickHandler.mobsForDailyMission.get(MissionsData.getDailyMission2(player)))) {
+
+                    MissionsData.addDailyMissionProgress(player, 2, 1);
+                }
+            } if(MissionsData.getDailyMissionType3(player) == 1) {
+
+                EntityType<?> killedEntityType = killedEntity.getType();
+
+                if(killedEntityType.equals(ServerTickHandler.mobsForDailyMission.get(MissionsData.getDailyMission3(player)))) {
+
+                    MissionsData.addDailyMissionProgress(player, 3, 1);
                 }
             }
         }

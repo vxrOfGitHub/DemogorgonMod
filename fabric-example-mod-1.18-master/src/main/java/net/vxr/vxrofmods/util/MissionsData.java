@@ -59,103 +59,18 @@ public class MissionsData {
 
     }
 
-    public static void setRandomDailyMissions(IEntityDataSaver player, List<ItemStack> dailyMissionItems, List<EntityType> dailyMissionMobs) {
-
-        NbtCompound nbt = player.getPersistentData();
-
-        int y1 = nextInt(0, dailyMissionItems.size());
-        int y2 = nextInt(0, dailyMissionItems.size());
-        int y3 = nextInt(0, dailyMissionItems.size());
-
-        int z1 = nextInt(0, dailyMissionMobs.size());
-        int z2 = nextInt(0, dailyMissionMobs.size());
-        int z3 = nextInt(0, dailyMissionMobs.size());
-
-        for(int i = 1; i <= 3; i++) {
-            int x = nextInt(0, 2);
-            if(x < 1) {
-                int x1 = alwaysDifferentMissions(i,dailyMissionItems.size(), y1, y2, y3);
-                setAllDailyMissions(player, i, x1);
-                System.out.println("--------Random: war ein Item: " + x1);
-                System.out.println("--------Item welches Item: " +
-                        ServerTickHandler.itemsForDailyMission.get(x1));
-                setDailyMissionOfNumberTypeItem(player, i, true);
-
-                System.out.println("-------GetMethod bekommt die Zahl: " + getAllDailyMissions(player, i));
-
-            } else {
-                int x1 = alwaysDifferentMissions(i,dailyMissionMobs.size(), z1, z2, z3);
-                setAllDailyMissions(player, i, x1);
-                System.out.println("--------Random: war ein Mob: " + x1);
-                System.out.println("--------Mob war " + ServerTickHandler.mobsForDailyMission.get(x1));
-                setDailyMissionOfNumberTypeItem(player, i, false);
-
-
-
-                System.out.println("-------GetMethod bekommt die Zahl: " + getAllDailyMissions(player, i));
-
-            }
-            setDailyMissionProgress(player, 1, 0);
-        }
-    }
-
-    private static void setAllDailyMissions(IEntityDataSaver player, int i, int numberToPut) {
-        if(i <= 1) {
-            System.out.println("-------SetMethod1 NumberToPut: " + numberToPut);
-            setDailyMission1(player, numberToPut);
-        } else if (i == 2) {
-            System.out.println("-------SetMethod2 NumberToPut: " + numberToPut);
-            setDailyMission2(player, numberToPut);
-        } else {
-            System.out.println("-------SetMethod3 NumberToPut: " + numberToPut);
-            setDailyMission3(player, numberToPut);
-        }
-    }
-
-    private static int getAllDailyMissions(IEntityDataSaver player, int i) {
-        if( i <= 1) {
-            System.out.println("-------GetMethod1 Number: " + getDailyMission1(player));
-            return getDailyMission1(player);
-        } else if (i == 2) {
-            System.out.println("-------GetMethod2 Number: " + getDailyMission2(player));
-            return getDailyMission2(player);
-        } else {
-            System.out.println("-------GetMethod3 Number: " + getDailyMission3(player));
-            return getDailyMission3(player);
-        }
-    }
-
-    private static int alwaysDifferentMissions(int i ,int exclusiveMaxNumber,int y1,int y2,int y3) {
-        if(i <= 1) {
-            return y1;
-        }
-        if(i == 2) {
-            while (y1 == y2) {
-                y2 = nextInt(0, exclusiveMaxNumber);
-            }
-            return y2;
-        } else {
-            while (y3 == y1 || y3 == y2) {
-                y3 = nextInt(0, exclusiveMaxNumber);
-            }
-            return y3;
-        }
-    }
 
     public static int getDailyMission1(IEntityDataSaver player) {
-
         NbtCompound nbt = player.getPersistentData();
 
         return nbt.getInt("daily_mission_1");
     }
     public static int getDailyMission2(IEntityDataSaver player) {
-
         NbtCompound nbt = player.getPersistentData();
 
         return nbt.getInt("daily_mission_2");
     }
     public static int getDailyMission3(IEntityDataSaver player) {
-
         NbtCompound nbt = player.getPersistentData();
 
         return nbt.getInt("daily_mission_3");
@@ -179,32 +94,93 @@ public class MissionsData {
 
         nbt.putInt("daily_mission_3", numberToPut);
     }
-
-    public static boolean isDailyMissionOfNumberTypeItem(IEntityDataSaver player, int missionNumber) {
-
-        NbtCompound nbt = player.getPersistentData();
-
-        return nbt.getBoolean("daily_mission_" + missionNumber);
+    public static void setRandomDailyMission1(IEntityDataSaver player, List <ItemStack> itemStackList, List<EntityType> entityTypeList) {
+        if(nextInt(0,2) == 0) {
+            //Item Mission
+            int x = nextInt(0, itemStackList.size());
+            System.out.println("----Item Mission");
+            System.out.println("----Random Zahl ist: " + x);
+            setDailyMissionType1(player, 0);
+            setDailyMission1(player, x);
+            System.out.println("----GetMedthod1 bekommt: " + getDailyMission1(player));
+        } else {
+            //Mob Kill Mission
+            int x = nextInt(0, entityTypeList.size());
+            System.out.println("----Mob Kill Mission");
+            System.out.println("----Random Zahl ist: " + x);
+            setDailyMissionType1(player, 1);
+            setDailyMission1(player, x);
+            System.out.println("----GetMedthod1 bekommt: " + getDailyMission1(player));
+        }
     }
-    public static void setDailyMissionOfNumberTypeItem(IEntityDataSaver player, int missionNumber, boolean isItemMission) {
-
-        NbtCompound nbt = player.getPersistentData();
-
-        nbt.putBoolean("daily_mission_" + missionNumber, isItemMission);
+    public static void setRandomDailyMission2(IEntityDataSaver player, List <ItemStack> itemStackList, List<EntityType> entityTypeList) {
+        if(nextInt(0,2) == 0) {
+            //Item Mission
+            int x = nextInt(0, itemStackList.size());
+            System.out.println("----Item Mission");
+            System.out.println("----Random Zahl ist: " + x);
+            setDailyMissionType2(player, 0);
+            setDailyMission2(player, x);
+            System.out.println("----GetMedthod2 bekommt: " + getDailyMission2(player));
+        } else {
+            //Mob Kill Mission
+            int x = nextInt(0, entityTypeList.size());
+            System.out.println("----Mob Kill Mission");
+            System.out.println("----Random Zahl ist: " + x);
+            setDailyMissionType2(player, 1);
+            setDailyMission2(player, x);
+            System.out.println("----GetMedthod2 bekommt: " + getDailyMission2(player));
+        }
+    }
+    public static void setRandomDailyMission3(IEntityDataSaver player, List <ItemStack> itemStackList, List<EntityType> entityTypeList) {
+        if(nextInt(0,2) == 0) {
+            //Item Mission
+            int x = nextInt(0, itemStackList.size());
+            System.out.println("----Item Mission");
+            System.out.println("----Random Zahl ist: " + x);
+            setDailyMissionType3(player, 0);
+            setDailyMission3(player, x);
+            System.out.println("----GetMedthod3 bekommt: " + getDailyMission3(player));
+        } else {
+            //Mob Kill Mission
+            int x = nextInt(0, entityTypeList.size());
+            System.out.println("----Mob Kill Mission");
+            System.out.println("----Random Zahl ist: " + x);
+            setDailyMissionType3(player, 1);
+            setDailyMission3(player, x);
+            System.out.println("----GetMedthod3 bekommt: " + getDailyMission3(player));
+        }
     }
 
-    public static int getDailyMissionOfNumber(IEntityDataSaver player, int missionNumber) {
-
+    public static int getDailyMissionType1(IEntityDataSaver player) {
         NbtCompound nbt = player.getPersistentData();
 
-        return nbt.getInt("daily_mission_" + missionNumber);
+        return nbt.getInt("daily_mission_1_type");
     }
-
-    public static void setDailyMissionNumber(IEntityDataSaver player, int missionNumber, int numberToPut) {
-
+    public static int getDailyMissionType2(IEntityDataSaver player) {
         NbtCompound nbt = player.getPersistentData();
 
-        nbt.putInt("daily_mission_" + missionNumber, numberToPut);
+        return nbt.getInt("daily_mission_2_type");
+    }
+    public static int getDailyMissionType3(IEntityDataSaver player) {
+        NbtCompound nbt = player.getPersistentData();
+
+        return nbt.getInt("daily_mission_3_type");
+    }
+    public static void setDailyMissionType1(IEntityDataSaver player, int numberAKATypeToPut) {
+        NbtCompound nbt = player.getPersistentData();
+
+        nbt.putInt("daily_mission_1_type", numberAKATypeToPut);
+    }
+    public static void setDailyMissionType2(IEntityDataSaver player, int numberAKATypeToPut) {
+        NbtCompound nbt = player.getPersistentData();
+
+        nbt.putInt("daily_mission_2_type", numberAKATypeToPut);
+    }
+    public static void setDailyMissionType3(IEntityDataSaver player, int numberAKATypeToPut) {
+        NbtCompound nbt = player.getPersistentData();
+
+        nbt.putInt("daily_mission_3_type", numberAKATypeToPut);
     }
 
     public static void setDailyMissionProgress(IEntityDataSaver player, int missionNumber, int newProgress) {
