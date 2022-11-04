@@ -30,12 +30,12 @@ public class WithdrawMoneyCommand {
         serverCommandSourceCommandDispatcher.register(CommandManager.literal("money")
                         .then(CommandManager.literal("withdraw")
                         .then((CommandManager.argument("amount", IntegerArgumentType.integer()))
-                        .executes((context) -> runAddMoney(context, IntegerArgumentType.getInteger(context, "amount"))))));
+                        .executes((context) -> runWithdrawMoney(context, IntegerArgumentType.getInteger(context, "amount"))))));
 
 
 
     }
-    private static int runAddMoney(CommandContext<ServerCommandSource> context, int withdrawAmount) throws CommandSyntaxException {
+    private static int runWithdrawMoney(CommandContext<ServerCommandSource> context, int withdrawAmount) throws CommandSyntaxException {
 
         IEntityDataSaver player = (IEntityDataSaver)context.getSource().getPlayer();
 

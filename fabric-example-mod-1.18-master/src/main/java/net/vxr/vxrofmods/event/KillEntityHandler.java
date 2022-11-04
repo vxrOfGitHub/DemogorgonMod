@@ -6,6 +6,12 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
+import net.vxr.vxrofmods.command.MissionsCommand;
+import net.vxr.vxrofmods.util.CustomMoneyData;
 import net.vxr.vxrofmods.util.IEntityDataSaver;
 import net.vxr.vxrofmods.util.MissionsData;
 
@@ -24,6 +30,13 @@ public class KillEntityHandler implements ServerEntityCombatEvents.AfterKilledOt
                 if(killedEntityType.equals(ServerTickHandler.mobsForDailyMission.get(MissionsData.getDailyMission1(player)))) {
 
                     MissionsData.addDailyMissionProgress(player, 1, 1);
+                    if(MissionsData.getDailyMissionProgress(player, 1) ==
+                            ServerTickHandler.amountOfMobToKillForDailyMission.get(MissionsData.getDailyMission1(player))) {
+
+                        MissionsData.setDailyMissionComplete(((IEntityDataSaver) entity), 1, true);
+                        entity.sendMessage(Text.literal("§aCongratulations! You completed Mission " + 1 + " !§r"));
+                        entity.sendMessage(Text.literal("§bREWARD:§r §6§l" + MissionsCommand.rewardAmountDailyMission + " Coins§r§r"));
+                    }
                 }
             } if(MissionsData.getDailyMissionType2(player) == 1) {
 
@@ -32,6 +45,13 @@ public class KillEntityHandler implements ServerEntityCombatEvents.AfterKilledOt
                 if(killedEntityType.equals(ServerTickHandler.mobsForDailyMission.get(MissionsData.getDailyMission2(player)))) {
 
                     MissionsData.addDailyMissionProgress(player, 2, 1);
+                    if(MissionsData.getDailyMissionProgress(player, 2) ==
+                            ServerTickHandler.amountOfMobToKillForDailyMission.get(MissionsData.getDailyMission2(player))) {
+
+                        MissionsData.setDailyMissionComplete(((IEntityDataSaver) entity), 2, true);
+                        entity.sendMessage(Text.literal("§aCongratulations! You completed Mission " + 2 + " !§r"));
+                        entity.sendMessage(Text.literal("§bREWARD:§r §6§l" + MissionsCommand.rewardAmountDailyMission + " Coins§r§r"));
+                    }
                 }
             } if(MissionsData.getDailyMissionType3(player) == 1) {
 
@@ -40,6 +60,13 @@ public class KillEntityHandler implements ServerEntityCombatEvents.AfterKilledOt
                 if(killedEntityType.equals(ServerTickHandler.mobsForDailyMission.get(MissionsData.getDailyMission3(player)))) {
 
                     MissionsData.addDailyMissionProgress(player, 3, 1);
+                    if(MissionsData.getDailyMissionProgress(player, 3) ==
+                            ServerTickHandler.amountOfMobToKillForDailyMission.get(MissionsData.getDailyMission3(player))) {
+
+                        MissionsData.setDailyMissionComplete(((IEntityDataSaver) entity), 3, true);
+                        entity.sendMessage(Text.literal("§aCongratulations! You completed Mission " + 3 + " !§r"));
+                        entity.sendMessage(Text.literal("§bREWARD:§r §6§l" + MissionsCommand.rewardAmountDailyMission + " Coins§r§r"));
+                    }
                 }
             }
         }

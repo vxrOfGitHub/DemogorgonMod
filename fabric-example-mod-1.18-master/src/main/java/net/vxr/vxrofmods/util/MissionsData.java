@@ -4,6 +4,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.predicate.entity.DistancePredicate;
+import net.vxr.vxrofmods.command.MissionsCommand;
 import net.vxr.vxrofmods.event.ServerTickHandler;
 
 import java.util.List;
@@ -98,6 +99,11 @@ public class MissionsData {
         if(nextInt(0,2) == 0) {
             //Item Mission
             int x = nextInt(0, itemStackList.size());
+            if(getDailyMissionType2(player) == 0 || getDailyMissionType3(player) == 0) {
+                while(x == getDailyMission2(player) || x == getDailyMission3(player)) {
+                    x = nextInt(0, itemStackList.size());
+                }
+            }
             System.out.println("----Item Mission");
             System.out.println("----Random Zahl ist: " + x);
             setDailyMissionType1(player, 0);
@@ -106,6 +112,11 @@ public class MissionsData {
         } else {
             //Mob Kill Mission
             int x = nextInt(0, entityTypeList.size());
+            if(getDailyMissionType2(player) == 1 || getDailyMissionType3(player) == 1) {
+                while(x == getDailyMission2(player) || x == getDailyMission3(player)) {
+                    x = nextInt(0, entityTypeList.size());
+                }
+            }
             System.out.println("----Mob Kill Mission");
             System.out.println("----Random Zahl ist: " + x);
             setDailyMissionType1(player, 1);
@@ -113,11 +124,17 @@ public class MissionsData {
             System.out.println("----GetMedthod1 bekommt: " + getDailyMission1(player));
         }
         setDailyMissionProgress(player, 1, 0);
+        setDailyMissionComplete(player, 1, false);
     }
     public static void setRandomDailyMission2(IEntityDataSaver player, List <ItemStack> itemStackList, List<EntityType> entityTypeList) {
         if(nextInt(0,2) == 0) {
             //Item Mission
             int x = nextInt(0, itemStackList.size());
+            if(getDailyMissionType1(player) == 0 || getDailyMissionType3(player) == 0) {
+                while(x == getDailyMission1(player) || x == getDailyMission3(player)) {
+                    x = nextInt(0, itemStackList.size());
+                }
+            }
             System.out.println("----Item Mission");
             System.out.println("----Random Zahl ist: " + x);
             setDailyMissionType2(player, 0);
@@ -126,6 +143,11 @@ public class MissionsData {
         } else {
             //Mob Kill Mission
             int x = nextInt(0, entityTypeList.size());
+            if(getDailyMissionType1(player) == 1 || getDailyMissionType3(player) == 1) {
+                while(x == getDailyMission1(player) || x == getDailyMission3(player)) {
+                    x = nextInt(0, entityTypeList.size());
+                }
+            }
             System.out.println("----Mob Kill Mission");
             System.out.println("----Random Zahl ist: " + x);
             setDailyMissionType2(player, 1);
@@ -133,11 +155,17 @@ public class MissionsData {
             System.out.println("----GetMedthod2 bekommt: " + getDailyMission2(player));
         }
         setDailyMissionProgress(player, 2, 0);
+        setDailyMissionComplete(player, 2, false);
     }
     public static void setRandomDailyMission3(IEntityDataSaver player, List <ItemStack> itemStackList, List<EntityType> entityTypeList) {
         if(nextInt(0,2) == 0) {
             //Item Mission
             int x = nextInt(0, itemStackList.size());
+            if(getDailyMissionType1(player) == 0 || getDailyMissionType2(player) == 0) {
+                while(x == getDailyMission1(player) || x == getDailyMission2(player)) {
+                    x = nextInt(0, itemStackList.size());
+                }
+            }
             System.out.println("----Item Mission");
             System.out.println("----Random Zahl ist: " + x);
             setDailyMissionType3(player, 0);
@@ -146,6 +174,11 @@ public class MissionsData {
         } else {
             //Mob Kill Mission
             int x = nextInt(0, entityTypeList.size());
+            if(getDailyMissionType1(player) == 1 || getDailyMissionType2(player) == 1) {
+                while(x == getDailyMission1(player) || x == getDailyMission2(player)) {
+                    x = nextInt(0, entityTypeList.size());
+                }
+            }
             System.out.println("----Mob Kill Mission");
             System.out.println("----Random Zahl ist: " + x);
             setDailyMissionType3(player, 1);
@@ -153,6 +186,7 @@ public class MissionsData {
             System.out.println("----GetMedthod3 bekommt: " + getDailyMission3(player));
         }
         setDailyMissionProgress(player, 3, 0);
+        setDailyMissionComplete(player, 3, false);
     }
 
     public static int getDailyMissionType1(IEntityDataSaver player) {
@@ -209,6 +243,22 @@ public class MissionsData {
         int newProgress = currentProgress + additionalProgress;
 
         nbt.putInt("daily_mission_" + missionNumber + "_progress", newProgress);
+    }
+
+    public static void setDailyMissionComplete(IEntityDataSaver player, int missionNumber, boolean isComplete) {
+        NbtCompound nbt = player.getPersistentData();
+
+        if(isComplete) {
+            CustomMoneyData.addOrSubtractMoney(player, MissionsCommand.rewardAmountDailyMission);
+        }
+
+        nbt.putBoolean("daily_mission_" + missionNumber + "_complete", isComplete);
+    }
+
+    public static boolean getDailyMissionComplete(IEntityDataSaver player, int missionNumber) {
+        NbtCompound nbt = player.getPersistentData();
+
+        return nbt.getBoolean("daily_mission_" + missionNumber + "_complete");
     }
 }
 
