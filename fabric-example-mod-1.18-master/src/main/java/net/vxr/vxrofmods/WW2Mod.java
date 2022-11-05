@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.vxr.vxrofmods.block.ModBlocks;
 import net.vxr.vxrofmods.block.entity.ModBlockEntities;
 import net.vxr.vxrofmods.effect.ModEffects;
+import net.vxr.vxrofmods.enchantment.ModEnchantments;
 import net.vxr.vxrofmods.event.KillEntityHandler;
 import net.vxr.vxrofmods.event.PlayerTickHandler;
 import net.vxr.vxrofmods.event.ServerTickHandler;
@@ -46,6 +47,7 @@ public class WW2Mod implements ModInitializer {
 		ModRecipes.registerRecipes();
 		ModScreenHandlers.registerAllScreenHandlers();
 		ModMessages.registerC2SPackets();
+		ModEnchantments.registerModEnchantments();
 
 		ServerTickEvents.START_SERVER_TICK.register(new PlayerTickHandler());
 		ServerTickEvents.START_SERVER_TICK.register(new ServerTickHandler());

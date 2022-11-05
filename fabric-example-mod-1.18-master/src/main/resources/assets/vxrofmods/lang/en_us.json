@@ -62,5 +62,7 @@
   "tooltip.vxrofmods.speedy_block": "Makes you fast, idiot",
 
   "item.vxrofmods.background_music_disc": "Background Music Disc",
-  "item.vxrofmods.background_music_disc.desc": "Stranger Things - Theme Song"
+  "item.vxrofmods.background_music_disc.desc": "Stranger Things - Theme Song",
+
+  "enchantment.vxrofmods.lifesteal": "Lifesteal"
 }
