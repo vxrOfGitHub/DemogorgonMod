@@ -3,13 +3,17 @@ package net.vxr.vxrofmods.event;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.vxr.vxrofmods.item.custom.ModHelmetItem;
 import net.vxr.vxrofmods.util.DreamBoostCooldownData;
+import net.vxr.vxrofmods.util.DreamHelmetData;
 import net.vxr.vxrofmods.util.DreamJetpackData;
 import net.vxr.vxrofmods.util.IEntityDataSaver;
 
@@ -20,6 +24,16 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
 
             DreamBoostTick(player);
             DreamJetpackTick(player);
+            DreamHelmetTick(player);
+        }
+    }
+
+    private void DreamHelmetTick(ServerPlayerEntity player) {
+        boolean hasHelmetOn = !player.getInventory().getArmorStack(3).isEmpty();
+        boolean hasEffect = player.hasStatusEffect(StatusEffects.NIGHT_VISION);
+           if(!hasHelmetOn && DreamHelmetData.hadHelmetOn(((IEntityDataSaver) player)) && hasEffect) {
+               player.removeStatusEffect(StatusEffects.NIGHT_VISION);
+               DreamHelmetData.setHadHelmetOn(((IEntityDataSaver) player), false);
         }
     }
 

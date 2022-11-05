@@ -15,6 +15,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.vxr.vxrofmods.item.ModArmorMaterials;
 import net.vxr.vxrofmods.item.ModItems;
+import net.vxr.vxrofmods.util.DreamHelmetData;
+import net.vxr.vxrofmods.util.IEntityDataSaver;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -53,6 +55,7 @@ public class ModHelmetItem extends ArmorItem implements IAnimatable {
                 } else if(!hasHelmetOn(player) && hadPlayerEffect) {
                     player.removeStatusEffect(StatusEffects.NIGHT_VISION);
                     hadPlayerEffect = false;
+                    DreamHelmetData.setHadHelmetOn(((IEntityDataSaver) entity), false);
                 }
             }
         }
@@ -70,10 +73,12 @@ public class ModHelmetItem extends ArmorItem implements IAnimatable {
             if(hasCorrectHelmetOn(mapArmorMaterial, player) && hasPlayerEffect) {
                 //addStatusEffectForMaterial(player, mapArmorMaterial, mapStatusEffect);
                 hadPlayerEffect = true;
+                DreamHelmetData.setHadHelmetOn(((IEntityDataSaver) player), true);
 
             } else if(!hasCorrectHelmetOn(mapArmorMaterial, player) && hadPlayerEffect) {
                 player.removeStatusEffect(StatusEffects.NIGHT_VISION);
                 hadPlayerEffect = false;
+                DreamHelmetData.setHadHelmetOn(((IEntityDataSaver) player), false);
             }
         }
     }

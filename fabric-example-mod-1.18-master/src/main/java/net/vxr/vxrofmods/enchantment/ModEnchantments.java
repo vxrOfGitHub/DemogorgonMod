@@ -10,8 +10,12 @@ import net.minecraft.util.registry.Registry;
 
 public class ModEnchantments {
 
-    private static Enchantment LIFESTEAL = register("lifesteal",
+    public static Enchantment LIFESTEAL = register("lifesteal",
             new LifeStealEnchantment(Enchantment.Rarity.RARE,
+                    EnchantmentTarget.WEAPON, EquipmentSlot.MAINHAND));
+
+    public static Enchantment ICE_ASPECT = register("ice_aspect",
+            new IceAspectEnchantment(Enchantment.Rarity.UNCOMMON,
                     EnchantmentTarget.WEAPON, EquipmentSlot.MAINHAND));
 
 
