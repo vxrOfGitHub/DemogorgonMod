@@ -14,6 +14,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.vxr.vxrofmods.util.CustomMoneyData;
 import net.vxr.vxrofmods.util.IEntityDataSaver;
+import net.vxr.vxrofmods.util.MissionsData;
 
 import java.util.Collection;
 
@@ -28,7 +29,12 @@ public class AddMoneyCommand {
                         .then(CommandManager.argument("targets", EntityArgumentType.players())
                         .then((CommandManager.argument("amount", IntegerArgumentType.integer()))
                         .executes((context) -> runAddMoney(context, EntityArgumentType.getPlayers(context, "targets"),
-                                IntegerArgumentType.getInteger(context, "amount")))))));
+                                IntegerArgumentType.getInteger(context, "amount"))))))
+                .then(CommandManager.literal("transfer")
+                        .then(CommandManager.argument("target", EntityArgumentType.player())
+                                .then(CommandManager.argument("amountToTransfer", IntegerArgumentType.integer())
+                                        .executes(context -> runTransferMoney(context, EntityArgumentType.getPlayer(context, "target"),
+                                                IntegerArgumentType.getInteger(context, "amountToTransfer")))))));
 
 
 
@@ -53,6 +59,30 @@ public class AddMoneyCommand {
                         true);
             }
         }
+
+        return 1;
+    }
+
+    private static int runTransferMoney(CommandContext<ServerCommandSource> context, PlayerEntity target, int amountToTransfer) throws CommandSyntaxException {
+        IEntityDataSaver playerSaver = ((IEntityDataSaver) context.getSource().getPlayer());
+        PlayerEntity player = context.getSource().getPlayer();
+        IEntityDataSaver targetSaver = ((IEntityDataSaver) target);
+        assert playerSaver != null;
+        assert player != null;
+
+        if(amountToTransfer > 0 && CustomMoneyData.getMoney(playerSaver) >= amountToTransfer) {
+
+            CustomMoneyData.addOrSubtractMoney(playerSaver, Math.negateExact(amountToTransfer));
+            CustomMoneyData.addOrSubtractMoney(targetSaver, amountToTransfer);
+            player.sendMessage(Text.literal("You transfered §6" + amountToTransfer + " Coins§r" + " to §b" + target.getName().getString() + "§r"));
+            target.sendMessage(Text.literal("§b" + player.getName().getString() + "§r transfered you §6" + amountToTransfer  + " Coins§r"));
+
+        } else if (CustomMoneyData.getMoney(playerSaver) < amountToTransfer) {
+            player.sendMessage(Text.literal("§cYou have not enough Coins!§r"));
+        } else {
+            player.sendMessage(Text.literal("§cYou cannot transfer 0 or less Coins!§r"));
+        }
+
 
         return 1;
     }
