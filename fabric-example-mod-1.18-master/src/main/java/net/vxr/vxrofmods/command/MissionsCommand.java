@@ -66,10 +66,12 @@ public class MissionsCommand {
                                             .executes(context -> runRerollAllDailyMissions(context, EntityArgumentType.getPlayers(context, "target"))))))
                     .then(CommandManager.literal("complete").then(CommandManager.literal("1")
                             .executes(context -> runCompleteDailyMission1(context)))
-                            //.then(CommandManager.literal("2").executes(context -> runCompleteDailyMission2(context)))
-                            //.then(CommandManager.literal("3").executes(context -> runCompleteDailyMission3(context))))
+                            .then(CommandManager.literal("2").executes(context -> runCompleteDailyMission2(context)))
+                            .then(CommandManager.literal("3").executes(context -> runCompleteDailyMission3(context)))
+                            .then(CommandManager.literal("all").executes(context -> runCompleteAllDailyMissions(context)))
+                    .executes(context -> runCompleteAllDailyMissions(context)))
                     .then(CommandManager.literal("list")
-                            .executes(context -> runOuputDailyMissionsList(context)))))
+                            .executes(context -> runOuputDailyMissionsList(context))))
             .then(CommandManager.literal("weekly")
                 .executes(context -> runOutputWeeklyMissions(context))
             .then(CommandManager.literal("reset").requires(source -> source.hasPermissionLevel(2))
@@ -84,6 +86,15 @@ public class MissionsCommand {
     }
     public static int rewardAmountDailyMission = 100;
 
+    private static int runCompleteAllDailyMissions(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+
+        runCompleteDailyMission1(context);
+        runCompleteDailyMission2(context);
+        runCompleteDailyMission3(context);
+
+        return 1;
+    }
+
     private static int runCompleteDailyMission1(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         IEntityDataSaver playerSaver = ((IEntityDataSaver) context.getSource().getPlayer());
         PlayerEntity player = context.getSource().getPlayer();
@@ -95,49 +106,90 @@ public class MissionsCommand {
             ItemStack stack = ServerTickHandler.itemsForDailyMission.get(MissionsData.getDailyMission1(playerSaver));
             int amountNeeded = ServerTickHandler.amountOfItemsForDailyMission.get(MissionsData.getDailyMission1(playerSaver));
 
-            int combinedAmountInInventory = 0;
-            List<Integer> amountInInventory = new ArrayList<>();
+            assert player != null;
+            completeItemMission(player, playerSaver, stack, amountNeeded, 1);
+        } else {
+            assert player != null;
+            player.sendMessage(Text.literal("§cMission 1 is not a §o'Collect'§r§c-Mission!§r"));
+        }
+        return 1;
+    }
+    private static int runCompleteDailyMission2(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        IEntityDataSaver playerSaver = ((IEntityDataSaver) context.getSource().getPlayer());
+        PlayerEntity player = context.getSource().getPlayer();
 
-            for(int i = 0; i < Objects.requireNonNull(player).getInventory().size(); i++) {
+        assert playerSaver != null;
 
+        if(MissionsData.getDailyMissionType2(playerSaver) == 0) {
+
+            ItemStack stack = ServerTickHandler.itemsForDailyMission.get(MissionsData.getDailyMission2(playerSaver));
+            int amountNeeded = ServerTickHandler.amountOfItemsForDailyMission.get(MissionsData.getDailyMission2(playerSaver));
+
+            assert player != null;
+            completeItemMission(player, playerSaver, stack, amountNeeded, 2);
+        } else {
+            assert player != null;
+            player.sendMessage(Text.literal("§cMission 2 is not a §o'Collect'§r§c-Mission!§r"));
+        }
+        return 1;
+    }
+    private static int runCompleteDailyMission3(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        IEntityDataSaver playerSaver = ((IEntityDataSaver) context.getSource().getPlayer());
+        PlayerEntity player = context.getSource().getPlayer();
+
+        assert playerSaver != null;
+
+        if(MissionsData.getDailyMissionType3(playerSaver) == 0) {
+
+            ItemStack stack = ServerTickHandler.itemsForDailyMission.get(MissionsData.getDailyMission3(playerSaver));
+            int amountNeeded = ServerTickHandler.amountOfItemsForDailyMission.get(MissionsData.getDailyMission3(playerSaver));
+
+            assert player != null;
+            completeItemMission(player, playerSaver, stack, amountNeeded, 3);
+        } else {
+            assert player != null;
+            player.sendMessage(Text.literal("§cMission 3 is not a §o'Collect'§r§c-Mission!§r"));
+        }
+        return 1;
+    }
+
+    private static void completeItemMission(PlayerEntity player, IEntityDataSaver playerSaver,  ItemStack stack, int amountNeeded, int missionNumber) {
+        if(!MissionsData.getDailyMissionComplete(playerSaver, missionNumber)) {
+            int amountInInventory = 0;
+            for (int i = 0; i < player.getInventory().size(); i++) {
                 ItemStack currentStack = player.getInventory().getStack(i);
-
-                if(!currentStack.isEmpty() && currentStack.equals(stack)) {
-
-                    System.out.println("----Ein Stack wurde gefunden");
-                    amountInInventory.add(currentStack.getCount());
+                if(!currentStack.isEmpty() && currentStack.getItem().equals(stack.getItem())) {
+                    amountInInventory = amountInInventory + currentStack.getCount();
                 }
             }
-            if(amountInInventory.size() > 0) {
-                for (Integer integer : amountInInventory) {
-                    combinedAmountInInventory = combinedAmountInInventory + integer;
-                    System.out.println("--------You have " + combinedAmountInInventory + "x " + stack.getName().getString());
-                }
-            }
-            if(combinedAmountInInventory >= amountNeeded) {
-                MissionsData.setDailyMissionComplete(playerSaver, 1, true);
-                player.sendMessage(Text.literal("§aCongratulations! You completed Mission " + 1 + " !§r"));
+            System.out.println("--------You have " + amountInInventory + "x " + stack.getName().getString());
+            if(amountInInventory >= amountNeeded) {
+                MissionsData.setDailyMissionComplete(playerSaver, missionNumber, true);
+                player.sendMessage(Text.literal("§aCongratulations! You completed Mission " + missionNumber + " !§r"));
                 player.sendMessage(Text.literal("§bREWARD:§r §6§l" + rewardAmountDailyMission + " Coins§r§r"));
 
-                for (int i = 0; i < amountInInventory.size(); i++) {
+                for (int i = 0; i < player.getInventory().size(); i++) {
                     ItemStack currentStack = player.getInventory().getStack(i);
-                    if(!currentStack.isEmpty() && currentStack.equals(stack)) {
+                    if(!currentStack.isEmpty() && currentStack.getItem().equals(stack.getItem())) {
                         if(amountNeeded >= currentStack.getCount()) {
                             amountNeeded = amountNeeded - currentStack.getCount();
                             currentStack.decrement(currentStack.getCount());
                         } else {
                             currentStack.decrement(amountNeeded);
+                            amountNeeded = 0;
+                            i = player.getInventory().size();
                             break;
                         }
                     }
                 }
-            } else {
-                amountNeeded = amountNeeded - combinedAmountInInventory;
-                player.sendMessage(Text.literal("You need " + amountNeeded + " more to complete Mission " + 1 + " !"));
             }
-
+            else {
+                amountNeeded = amountNeeded - amountInInventory;
+                player.sendMessage(Text.literal("§cYou need §3" + amountNeeded + "x " + stack.getItem().getName().getString() + "§r §cmore to complete Mission " + missionNumber + " !§r"));
+            }
+        } else {
+            player.sendMessage(Text.literal("§cYou already completed Mission " + missionNumber + " !§r"));
         }
-        return 1;
     }
 
     private static int runRemoveDailyMission(CommandContext<ServerCommandSource> context, int numberInList) throws CommandSyntaxException {
@@ -282,6 +334,10 @@ public class MissionsCommand {
                 dailyMission = missionNumber + ". Collect: " + ServerTickHandler.amountOfItemsForDailyMission.get(x) +
                         "x " + ServerTickHandler.itemsForDailyMission.get(x).getItem().getName().getString();
 
+                if(MissionsData.getDailyMissionComplete(playerSaver,missionNumber)) {
+                    dailyMission = "§2§m" + dailyMission + "§r";
+                }
+
             } else {
 
                 if(MissionsData.getDailyMissionComplete(playerSaver, missionNumber)) {
@@ -305,6 +361,9 @@ public class MissionsCommand {
                 dailyMission = missionNumber + ". Collect: " + ServerTickHandler.amountOfItemsForDailyMission.get(x) +
                         "x " + ServerTickHandler.itemsForDailyMission.get(x).getItem().getName().getString();
 
+                if(MissionsData.getDailyMissionComplete(playerSaver,missionNumber)) {
+                    dailyMission = "§2§m" + dailyMission + "§r";
+                }
             } else {
 
                 if(MissionsData.getDailyMissionComplete(playerSaver, missionNumber)) {
@@ -330,6 +389,9 @@ public class MissionsCommand {
                 dailyMission = missionNumber + ". Collect: " + ServerTickHandler.amountOfItemsForDailyMission.get(x) +
                         "x " + ServerTickHandler.itemsForDailyMission.get(x).getItem().getName().getString();
 
+                if(MissionsData.getDailyMissionComplete(playerSaver,missionNumber)) {
+                    dailyMission = "§2§m" + dailyMission + "§r";
+                }
             } else {
                 if(MissionsData.getDailyMissionComplete(playerSaver, missionNumber)) {
                     dailyMission = "§2§m" + missionNumber + ". Kill: " + ServerTickHandler.amountOfMobToKillForDailyMission.get(x) +
