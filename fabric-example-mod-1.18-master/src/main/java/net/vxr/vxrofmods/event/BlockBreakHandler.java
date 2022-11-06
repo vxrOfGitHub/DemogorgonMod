@@ -25,7 +25,7 @@ public class BlockBreakHandler implements PlayerBlockBreakEvents.After{
     private void luckOfTheSeedEnchantment (World world, PlayerEntity player, BlockPos pos, BlockState state) {
         if(!world.isClient()) {
             System.out.println("-------after BlockBreak !world.isClient()");
-            if(state.getBlock() instanceof CropBlock || state.getBlock().equals(Blocks.WHEAT)) {
+            if(state.getBlock() instanceof CropBlock) {
                 if(state.get(((CropBlock) state.getBlock()).getAgeProperty()) == ((CropBlock) state.getBlock()).getMaxAge()) {
                     System.out.println("-----Block was a CropBlock");
                     System.out.println("-----Stack in Hand has: " + player.getStackInHand(player.getActiveHand()).getEnchantments().size() + " Enchants");
@@ -44,16 +44,19 @@ public class BlockBreakHandler implements PlayerBlockBreakEvents.After{
                                     for( int y = 0; y < x; y++) {
                                         world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(),
                                                 new ItemStack(Items.WHEAT)));
-                                        world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(),
-                                                new ItemStack(ModItems.COIN)));
                                     }
-                                } else {
+                                }else if(state.getBlock().equals(Blocks.BEETROOTS)) {
+                                    int x = nextInt(0, 5);
+                                    for( int y = 0; y < x; y++) {
+                                        world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(),
+                                                new ItemStack(Items.BEETROOT)));
+                                    }
+                                }
+                                else {
                                     int x = nextInt(0,6);
                                     for(int y = 0; y < x; y++) {
                                         world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(),
                                                 state.getBlock().getPickStack(world, pos, state)));
-                                        world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(),
-                                                new ItemStack(ModItems.Dream_Star)));
                                     }
                                 }
                             }
@@ -64,27 +67,43 @@ public class BlockBreakHandler implements PlayerBlockBreakEvents.After{
                                     for( int y = 0; y < x; y++) {
                                         world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(),
                                                 new ItemStack(Items.WHEAT)));
-                                        world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(),
-                                                new ItemStack(ModItems.COIN)));
                                     }
-                                } else {
+                                } else if(state.getBlock().equals(Blocks.BEETROOTS)) {
+                                    int x = nextInt(0, 4);
+                                    for( int y = 0; y < x; y++) {
+                                        world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(),
+                                                new ItemStack(Items.BEETROOT)));
+                                    }
+                                }
+                                else {
                                     int x = nextInt(0,4);
                                     for(int y = 0; y < x; y++) {
                                         world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(),
                                                 state.getBlock().getPickStack(world, pos, state)));
-                                        world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(),
-                                                new ItemStack(ModItems.Dream_Star)));
                                     }
                                 }
                             }
                             if(stack.getEnchantments().get(i).toString().contains("lvl:1s")) {
                                 System.out.println("------ Enchantment with Level 1");
-                                int x = nextInt(0,3);
-                                for(int y = 0; y < x; y++) {
-                                    world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(),
-                                            state.getBlock().getPickStack(world, pos, state)));
-                                    world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(),
-                                            new ItemStack(ModItems.Dream_Star)));
+                                if(state.getBlock().equals(Blocks.WHEAT)) {
+                                    int x = nextInt(0, 3);
+                                    for( int y = 0; y < x; y++) {
+                                        world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(),
+                                                new ItemStack(Items.WHEAT)));
+                                    }
+                                } else if(state.getBlock().equals(Blocks.BEETROOTS)) {
+                                    int x = nextInt(0, 3);
+                                    for( int y = 0; y < x; y++) {
+                                        world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(),
+                                                new ItemStack(Items.BEETROOT)));
+                                    }
+                                }
+                                else {
+                                    int x = nextInt(0,3);
+                                    for(int y = 0; y < x; y++) {
+                                        world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(),
+                                                state.getBlock().getPickStack(world, pos, state)));
+                                    }
                                 }
                             }
                             break;
