@@ -102,7 +102,7 @@ public class DemogorgonEntity extends HostileEntity implements IAnimatable{
     public void registerControllers(AnimationData animationData) {
         animationData.addAnimationController(new AnimationController(this, "controller",
                 0, this::predicate));
-        animationData   .addAnimationController(new AnimationController(this, "attackController",
+        animationData.addAnimationController(new AnimationController(this, "attackController",
                 0, this::attackPredicate));
     }
 
