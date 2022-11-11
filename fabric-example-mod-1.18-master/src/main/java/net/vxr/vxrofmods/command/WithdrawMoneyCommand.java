@@ -7,6 +7,7 @@ import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.command.CommandManager;
@@ -41,9 +42,8 @@ public class WithdrawMoneyCommand {
 
         if(CustomMoneyData.getMoney(player) >= withdrawAmount && withdrawAmount > 0) {
             CustomMoneyData.addOrSubtractMoney(player, Math.negateExact(withdrawAmount));
-            context.getSource().getPlayer().giveItemStack(ModItems.COIN.getDefaultStack());
 
-            addNbtToCoin(context.getSource().getPlayer(), withdrawAmount);
+            giveCoinWithNbtToCoin(context.getSource().getPlayer(), withdrawAmount);
 
             context.getSource().sendFeedback(Text.literal("You withdrawed §6§l" + withdrawAmount + " Coins §r§r"), false);
             context.getSource().sendFeedback(
@@ -56,14 +56,12 @@ public class WithdrawMoneyCommand {
         return 1;
     }
 
-    private static void addNbtToCoin(PlayerEntity player, int coinValue) {
-        ItemStack coin =
-                player.getInventory().getStack(InventoryUtil.getFirstWithoutNbtInventoryIndex(player, ModItems.COIN));
-
+    private static void giveCoinWithNbtToCoin(PlayerEntity player, int coinValue) {
+        ItemStack COIN = new ItemStack(ModItems.COIN);
         NbtCompound nbtCompound = new NbtCompound();
         nbtCompound.putInt("vxrofmods.coin_value", coinValue);
-
-        coin.setNbt(nbtCompound);
+        COIN.setNbt(nbtCompound);
+        player.giveItemStack(COIN);
     }
 
 }

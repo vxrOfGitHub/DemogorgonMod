@@ -4,6 +4,8 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -24,6 +26,12 @@ public class DreamJetpackC2SPacket {
 
         if(hasChestplateOn && hasCorrectChestplateOn) {
             DreamJetpackData.switchJetpackOnOff(((IEntityDataSaver) player));
+            ItemStack helmetStack = player.getInventory().getArmorStack(2);
+            NbtCompound nbt = new NbtCompound();
+            nbt.putBoolean("dream_jetpack_on", DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player)));
+
+            helmetStack.setNbt(nbt);
+
             if(!DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player))) {
                 player.setNoGravity(false);
                 DreamJetpackData.setJetpackUp(((IEntityDataSaver) player), false);

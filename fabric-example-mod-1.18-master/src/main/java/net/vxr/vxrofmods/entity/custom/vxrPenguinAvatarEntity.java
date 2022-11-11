@@ -24,7 +24,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import net.vxr.vxrofmods.item.ModItems;
-import net.vxr.vxrofmods.util.InventoryUtil;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -176,13 +175,13 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
 
 
         if (isTamed() && !this.world.isClient() && player.isInSneakingPose()) {
-            player.giveItemStack(penguinInInventoryStack);
             if(this.getCustomName() != null){
                 System.out.println("----------- Penguin Name = " + this.getName().getString() + "------------");
-                this.addNbtToHelmet(player, this.getName().getString());
+                penguinInInventoryStack = this.addNbtToHelmet(player, this.getName().getString(), penguinInInventoryStack);
             } else {
                 System.out.println("-------- Hatte keinen Namen!!! -------------");
             }
+            player.giveItemStack(penguinInInventoryStack);
             this.discard();
             return ActionResult.SUCCESS;
         }
@@ -194,10 +193,7 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
         return super.interactMob(player, hand);
     }
 
-    private void addNbtToHelmet(PlayerEntity player, String nameOfAvatar) {
-        ItemStack avatarHelmet =
-                player.getInventory().getStack(InventoryUtil.getFirstWithoutNbtInventoryIndex(player, ModItems.PENGUIN_HELMET));
-
+    private ItemStack addNbtToHelmet(PlayerEntity player, String nameOfAvatar, ItemStack avatarHelmet) {
         if(!avatarHelmet.isEmpty()) {
             NbtCompound nbtData = new NbtCompound();
             nbtData.putString("vxrofmods.avatar_name", nameOfAvatar);
@@ -208,7 +204,9 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
 
             avatarHelmet.setNbt(nbtData);
             avatarHelmet.setCustomName(Text.literal(avatarHelmet.getNbt().getString("vxrofmods.avatar_name")));
+            return avatarHelmet;
         }
+        return avatarHelmet;
     }
 
     public void setSit(boolean sitting) {
@@ -227,6 +225,7 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
             getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(999999999.999999999999999999D * 99999999);
             getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(10f);
             getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue((double)0.4f);
+            this.setInvulnerable(true);
         } else {
             getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(30.0D);
             getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(2D);

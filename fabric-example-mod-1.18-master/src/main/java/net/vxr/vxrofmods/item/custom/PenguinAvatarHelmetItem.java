@@ -22,6 +22,7 @@ import net.minecraft.world.MobSpawnerLogic;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import net.vxr.vxrofmods.entity.ModEntities;
+import net.vxr.vxrofmods.entity.custom.vxrPenguinAvatarEntity;
 import net.vxr.vxrofmods.item.ModItems;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -31,6 +32,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.shadowed.eliotlash.mclib.math.functions.classic.Mod;
 
 import java.util.*;
 
@@ -94,7 +96,14 @@ public class PenguinAvatarHelmetItem extends ArmorItem implements IAnimatable {
             }
 
             EntityType<?> entityType2 = ModEntities.PENGUIN_AVATAR;
+
+            vxrPenguinAvatarEntity entity = new vxrPenguinAvatarEntity(ModEntities.PENGUIN_AVATAR, world);
+
+            entity.setCustomName(context.getStack().getName());
+            entity.setTamed(true);
+
             if (entityType2.spawnFromItemStack((ServerWorld)world, itemStack, context.getPlayer(), blockPos2, SpawnReason.SPAWN_EGG, true, !Objects.equals(blockPos, blockPos2) && direction == Direction.UP) != null) {
+
                 itemStack.decrement(1);
                 world.emitGameEvent(context.getPlayer(), GameEvent.ENTITY_PLACE, blockPos);
                 context.getPlayer().giveItemStack(new ItemStack(Items.COD));  // TAMING ITEM
