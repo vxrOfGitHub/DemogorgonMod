@@ -2,31 +2,33 @@ package net.vxr.vxrofmods.entity.client;
 
 import net.minecraft.util.Identifier;
 import net.vxr.vxrofmods.WW2Mod;
-import net.vxr.vxrofmods.entity.custom.MoritzDragonAvatarEntity;
+import net.vxr.vxrofmods.entity.custom.DomeCapybaraAvatarEntity;
+import net.vxr.vxrofmods.entity.custom.DomeCapybaraAvatarEntity;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
-public class MoritzDragonModel extends AnimatedGeoModel<MoritzDragonAvatarEntity> {
+public class DomeCapybaraAvatarModel extends AnimatedGeoModel<DomeCapybaraAvatarEntity> {
     @Override
-    public Identifier getModelResource(MoritzDragonAvatarEntity object) {
-        return new Identifier(WW2Mod.MOD_ID, "geo/moritz_dragon.geo.json");
+    public Identifier getModelResource(DomeCapybaraAvatarEntity object) {
+        return new Identifier(WW2Mod.MOD_ID, "geo/dome_capybara.geo.json");
     }
 
     @Override
-    public Identifier getTextureResource(MoritzDragonAvatarEntity object) {
-        return new Identifier(WW2Mod.MOD_ID, "textures/entity/moritz_dragon/moritz_dragon.png");
+    public Identifier getTextureResource(DomeCapybaraAvatarEntity object) {
+        return new Identifier(WW2Mod.MOD_ID, "textures/entity/dome_capybara/dome_capybara.png");
     }
 
     @Override
-    public Identifier getAnimationResource(MoritzDragonAvatarEntity animatable) {
-        return new Identifier(WW2Mod.MOD_ID, "animations/moritz_dragon.animation.json");
+    public Identifier getAnimationResource(DomeCapybaraAvatarEntity animatable) {
+        return new Identifier(WW2Mod.MOD_ID, "animations/dome_capybara.animation.json");
     }
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public void setLivingAnimations(MoritzDragonAvatarEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
+    public void setLivingAnimations(DomeCapybaraAvatarEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
+
         IBone head = this.getAnimationProcessor().getBone("head");
 
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);

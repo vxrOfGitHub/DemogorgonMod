@@ -25,27 +25,16 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
-public class PenguinAvatarHelmetItem extends ArmorItem implements IAnimatable {
-
-    private static final Item TamingItem = Items.COD;
-    private static final EntityType<?> avatarEntity = ModEntities.PENGUIN_AVATAR;
-    private static final String idleAnimation = "animation.moritz_dragon.flying";
-
-
-
-
+public class MoritzDragonAvatarHelmetItem2 extends ArmorItem implements IAnimatable {
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public PenguinAvatarHelmetItem(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
+    public MoritzDragonAvatarHelmetItem2(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
         super(material, slot, settings);
-    }
-
-    @Override
-    public boolean hasGlint(ItemStack stack) {
-
-        return stack.hasNbt();
     }
 
     @Override
@@ -70,7 +59,7 @@ public class PenguinAvatarHelmetItem extends ArmorItem implements IAnimatable {
                 BlockEntity blockEntity = world.getBlockEntity(blockPos);
                 if (blockEntity instanceof MobSpawnerBlockEntity) {
                     MobSpawnerLogic mobSpawnerLogic = ((MobSpawnerBlockEntity)blockEntity).getLogic();
-                    EntityType<?> entityType = avatarEntity;
+                    EntityType<?> entityType = ModEntities.MORITZ_DRAGON;
                     mobSpawnerLogic.setEntityId(entityType);
                     blockEntity.markDirty();
                     world.updateListeners(blockPos, blockState, blockState, 3);
@@ -86,13 +75,11 @@ public class PenguinAvatarHelmetItem extends ArmorItem implements IAnimatable {
                 blockPos2 = blockPos.offset(direction);
             }
 
-            EntityType<?> entityType2 = avatarEntity;
-
+            EntityType<?> entityType2 = ModEntities.MORITZ_DRAGON;
             if (entityType2.spawnFromItemStack((ServerWorld)world, itemStack, context.getPlayer(), blockPos2, SpawnReason.SPAWN_EGG, true, !Objects.equals(blockPos, blockPos2) && direction == Direction.UP) != null) {
-
                 itemStack.decrement(1);
                 world.emitGameEvent(context.getPlayer(), GameEvent.ENTITY_PLACE, blockPos);
-                context.getPlayer().giveItemStack(new ItemStack(TamingItem));  // TAMING ITEM
+                context.getPlayer().giveItemStack(new ItemStack(Items.COD));  // TAMING ITEM
             }
 
             return ActionResult.CONSUME;
@@ -107,7 +94,7 @@ public class PenguinAvatarHelmetItem extends ArmorItem implements IAnimatable {
 
         // Always loop the animation but later on in this method we'll decide whether or
         // not to actually play it
-            event.getController().setAnimation(new AnimationBuilder().addAnimation(idleAnimation, true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.moritz_dragon.flying", true));
 
 
         // If the living entity is an armorstand just play the animation nonstop
@@ -130,7 +117,7 @@ public class PenguinAvatarHelmetItem extends ArmorItem implements IAnimatable {
 
             // Make sure the player is wearing all the armor. If they are, continue playing
             // the animation, otherwise stop
-            boolean isWearingAll = armorList.containsAll(Arrays.asList(this));
+            boolean isWearingAll = armorList.containsAll(Arrays.asList(ModItems.MORITZ_DRAGON_HELMET) );
             return isWearingAll ? PlayState.CONTINUE : PlayState.STOP;
         }
         return PlayState.STOP;

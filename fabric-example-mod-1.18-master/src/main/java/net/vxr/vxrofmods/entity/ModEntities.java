@@ -7,9 +7,7 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.vxr.vxrofmods.WW2Mod;
-import net.vxr.vxrofmods.entity.custom.DemogorgonEntity;
-import net.vxr.vxrofmods.entity.custom.MoritzDragonAvatarEntity;
-import net.vxr.vxrofmods.entity.custom.vxrPenguinAvatarEntity;
+import net.vxr.vxrofmods.entity.custom.*;
 
 public class ModEntities {
     public static final EntityType<DemogorgonEntity> DEMOGORGON = Registry.register(
@@ -26,4 +24,9 @@ public class ModEntities {
             Registry.ENTITY_TYPE, new Identifier(WW2Mod.MOD_ID, "moritz_dragon"),
             FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, MoritzDragonAvatarEntity::new)
                     .dimensions(EntityDimensions.fixed(0.4f, 0.55f)).build());
+
+    public static final EntityType<DomeCapybaraAvatarEntity> DOME_CAPYBARA = Registry.register(
+            Registry.ENTITY_TYPE, new Identifier(WW2Mod.MOD_ID, "dome_capybara"),
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, DomeCapybaraAvatarEntity::new)
+                    .dimensions(EntityDimensions.fixed(0.8f, 1.2f)).build());
 }

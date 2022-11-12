@@ -62,6 +62,10 @@ public class ModItems {
             new SpawnEggItem(ModEntities.PENGUIN_AVATAR,0x46487d, 0xffffff,
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
+    public static final Item DOME_CAPYBARA_SPAWN_EGG = registerItem("dome_capybara_spawn_egg",
+            new SpawnEggItem(ModEntities.DOME_CAPYBARA,0x46487d, 0xffffff,
+                    new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
+
     public static final Item MORITZ_DRAGON_SPAWN_EGG = registerItem("moritz_dragon_spawn_egg",
             new SpawnEggItem(ModEntities.MORITZ_DRAGON,0x161616, 0x000000,
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
@@ -72,6 +76,10 @@ public class ModItems {
 
     public static final Item PENGUIN_HELMET = registerItem("penguin_helmet",
             new PenguinAvatarHelmetItem(ModArmorMaterials.AVATAR, EquipmentSlot.HEAD,
+                    new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
+
+    public static final Item DOME_CAPYBARA_HELMET = registerItem("dome_capybara_helmet",
+            new DomeCapybaraAvatarHelmetItem(ModArmorMaterials.AVATAR, EquipmentSlot.HEAD,
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
 
     public static final Item MORITZ_DRAGON_HELMET = registerItem("moritz_dragon_helmet",

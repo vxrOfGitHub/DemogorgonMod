@@ -1,7 +1,5 @@
 package net.vxr.vxrofmods.entity.custom;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.JukeboxBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -21,7 +19,6 @@ import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
@@ -35,22 +32,20 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-import java.util.List;
+public class MoritzDragonAvatarEntity2 extends TameableEntity implements IAnimatable {
+    private boolean Dancing = false;
 
-public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatable {
+    public boolean isDancing() {
+        return Dancing;
+    }
 
-    private static final Item TamingItem = Items.COD;
-    private static final Item ArmorItem = ModItems.PENGUIN_HELMET;
-
-    private static final boolean hasDanceAnimation = true;
-    private static final String dancingAnimation = "animation.vxr_penguin.dance";
-    private static final String sittingAnimation = "animation.vxr_penguin.sitting";
-    private static final String walkAnimation = "animation.vxr_penguin.walk";
-    private static final String idleAnimation = "animation.vxr_penguin.idle";
+    public void setDancing(boolean dancing) {
+        Dancing = dancing;
+    }
 
     private AnimationFactory factory = new AnimationFactory(this);
 
-    public vxrPenguinAvatarEntity(EntityType<? extends TameableEntity> entityType, World world) {
+    public MoritzDragonAvatarEntity2(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
     }
 
@@ -89,21 +84,20 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-
-        if(hasDanceAnimation && this.isDancing()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation(dancingAnimation, true));
+        if(this.isDancing()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.moritz_dragon.flying", true));
             return PlayState.CONTINUE;
         }
         if (event.isMoving()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation(walkAnimation, true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.moritz_dragon.flying", true));
             return PlayState.CONTINUE;
         }
         if (this.isSitting()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation(sittingAnimation, true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.moritz_dragon.flying", true));
             return PlayState.CONTINUE;
         }
 
-        event.getController().setAnimation(new AnimationBuilder().addAnimation(idleAnimation, true));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.moritz_dragon.flying", true));
         return PlayState.CONTINUE;
     }
 
@@ -121,46 +115,36 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.ENTITY_DOLPHIN_AMBIENT;
+        return SoundEvents.ENTITY_ENDER_DRAGON_FLAP;
     }
 
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.ENTITY_DOLPHIN_HURT;
+        return SoundEvents.ENTITY_ENDER_DRAGON_HURT;
     }
 
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.ENTITY_AXOLOTL_DEATH;
+        return SoundEvents.ENTITY_ENDER_DRAGON_DEATH;
     }
 
     // Tameable Entity
     private static final TrackedData<Boolean> SITTING =
-            DataTracker.registerData(vxrPenguinAvatarEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-
-    private static final TrackedData<Boolean> DANCING =
-            DataTracker.registerData(vxrPenguinAvatarEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-
-
-    private static boolean musicIsPlayingNear(List<BlockState> nearJukeboxes, vxrPenguinAvatarEntity entity) {
-        boolean musicIsPlayingNear = false;
-        if(!entity.world.isClient() && nearJukeboxes.size() > 0) {
-            for(int i = 0; i < nearJukeboxes.size(); i++) {
-                musicIsPlayingNear = ((Boolean) nearJukeboxes.get(i).get(JukeboxBlock.HAS_RECORD));
-            }
-        }
-        return musicIsPlayingNear;
-    }
+            DataTracker.registerData(MoritzDragonAvatarEntity2.class, TrackedDataHandlerRegistry.BOOLEAN);
 
     @Override
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getStackInHand(hand);
         Item item = itemstack.getItem();
-        ItemStack armorItemStack = new ItemStack(ArmorItem);
+        Item thisEntityInInventory = ModItems.MORITZ_DRAGON_HELMET;
+        ItemStack thisEntityInInventoryStack = new ItemStack(thisEntityInInventory);
 
-        if (item == TamingItem && !isTamed()) {
+        Item itemForTaming = Items.COD;
+
+
+        if (item == itemForTaming && !isTamed()) {
             if (this.world.isClient()) {
                 return ActionResult.CONSUME;
             } else {
@@ -181,76 +165,39 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
         }
 
         if(isTamed() && !this.world.isClient() && hand == Hand.MAIN_HAND) {
-            if(hasDanceAnimation) {
-                if(isSitting() && !isDancing()) {
-                    setDancing(true);
-                    setSit(false);
-                } else if (isDancing()) {
-                    setSit(false);
-                    setDancing(false);
-                } else if (!isSitting()) {
-                    setSit(true);
-                }
-                return ActionResult.SUCCESS;
-            } else {
-                setSit(!this.isSitting());
-            }
+            setSit(!isSitting());
+            return ActionResult.SUCCESS;
         }
 
+        if(isTamed() && !this.world.isClient() && itemstack.getItem() == Items.CARROT && player.isInSneakingPose() && !this.isDancing()) {
+            this.setDancing(true);
+            return ActionResult.SUCCESS;
+        }
+        if(isTamed() && !this.world.isClient() && player.isInSneakingPose() && this.isDancing()) {
+            this.setDancing(false);
+            return ActionResult.SUCCESS;
+        }
 
-
-        if (isTamed() && !this.world.isClient() && player.isInSneakingPose()) {
-            if(this.getCustomName() != null){
-                System.out.println("----------- Penguin Name = " + this.getName().getString() + "------------");
-                armorItemStack = this.addNbtToHelmet(player, this.getName().getString(), armorItemStack);
-            } else {
-                System.out.println("-------- Hatte keinen Namen!!! -------------");
-            }
-            player.giveItemStack(armorItemStack);
+        if (isTamed() && !this.world.isClient() && player.isInSneakingPose() && itemstack.getItem() != Items.CARROT && !this.isDancing()) {
+            player.giveItemStack(thisEntityInInventoryStack);
             this.discard();
             return ActionResult.SUCCESS;
         }
 
-        if (itemstack.getItem() == TamingItem) {
+        if (itemstack.getItem() == itemForTaming) {
             return ActionResult.PASS;
         }
 
         return super.interactMob(player, hand);
     }
 
-    private ItemStack addNbtToHelmet(PlayerEntity player, String nameOfAvatar, ItemStack avatarHelmet) {
-        if(!avatarHelmet.isEmpty()) {
-            NbtCompound nbtData = new NbtCompound();
-            nbtData.putString("vxrofmods.avatar_name", nameOfAvatar);
-            if(avatarHelmet.getNbt() != null) {
-                System.out.println("----- Name des Avatars nach NBT: " + avatarHelmet.getNbt().getString("vxrofmods.avatar_name") + " ------------");
-                System.out.println("----- Der Avatar Helm ist ein: " + avatarHelmet + " ------------");
-            }
-
-            avatarHelmet.setNbt(nbtData);
-            avatarHelmet.setCustomName(Text.literal(avatarHelmet.getNbt().getString("vxrofmods.avatar_name")));
-            return avatarHelmet;
-        }
-        return avatarHelmet;
-    }
-
     public void setSit(boolean sitting) {
         this.dataTracker.set(SITTING, sitting);
-        super.setSitting(sitting || this.isDancing());
+        super.setSitting(sitting);
     }
 
     public boolean isSitting() {
         return this.dataTracker.get(SITTING);
-    }
-
-    public void setDancing(boolean dancing) {
-        this.dataTracker.set(DANCING, dancing);
-        super.setSitting(dancing || this.isSitting());
-    }
-
-    public boolean isDancing() {
-
-        return this.dataTracker.get(DANCING) && hasDanceAnimation;
     }
 
     @Override
@@ -260,7 +207,6 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
             getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(999999999.999999999999999999D * 99999999);
             getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(10f);
             getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue((double)0.4f);
-            this.setInvulnerable(true);
         } else {
             getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(30.0D);
             getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(2D);
@@ -272,14 +218,12 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putBoolean("isSitting", this.dataTracker.get(SITTING));
-        nbt.putBoolean("isDancing", this.dataTracker.get(DANCING));
     }
 
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         this.dataTracker.set(SITTING, nbt.getBoolean("isSitting"));
-        this.dataTracker.set(DANCING, nbt.getBoolean("isDancing"));
     }
 
     @Override
@@ -288,13 +232,12 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
     }
 
     public boolean canBeLeashedBy(PlayerEntity player) {
-        return true;
+        return false;
     }
 
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
         this.dataTracker.startTracking(SITTING,false);
-        this.dataTracker.startTracking(DANCING,false);
     }
 }

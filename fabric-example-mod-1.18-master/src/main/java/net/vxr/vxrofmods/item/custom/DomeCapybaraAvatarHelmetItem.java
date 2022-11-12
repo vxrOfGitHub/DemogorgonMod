@@ -16,7 +16,6 @@ import net.minecraft.world.MobSpawnerLogic;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import net.vxr.vxrofmods.entity.ModEntities;
-import net.vxr.vxrofmods.item.ModItems;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -25,20 +24,23 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
-public class PenguinAvatarHelmetItem extends ArmorItem implements IAnimatable {
+public class DomeCapybaraAvatarHelmetItem extends ArmorItem implements IAnimatable {
 
-    private static final Item TamingItem = Items.COD;
-    private static final EntityType<?> avatarEntity = ModEntities.PENGUIN_AVATAR;
-    private static final String idleAnimation = "animation.moritz_dragon.flying";
+    private static final Item TamingItem = Items.CARROT;
+    private static final EntityType<?> avatarEntity = ModEntities.DOME_CAPYBARA;
+    private static final String idleAnimation = "animation.capybara.idle";
 
 
 
 
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public PenguinAvatarHelmetItem(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
+    public DomeCapybaraAvatarHelmetItem(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
         super(material, slot, settings);
     }
 

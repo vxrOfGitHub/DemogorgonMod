@@ -28,6 +28,7 @@ public class PenguinAvatarModel extends AnimatedGeoModel<vxrPenguinAvatarEntity>
     @Override
     public void setLivingAnimations(vxrPenguinAvatarEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
+
         IBone head = this.getAnimationProcessor().getBone("head");
 
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
