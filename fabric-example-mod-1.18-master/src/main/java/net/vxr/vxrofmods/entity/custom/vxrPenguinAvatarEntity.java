@@ -1,5 +1,8 @@
 package net.vxr.vxrofmods.entity.custom;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.JukeboxBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -22,6 +25,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.vxr.vxrofmods.item.ModItems;
 import org.jetbrains.annotations.Nullable;
@@ -33,18 +37,9 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-import java.util.Objects;
+import java.util.List;
 
 public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatable {
-    private boolean Dancing = false;
-
-    public boolean isDancing() {
-        return Dancing;
-    }
-
-    public void setDancing(boolean dancing) {
-        Dancing = dancing;
-    }
 
     private AnimationFactory factory = new AnimationFactory(this);
 
@@ -87,7 +82,14 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+
+        List<BlockState> nearJukeboxes = BlockPos.stream(this.getBoundingBox().expand(15)).map(this.world::getBlockState)
+                .filter(state -> state.isOf(Blocks.JUKEBOX)).toList();
+
+        setDancing(isTamed() && !this.world.isClient() && musicIsPlayingNear(nearJukeboxes, this));
+
         if(this.isDancing()) {
+            System.out.println("Penguin is Dancing!");
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.vxr_penguin.dance", true));
             return PlayState.CONTINUE;
         }
@@ -137,6 +139,20 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
     private static final TrackedData<Boolean> SITTING =
             DataTracker.registerData(vxrPenguinAvatarEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
+    private static final TrackedData<Boolean> DANCING =
+            DataTracker.registerData(vxrPenguinAvatarEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+
+
+    private static boolean musicIsPlayingNear(List<BlockState> nearJukeboxes, vxrPenguinAvatarEntity entity) {
+        boolean musicIsPlayingNear = false;
+        if(!entity.world.isClient() && nearJukeboxes.size() > 0) {
+            for(int i = 0; i < nearJukeboxes.size(); i++) {
+                musicIsPlayingNear = ((Boolean) nearJukeboxes.get(i).get(JukeboxBlock.HAS_RECORD));
+            }
+        }
+        return musicIsPlayingNear;
+    }
+
     @Override
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getStackInHand(hand);
@@ -145,7 +161,6 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
         ItemStack penguinInInventoryStack = new ItemStack(penguinInInventory);
 
         Item itemForTaming = Items.COD;
-
 
         if (item == itemForTaming && !isTamed()) {
             if (this.world.isClient()) {
@@ -218,6 +233,15 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
         return this.dataTracker.get(SITTING);
     }
 
+    public void setDancing(boolean dancing) {
+        this.dataTracker.set(DANCING, dancing);
+        super.setSitting(dancing);
+    }
+
+    public boolean isDancing() {
+        return this.dataTracker.get(DANCING);
+    }
+
     @Override
     public void setTamed(boolean tamed) {
         super.setTamed(tamed);
@@ -237,12 +261,14 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putBoolean("isSitting", this.dataTracker.get(SITTING));
+        nbt.putBoolean("isDancing", this.dataTracker.get(DANCING));
     }
 
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         this.dataTracker.set(SITTING, nbt.getBoolean("isSitting"));
+        this.dataTracker.set(DANCING, nbt.getBoolean("isDancing"));
     }
 
     @Override
@@ -258,5 +284,6 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
     protected void initDataTracker() {
         super.initDataTracker();
         this.dataTracker.startTracking(SITTING,false);
+        this.dataTracker.startTracking(DANCING,false);
     }
 }
