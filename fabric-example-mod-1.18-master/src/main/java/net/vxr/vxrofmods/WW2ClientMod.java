@@ -29,9 +29,11 @@ public class WW2ClientMod implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.DEMOGORGON, DemogorgonRenderer::new);
         EntityRendererRegistry.register(ModEntities.PENGUIN_AVATAR, PenguinAvatarRenderer::new);
         EntityRendererRegistry.register(ModEntities.DOME_CAPYBARA, DomeCapybaraAvatarRenderer::new);
+        EntityRendererRegistry.register(ModEntities.POKU_CAPYBARA, PokuCapybaraAvatarRenderer::new);
         EntityRendererRegistry.register(ModEntities.MORITZ_DRAGON, MoritzDragonAvatarRenderer::new);
         GeoArmorRenderer.registerArmorRenderer(new PenguinAvatarHelmetRenderer(), ModItems.PENGUIN_HELMET);
         GeoArmorRenderer.registerArmorRenderer(new DomeCapybaraAvatarHelmetRenderer(), ModItems.DOME_CAPYBARA_HELMET);
+        GeoArmorRenderer.registerArmorRenderer(new PokuCapybaraAvatarHelmetRenderer(), ModItems.POKU_CAPYBARA_HELMET);
         GeoArmorRenderer.registerArmorRenderer(new MoritzDragonAvatarHelmetRenderer(), ModItems.MORITZ_DRAGON_HELMET);
         GeoArmorRenderer.registerArmorRenderer(new DreamHelmetRenderer(), ModItems.Dream_Helmet);
         GeoArmorRenderer.registerArmorRenderer(new DreamChestplateRenderer(), ModItems.Dream_Chestplate);

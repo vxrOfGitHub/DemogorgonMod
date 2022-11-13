@@ -11,7 +11,7 @@
 							"vector": [0, 0, 0]
 						},
 						"1.5": {
-							"vector": [-7.5, 0, 0],
+							"vector": [7.5, 0, 0],
 							"easing": "easeInOutQuad"
 						},
 						"3.0": {

@@ -44,17 +44,19 @@ import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class DemogorgonEntity extends HostileEntity implements IAnimatable{
-    private AnimationFactory factory = new AnimationFactory(this);
+    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     private int dimensionDriftCooldown = 0;
     private int dimensionDriftMaxCooldown = 400;
@@ -89,11 +91,11 @@ public class DemogorgonEntity extends HostileEntity implements IAnimatable{
     }
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if (event.isMoving()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.demogorgon.walk", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.demogorgon.walk", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
 
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.demogorgon.idle", true));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.demogorgon.idle", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
 
     }
@@ -113,7 +115,7 @@ public class DemogorgonEntity extends HostileEntity implements IAnimatable{
                 attackAnimationsList.add("animation.demogorgon.attack1");
                 attackAnimationsList.add("animation.demogorgon.attack2");
                 animationEvent.getController().setAnimation(new AnimationBuilder().addAnimation(
-                        attackAnimationsList.get(random.nextInt(attackAnimationsList.size())), false));
+                        attackAnimationsList.get(random.nextInt(attackAnimationsList.size())), ILoopType.EDefaultLoopTypes.PLAY_ONCE));
             }
         return PlayState.CONTINUE;
     }

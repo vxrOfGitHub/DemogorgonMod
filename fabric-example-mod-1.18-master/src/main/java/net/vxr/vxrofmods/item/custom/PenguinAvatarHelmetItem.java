@@ -20,10 +20,12 @@ import net.vxr.vxrofmods.item.ModItems;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.*;
 
@@ -36,7 +38,7 @@ public class PenguinAvatarHelmetItem extends ArmorItem implements IAnimatable {
 
 
 
-    private final AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public PenguinAvatarHelmetItem(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
         super(material, slot, settings);
@@ -107,7 +109,7 @@ public class PenguinAvatarHelmetItem extends ArmorItem implements IAnimatable {
 
         // Always loop the animation but later on in this method we'll decide whether or
         // not to actually play it
-            event.getController().setAnimation(new AnimationBuilder().addAnimation(idleAnimation, true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation(idleAnimation, ILoopType.EDefaultLoopTypes.LOOP));
 
 
         // If the living entity is an armorstand just play the animation nonstop

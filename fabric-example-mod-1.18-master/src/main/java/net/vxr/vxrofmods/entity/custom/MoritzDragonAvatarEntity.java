@@ -30,10 +30,12 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.List;
 
@@ -48,7 +50,7 @@ public class MoritzDragonAvatarEntity extends TameableEntity implements IAnimata
     private static final String walkAnimation = "animation.moritz_dragon.flying";
     private static final String idleAnimation = "animation.moritz_dragon.flying";
 
-    private AnimationFactory factory = new AnimationFactory(this);
+    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public MoritzDragonAvatarEntity(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
@@ -91,19 +93,19 @@ public class MoritzDragonAvatarEntity extends TameableEntity implements IAnimata
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
 
         if(hasDanceAnimation && this.isDancing()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation(dancingAnimation, true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation(dancingAnimation,  ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         if (event.isMoving()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation(walkAnimation, true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation(walkAnimation, ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         if (this.isSitting()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation(sittingAnimation, true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation(sittingAnimation, ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
 
-        event.getController().setAnimation(new AnimationBuilder().addAnimation(idleAnimation, true));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation(idleAnimation, ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
     }
 

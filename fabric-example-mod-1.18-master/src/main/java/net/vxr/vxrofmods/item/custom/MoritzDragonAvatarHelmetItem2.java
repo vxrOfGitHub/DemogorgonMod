@@ -20,10 +20,12 @@ import net.vxr.vxrofmods.item.ModItems;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +33,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class MoritzDragonAvatarHelmetItem2 extends ArmorItem implements IAnimatable {
-    private final AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public MoritzDragonAvatarHelmetItem2(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
         super(material, slot, settings);
@@ -94,7 +96,7 @@ public class MoritzDragonAvatarHelmetItem2 extends ArmorItem implements IAnimata
 
         // Always loop the animation but later on in this method we'll decide whether or
         // not to actually play it
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.moritz_dragon.flying", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.moritz_dragon.flying", ILoopType.EDefaultLoopTypes.LOOP));
 
 
         // If the living entity is an armorstand just play the animation nonstop

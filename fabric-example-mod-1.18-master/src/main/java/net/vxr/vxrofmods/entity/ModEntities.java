@@ -29,4 +29,9 @@ public class ModEntities {
             Registry.ENTITY_TYPE, new Identifier(WW2Mod.MOD_ID, "dome_capybara"),
             FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, DomeCapybaraAvatarEntity::new)
                     .dimensions(EntityDimensions.fixed(0.8f, 1.2f)).build());
+
+    public static final EntityType<PokuCapybaraAvatarEntity> POKU_CAPYBARA = Registry.register(
+            Registry.ENTITY_TYPE, new Identifier(WW2Mod.MOD_ID, "poku_capybara"),
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, PokuCapybaraAvatarEntity::new)
+                    .dimensions(EntityDimensions.fixed(0.8f, 1.2f)).build());
 }

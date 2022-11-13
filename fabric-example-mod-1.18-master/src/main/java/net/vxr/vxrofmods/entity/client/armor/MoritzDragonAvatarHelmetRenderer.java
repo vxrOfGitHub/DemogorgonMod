@@ -7,7 +7,5 @@ public class MoritzDragonAvatarHelmetRenderer extends GeoArmorRenderer<MoritzDra
 
     public MoritzDragonAvatarHelmetRenderer() {
         super(new MoritzDragonAvatarHelmetModel());
-
-        this.headBone = "armorHead";
     }
 }

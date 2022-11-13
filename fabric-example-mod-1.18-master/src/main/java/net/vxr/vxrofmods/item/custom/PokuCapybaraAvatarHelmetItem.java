@@ -31,18 +31,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class DomeCapybaraAvatarHelmetItem extends ArmorItem implements IAnimatable {
+public class PokuCapybaraAvatarHelmetItem extends ArmorItem implements IAnimatable {
 
     private static final Item TamingItem = Items.CARROT;
-    private static final EntityType<?> avatarEntity = ModEntities.DOME_CAPYBARA;
-    private static final String idleAnimation = "animation.dome_capybara_avatar_helmet_item.idle";
+    private static final EntityType<?> avatarEntity = ModEntities.POKU_CAPYBARA;
+    private static final String idleAnimation = "animation.poku_capybara_avatar_helmet_item.idle";
 
 
 
 
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-    public DomeCapybaraAvatarHelmetItem(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
+    public PokuCapybaraAvatarHelmetItem(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
         super(material, slot, settings);
     }
 

@@ -1,6 +1,7 @@
 package net.vxr.vxrofmods.entity.client;
 
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import net.vxr.vxrofmods.WW2Mod;
 import net.vxr.vxrofmods.entity.custom.DemogorgonEntity;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -23,16 +24,28 @@ public class DemogorgonModel extends AnimatedGeoModel<DemogorgonEntity> {
     public Identifier getAnimationResource(DemogorgonEntity animatable) {
         return new Identifier(WW2Mod.MOD_ID, "animations/demogorgon.animation.json");
     }
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    /*@SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public void setLivingAnimations(DemogorgonEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+    public void setLivingAnimations(DemogorgonEntity entity, Integer instanceId, AnimationEvent animationEvent) {
+        super.setLivingAnimations(entity, instanceId, animationEvent);
         IBone head = this.getAnimationProcessor().getBone("head");
 
-        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+        EntityModelData extraData = (EntityModelData) animationEvent.getExtraDataOfType(EntityModelData.class).get(0);
         if (head != null) {
             head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
             head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
+        }
+    } */
+
+    @Override
+    public void setCustomAnimations(DemogorgonEntity animatable, int instanceId, AnimationEvent animationEvent) {
+        super.setCustomAnimations(animatable, instanceId, animationEvent);
+        IBone head = this.getAnimationProcessor().getBone("head");
+
+        EntityModelData extraData = (EntityModelData) animationEvent.getExtraDataOfType(EntityModelData.class).get(0);
+        if (head != null) {
+            head.setRotationX(extraData.headPitch * MathHelper.RADIANS_PER_DEGREE);
+            head.setRotationY(extraData.netHeadYaw * MathHelper.RADIANS_PER_DEGREE);
         }
     }
 }

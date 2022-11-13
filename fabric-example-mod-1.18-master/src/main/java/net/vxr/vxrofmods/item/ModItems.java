@@ -63,7 +63,11 @@ public class ModItems {
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
     public static final Item DOME_CAPYBARA_SPAWN_EGG = registerItem("dome_capybara_spawn_egg",
-            new SpawnEggItem(ModEntities.DOME_CAPYBARA,0x46487d, 0xffffff,
+            new SpawnEggItem(ModEntities.DOME_CAPYBARA,0x7f6849, 0x302d28,
+                    new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
+
+    public static final Item POKU_CAPYBARA_SPAWN_EGG = registerItem("poku_capybara_spawn_egg",
+            new SpawnEggItem(ModEntities.POKU_CAPYBARA,0x040404, 0x996a55,
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
     public static final Item MORITZ_DRAGON_SPAWN_EGG = registerItem("moritz_dragon_spawn_egg",
@@ -80,6 +84,10 @@ public class ModItems {
 
     public static final Item DOME_CAPYBARA_HELMET = registerItem("dome_capybara_helmet",
             new DomeCapybaraAvatarHelmetItem(ModArmorMaterials.AVATAR, EquipmentSlot.HEAD,
+                    new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
+
+    public static final Item POKU_CAPYBARA_HELMET = registerItem("poku_capybara_helmet",
+            new PokuCapybaraAvatarHelmetItem(ModArmorMaterials.AVATAR, EquipmentSlot.HEAD,
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
 
     public static final Item MORITZ_DRAGON_HELMET = registerItem("moritz_dragon_helmet",

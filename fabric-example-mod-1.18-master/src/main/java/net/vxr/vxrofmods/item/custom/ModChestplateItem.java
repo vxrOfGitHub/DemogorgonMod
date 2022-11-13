@@ -37,17 +37,19 @@ import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.*;
 
 
 public class ModChestplateItem extends ArmorItem implements IAnimatable{
 
-    private final AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     /* private static final Map<ArmorMaterial, StatusEffectInstance> MATERIAL_TO_EFFECT_MAP =
             (new ImmutableMap.Builder<ArmorMaterial, StatusEffectInstance>())
@@ -75,7 +77,7 @@ public class ModChestplateItem extends ArmorItem implements IAnimatable{
 
                 // Always loop the animation but later on in this method we'll decide whether or
                 // not to actually play it
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dream_chestplate.standard", true));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dream_chestplate.standard", ILoopType.EDefaultLoopTypes.LOOP));
 
 
                 // If the living entity is an armorstand just play the animation nonstop
@@ -120,7 +122,7 @@ public class ModChestplateItem extends ArmorItem implements IAnimatable{
                 System.out.println("------Jetpack is on!");
                 // Always loop the animation but later on in this method we'll decide whether or
                 // not to actually play it
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dream_chestplate.flying", true));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dream_chestplate.flying", ILoopType.EDefaultLoopTypes.LOOP));
 
 
                 // If the living entity is an armorstand just play the animation nonstop
