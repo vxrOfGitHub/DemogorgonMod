@@ -119,7 +119,6 @@ public class ModChestplateItem extends ArmorItem implements IAnimatable{
             ItemStack chestPlateStack = player.getInventory().getArmorStack(2);
             assert chestPlateStack.getNbt() != null;
             if (chestPlateStack.getNbt().getBoolean("dream_jetpack_on")) {
-                System.out.println("------Jetpack is on!");
                 // Always loop the animation but later on in this method we'll decide whether or
                 // not to actually play it
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dream_chestplate.flying", ILoopType.EDefaultLoopTypes.LOOP));

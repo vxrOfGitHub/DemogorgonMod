@@ -21,6 +21,7 @@ import net.vxr.vxrofmods.util.IEntityDataSaver;
 import net.vxr.vxrofmods.util.InventoryUtil;
 
 import java.util.Collection;
+import java.util.Objects;
 
 public class WithdrawMoneyCommand {
     public static void register(CommandDispatcher<ServerCommandSource> serverCommandSourceCommandDispatcher,
@@ -39,8 +40,10 @@ public class WithdrawMoneyCommand {
     private static int runWithdrawMoney(CommandContext<ServerCommandSource> context, int withdrawAmount) throws CommandSyntaxException {
 
         IEntityDataSaver player = (IEntityDataSaver)context.getSource().getPlayer();
+        int emptySlot = Objects.requireNonNull(context.getSource().getPlayer()).getInventory().getEmptySlot();
+        boolean hasSpaceInInventory = emptySlot > -1;
 
-        if(CustomMoneyData.getMoney(player) >= withdrawAmount && withdrawAmount > 0) {
+        if(CustomMoneyData.getMoney(player) >= withdrawAmount && withdrawAmount > 0 && hasSpaceInInventory) {
             CustomMoneyData.addOrSubtractMoney(player, Math.negateExact(withdrawAmount));
 
             giveCoinWithNbtToCoin(context.getSource().getPlayer(), withdrawAmount);
@@ -51,6 +54,8 @@ public class WithdrawMoneyCommand {
 
         } else if(CustomMoneyData.getMoney(player) < withdrawAmount) {
             context.getSource().sendFeedback(Text.literal("§c§lNot enough Money!§r§r"), false);
+        } else if(!hasSpaceInInventory) {
+            context.getSource().sendFeedback(Text.literal("§c§lNot enough Space in Inventory!§r§r"), false);
         }
 
         return 1;

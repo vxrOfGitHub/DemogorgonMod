@@ -12,6 +12,14 @@ public class DreamJetpackData {
         return isJetpackOn;
     }
 
+    public static boolean setJetpackOnOff(IEntityDataSaver player, boolean isJetpackOn) {
+        NbtCompound nbt = player.getPersistentData();
+
+        nbt.putBoolean("dream_jetpack_on", isJetpackOn);
+
+        return isJetpackOn;
+    }
+
     public static boolean setJetpackUp(IEntityDataSaver player, boolean newIsJetpackUp) {
         NbtCompound nbt = player.getPersistentData();
         nbt.putBoolean("dream_jetpack_up", newIsJetpackUp);

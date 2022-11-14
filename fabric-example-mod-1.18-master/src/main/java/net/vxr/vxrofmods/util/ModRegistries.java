@@ -1,6 +1,7 @@
 package net.vxr.vxrofmods.util;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.vxr.vxrofmods.command.*;
@@ -9,7 +10,9 @@ import net.vxr.vxrofmods.entity.ModEntities;
 import net.vxr.vxrofmods.entity.custom.DomeCapybaraAvatarEntity;
 import net.vxr.vxrofmods.entity.custom.MoritzDragonAvatarEntity;
 import net.vxr.vxrofmods.entity.custom.vxrPenguinAvatarEntity;
+import net.vxr.vxrofmods.event.AfterRespawnHandler;
 import net.vxr.vxrofmods.event.ModPlayerEventCopyFrom;
+import net.vxr.vxrofmods.event.OnStopSleepingHandler;
 
 public class ModRegistries {
     public static void registerModStuffs() {
@@ -38,5 +41,7 @@ public class ModRegistries {
 
     private static void registerEvents() {
         ServerPlayerEvents.COPY_FROM.register(new ModPlayerEventCopyFrom());
+        ServerPlayerEvents.AFTER_RESPAWN.register(new AfterRespawnHandler());
+        EntitySleepEvents.STOP_SLEEPING.register(new OnStopSleepingHandler());
     }
 }
