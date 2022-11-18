@@ -11,6 +11,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ToolMaterial;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -31,28 +32,40 @@ public class DreamPickAxeItem extends PickaxeItem {
 
     @Override
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
-        breakStatusCount = 0;
-        if(modeSetter == 3) {
-            if(pos.getY() - 1 > miner.getPos().getY() || pos.getY() < miner.getPos().getY()) {
-                breakBlockUp(world, pos, state);
-            }  else if(miner.getHorizontalFacing() == Direction.NORTH || miner.getHorizontalFacing() == Direction.SOUTH) {
-                breakBlockNorth(world, pos, state);
-            } else if(miner.getHorizontalFacing() == Direction.EAST || miner.getHorizontalFacing() == Direction.WEST) {
-                breakBlockEast(world, pos, state);
+
+        if(!world.isClient()) {
+            if(!stack.hasNbt()) {
+                NbtCompound nbt = new NbtCompound();
+                nbt.putBoolean("dream_pickaxe_mode_setter", false);
+                stack.setNbt(nbt);
             }
-        }
-        if(breakStatusCount > 749) {
-            stack.damage(749, miner, (e) -> {
-                e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);});
-        } else {
-            stack.damage(breakStatusCount, miner, (e) -> {
-                e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);});
+            stack.getNbt().putInt("dream_pickaxe_break_status_count" , 0);
+
+            assert stack.getNbt() != null;
+            if(stack.getNbt().getBoolean("dream_pickaxe_mode_setter")) {
+                if(pos.getY() - 1 > miner.getPos().getY() || pos.getY() < miner.getPos().getY()) {
+                    breakBlockUp(world, pos, state, stack);
+                }  else if(miner.getHorizontalFacing() == Direction.NORTH || miner.getHorizontalFacing() == Direction.SOUTH) {
+                    breakBlockNorth(world, pos, state, stack);
+                } else if(miner.getHorizontalFacing() == Direction.EAST || miner.getHorizontalFacing() == Direction.WEST) {
+                    breakBlockEast(world, pos, state, stack);
+                }
+            }
+            if(stack.getNbt().getInt("dream_pickaxe_break_status_count") > 749) {
+                stack.damage(749, miner, (e) -> {
+                    e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);});
+            } else {
+                stack.damage(stack.getNbt().getInt("dream_pickaxe_break_status_count"), miner, (e) -> {
+                    e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);});
+            }
         }
         return super.postMine(stack, world, state, pos, miner);
     }
 
-    private void breakBlockNorth(World world, BlockPos pos, BlockState state) {
+    private void breakBlockNorth(World world, BlockPos pos, BlockState state, ItemStack stack) {
         if(isValuableBlock(state.getBlock())) {
+            assert stack.getNbt() != null;
+            int breakStatusCount = stack.getNbt().getInt("dream_pickaxe_break_status_count");
             if(isValuableBlock(world.getBlockState(pos.up()).getBlock())) {
                 world.breakBlock(pos.up(), true);
                 breakStatusCount++;
@@ -85,11 +98,14 @@ public class DreamPickAxeItem extends PickaxeItem {
                 world.breakBlock(pos.down().east(), true);
                 breakStatusCount++;
             }
+            stack.getNbt().putInt("dream_pickaxe_break_status_count", breakStatusCount);
         }
     }
 
-    private void breakBlockUp(World world, BlockPos pos, BlockState state) {
+    private void breakBlockUp(World world, BlockPos pos, BlockState state ,ItemStack stack) {
         if(isValuableBlock(state.getBlock())) {
+            assert stack.getNbt() != null;
+            int breakStatusCount = stack.getNbt().getInt("dream_pickaxe_break_status_count");
             if(isValuableBlock(world.getBlockState(pos.north()).getBlock())) {
                 world.breakBlock(pos.north(), true);
                 breakStatusCount++;
@@ -122,11 +138,14 @@ public class DreamPickAxeItem extends PickaxeItem {
                 world.breakBlock(pos.south().east(), true);
                 breakStatusCount++;
             }
+            stack.getNbt().putInt("dream_pickaxe_break_status_count", breakStatusCount);
         }
     }
 
-    private void breakBlockEast(World world, BlockPos pos, BlockState state) {
+    private void breakBlockEast(World world, BlockPos pos, BlockState state, ItemStack stack) {
         if(isValuableBlock(state.getBlock())) {
+            assert stack.getNbt() != null;
+            int breakStatusCount = stack.getNbt().getInt("dream_pickaxe_break_status_count");
             if(isValuableBlock(world.getBlockState(pos.up()).getBlock())) {
                 world.breakBlock(pos.up(), true);
                 breakStatusCount++;
@@ -159,6 +178,7 @@ public class DreamPickAxeItem extends PickaxeItem {
                 world.breakBlock(pos.down().north(), true);
                 breakStatusCount++;
             }
+            stack.getNbt().putInt("dream_pickaxe_break_status_count", breakStatusCount);
         }
     }
 
@@ -176,24 +196,37 @@ public class DreamPickAxeItem extends PickaxeItem {
     }
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        if(modeSetter == 2) {
-            modeSetter = 3;
-            user.sendMessage(Text.literal("§b3x3-Breaker activated§r"), true);
-        } else if (modeSetter >= 3){
-            modeSetter = 0;
-            user.sendMessage(Text.literal("§b3x3-Breaker activated§r"), true);
-        } else if(modeSetter <= 0) {
-            modeSetter = 1;
-            user.sendMessage(Text.literal("§b3x3-Breaker deactivated§r"), true);
-        } else if(modeSetter == 1) {
-            modeSetter = 2;
-            user.sendMessage(Text.literal("§b3x3-Breaker deactivated§r"), true);
+        if(!world.isClient()) {
+            ItemStack stack = user.getStackInHand(hand);
+
+            if(stack.getItem().equals(this)) {
+
+                boolean modeSetter;
+                NbtCompound nbt = new NbtCompound();
+
+                if(stack.hasNbt()) {
+                    nbt = stack.getNbt();
+                    assert nbt != null;
+                    modeSetter = nbt.getBoolean("dream_pickaxe_mode_setter");
+                } else {
+                    modeSetter = false;
+                    nbt.putBoolean("dream_pickaxe_mode_setter", modeSetter);
+                }
+
+                modeSetter = !modeSetter;
+
+                if(modeSetter) {
+                    user.sendMessage(Text.literal("§b3x3-Breaker activated§r"), true);
+                } else {
+                    user.sendMessage(Text.literal("§b3x3-Breaker deactivated§r"), true);
+                }
+
+
+                nbt.putBoolean("dream_pickaxe_mode_setter", modeSetter);
+                stack.setNbt(nbt);
+
+            }
         }
         return super.use(world, user, hand);
     }
-
-    private int modeSetter = 3;
-
-    private static int breakStatusCount = 0;
-
 }
