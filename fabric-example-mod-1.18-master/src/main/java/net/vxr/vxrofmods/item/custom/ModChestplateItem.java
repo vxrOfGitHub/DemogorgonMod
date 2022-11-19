@@ -107,6 +107,10 @@ public class ModChestplateItem extends ArmorItem implements IAnimatable{
         return PlayState.STOP;
     }
 
+    @Override
+    public boolean hasGlint(ItemStack stack) {
+        return false;
+    }
 
     // Predicate runs every frame
     private <P extends IAnimatable> PlayState flyPredicate(AnimationEvent<P> event) {

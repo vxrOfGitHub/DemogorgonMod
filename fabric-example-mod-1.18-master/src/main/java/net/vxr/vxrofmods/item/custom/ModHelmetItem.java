@@ -44,6 +44,10 @@ public class ModHelmetItem extends ArmorItem implements IAnimatable {
         super(material, slot, settings);
     }
 
+    @Override
+    public boolean hasGlint(ItemStack stack) {
+        return false;
+    }
     private boolean hadPlayerEffect;
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
