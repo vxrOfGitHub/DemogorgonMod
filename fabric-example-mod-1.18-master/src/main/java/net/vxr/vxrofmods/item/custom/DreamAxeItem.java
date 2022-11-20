@@ -29,6 +29,16 @@ public class DreamAxeItem extends AxeItem {
     }
 
     @Override
+    public boolean hasGlint(ItemStack stack) {
+        if(!stack.hasNbt()) {
+            return false;
+        }
+        else {
+            return stack.getNbt().getBoolean("dream_axe_mode_setter");
+        }
+    }
+
+    @Override
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
         if (!world.isClient()) {
 
@@ -187,9 +197,9 @@ public class DreamAxeItem extends AxeItem {
                 modeSetter = !modeSetter;
 
                 if(modeSetter) {
-                    user.sendMessage(Text.literal("§bTree-Breaker activated§r"), true);
+                    user.sendMessage(Text.literal("§bTree-Breaker§r§a activated§r"), true);
                 } else {
-                    user.sendMessage(Text.literal("§bTree-Breaker deactivated§r"), true);
+                    user.sendMessage(Text.literal("§bTree-Breaker§r§c deactivated§r"), true);
                 }
 
                 nbt.putBoolean("dream_axe_mode_setter", modeSetter);

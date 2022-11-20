@@ -102,7 +102,18 @@ public class DreamPickAxeItem extends PickaxeItem {
         }
     }
 
-    private void breakBlockUp(World world, BlockPos pos, BlockState state ,ItemStack stack) {
+
+    @Override
+    public boolean hasGlint(ItemStack stack) {
+        if(!stack.hasNbt()) {
+            return false;
+        }
+        else {
+            return stack.getNbt().getBoolean("dream_pickaxe_mode_setter");
+        }
+    }
+
+    private void breakBlockUp(World world, BlockPos pos, BlockState state , ItemStack stack) {
         if(isValuableBlock(state.getBlock())) {
             assert stack.getNbt() != null;
             int breakStatusCount = stack.getNbt().getInt("dream_pickaxe_break_status_count");
@@ -216,9 +227,9 @@ public class DreamPickAxeItem extends PickaxeItem {
                 modeSetter = !modeSetter;
 
                 if(modeSetter) {
-                    user.sendMessage(Text.literal("§b3x3-Breaker activated§r"), true);
+                    user.sendMessage(Text.literal("§b3x3-Breaker§r§a activated§r"), true);
                 } else {
-                    user.sendMessage(Text.literal("§b3x3-Breaker deactivated§r"), true);
+                    user.sendMessage(Text.literal("§b3x3-Breaker§r§c deactivated§r"), true);
                 }
 
 
