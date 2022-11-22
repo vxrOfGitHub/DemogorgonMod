@@ -3,6 +3,8 @@ package net.vxr.vxrofmods.item.custom;
 import com.google.common.base.Ticker;
 import com.google.common.collect.ImmutableMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -30,6 +32,7 @@ import net.vxr.vxrofmods.block.entity.ModBlockEntities;
 import net.vxr.vxrofmods.effect.ModEffects;
 import net.vxr.vxrofmods.item.ModArmorMaterials;
 import net.vxr.vxrofmods.item.ModItems;
+import net.vxr.vxrofmods.networking.ModMessages;
 import net.vxr.vxrofmods.util.DreamJetpackData;
 import net.vxr.vxrofmods.util.IEntityDataSaver;
 import org.jetbrains.annotations.Nullable;
@@ -243,6 +246,29 @@ public class ModChestplateItem extends ArmorItem implements IAnimatable{
 
         return chestplate.getMaterial() == material;
     } */
+
+    @Override
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+        if(!world.isClient() && entity instanceof PlayerEntity player) {
+            if(!hasChestplateOn(player) && !hasCorrectChestplateOn(this.getMaterial(), player) && DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player))) {
+                System.out.println("Doesn*t have Chestplate on or false one and the Jetpack's still on");
+                ClientPlayNetworking.send(ModMessages.DREAM_JETPACK_ID, PacketByteBufs.create());
+            }
+        }
+
+        super.inventoryTick(stack, world, entity, slot, selected);
+    }
+    private boolean hasChestplateOn(PlayerEntity player) {
+        ItemStack chestplate = player.getInventory().getArmorStack(2);
+
+        return !chestplate.isEmpty();
+    }
+
+    private boolean hasCorrectChestplateOn(ArmorMaterial material, PlayerEntity player) {
+        ArmorItem chestplate = ((ArmorItem)player.getInventory().getArmorStack(3).getItem());
+
+        return chestplate.getMaterial() == material;
+    }
 
 }
 

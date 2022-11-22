@@ -21,7 +21,6 @@ public class DreamJetpackUpC2SPacket {
         boolean hasCorrectChestplateOn = ((ArmorItem)player.getInventory().getArmorStack(2).getItem())
                 .getMaterial() == ModArmorMaterials.Dream;
 
-
         if(hasChestplateOn && hasCorrectChestplateOn) {
             DreamJetpackData.switchJetpackUp(((IEntityDataSaver) player));
             DreamJetpackData.setJetpackOnOff(((IEntityDataSaver) player), true);
