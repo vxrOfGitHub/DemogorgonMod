@@ -1,17 +1,23 @@
 package net.vxr.vxrofmods.event;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.vxr.vxrofmods.item.ModArmorMaterials;
 import net.vxr.vxrofmods.item.custom.ModHelmetItem;
+import net.vxr.vxrofmods.networking.ModMessages;
 import net.vxr.vxrofmods.util.DreamBoostCooldownData;
 import net.vxr.vxrofmods.util.DreamHelmetData;
 import net.vxr.vxrofmods.util.DreamJetpackData;
@@ -38,33 +44,46 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
     }
 
     private void DreamJetpackTick(ServerPlayerEntity player) {
+        boolean hasCorrectChestplateOn = !player.getInventory().getArmorStack(2).isEmpty() && ((ArmorItem)player.getInventory().getArmorStack(2).getItem())
+                .getMaterial().equals(ModArmorMaterials.Dream);
+        // Jetpack Down
         if(DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player)) && player.isSneaking() &&
                 !DreamJetpackData.getJetpackUp(((IEntityDataSaver) player))) {
             player.setNoGravity(false);
             DreamJetpackData.setJetpackUp(((IEntityDataSaver) player), false);
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 6, 1));
             DreamJetpackData.setJetpackUp(((IEntityDataSaver) player), false);
+            System.out.println("Jetpack Down");
+        //Jetpack Stay
         } if(DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player)) && !player.isSneaking() &&
                 !DreamJetpackData.getJetpackUp(((IEntityDataSaver) player))) {
             DreamJetpackData.setJetpackUp(((IEntityDataSaver) player), false);
             player.setNoGravity(true);
+            System.out.println("Jetpack Stay " + DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player)));
+        // Jetpack up
         } if(DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player)) && !player.isSneaking() &&
                 DreamJetpackData.getJetpackUp(((IEntityDataSaver) player))) {
             player.setNoGravity(false);
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.LEVITATION, 3, 5));
+            System.out.println("Jetpack Up: ");
+        // Spawn Jetpack Particles
         } if(DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player))) {
-            spawnJetpackParticles(player.getWorld(), player.getBlockPos());
+            spawnJetpackParticles(player);
+        // Take effects away when putting off helmet
+        } if(!hasCorrectChestplateOn && DreamJetpackData.hadJetpackOn(((IEntityDataSaver) player))) {
+            player.setNoGravity(false);
+            player.removeStatusEffect(StatusEffects.LEVITATION);
+            DreamJetpackData.setJetpackUp(((IEntityDataSaver) player), false);
+            DreamJetpackData.setJetpackOnOff(((IEntityDataSaver) player), false);
+            DreamJetpackData.setHadJetpackOn(((IEntityDataSaver) player), false);
+            System.out.println("Jetpack took effects");
         }
     }
 
-    private void spawnJetpackParticles(World world, BlockPos playerPos) {
-        for(int i = 0; i < 360; i++) {
-            if(i % 20 == 0) {
-                world.addParticle(ParticleTypes.FLAME,
-                        playerPos.getX() + 0.5d, playerPos.getY() + 1, playerPos.getZ() + 0.5d,
-                        Math.cos(i) * 0.25d, 0.15d, Math.sin(i) * 0.25d);
-            }
-        }
+    private void spawnJetpackParticles(PlayerEntity player) {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeBlockPos(player.getBlockPos());
+        ServerPlayNetworking.send(((ServerPlayerEntity) player), ModMessages.DREAM_JETPACK_PARTICLE_SPAWN, buf);
     }
 
     private void DreamBoostTick(ServerPlayerEntity player) {

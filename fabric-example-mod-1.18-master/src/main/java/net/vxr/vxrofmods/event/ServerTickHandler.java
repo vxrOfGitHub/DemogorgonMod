@@ -31,6 +31,7 @@ public class ServerTickHandler implements ServerTickEvents.StartTick{
             PlayerDailyMissionsTime(player);
             PlayerWeeklyMissionsTime(player);
         }
+
     }
 
     private void PlayerDailyMissionsTime(ServerPlayerEntity player) {

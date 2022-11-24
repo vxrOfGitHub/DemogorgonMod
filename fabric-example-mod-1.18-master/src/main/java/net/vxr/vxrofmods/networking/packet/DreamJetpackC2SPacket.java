@@ -23,18 +23,17 @@ public class DreamJetpackC2SPacket {
         boolean hasCorrectChestplateOn = ((ArmorItem)player.getInventory().getArmorStack(2).getItem())
                 .getMaterial() == ModArmorMaterials.Dream;
 
-
         if(hasChestplateOn && hasCorrectChestplateOn) {
             DreamJetpackData.switchJetpackOnOff(((IEntityDataSaver) player));
-            ItemStack helmetStack = player.getInventory().getArmorStack(2);
+            ItemStack chestplateStack = player.getInventory().getArmorStack(2);
             NbtCompound nbt = new NbtCompound();
             nbt.putBoolean("dream_jetpack_on", DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player)));
+            DreamJetpackData.setHadJetpackOn(((IEntityDataSaver) player), DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player)));
 
-            helmetStack.setNbt(nbt);
+            chestplateStack.setNbt(nbt);
 
             if(!DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player))) {
                 player.setNoGravity(false);
-                DreamJetpackData.setJetpackUp(((IEntityDataSaver) player), false);
             }
         }
 

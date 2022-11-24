@@ -48,11 +48,11 @@ public class IceAspectEnchantment extends Enchantment {
             }
         }
 
-        if (target.world.isClient()) {
+        if (target.world.isClient) {
             Random random = target.world.getRandom();
             boolean bl = target.lastRenderX != target.getX() || target.lastRenderZ != target.getZ();
             if (bl && random.nextBoolean()) {
-                target.world.addParticle(ParticleTypes.SNOWFLAKE, target.getX(), (double)(target.getBlockPos().getY() + 1), target.getBlockPos().getZ(), (double)(MathHelper.nextBetween(random, -1.0F, 1.0F) * 0.083333336F), 0.05000000074505806, (double)(MathHelper.nextBetween(random, -1.0F, 1.0F) * 0.083333336F));
+                target.world.addParticle(ParticleTypes.SNOWFLAKE, target.getX(), target.getBlockPos().getY() + 1, target.getBlockPos().getZ(), (double)(MathHelper.nextBetween(random, -1.0F, 1.0F) * 0.083333336F), 0.05000000074505806, (double)(MathHelper.nextBetween(random, -1.0F, 1.0F) * 0.083333336F));
             }
         }
 

@@ -3,51 +3,56 @@ package net.vxr.vxrofmods.util;
 import net.minecraft.nbt.NbtCompound;
 
 public class DreamJetpackData {
-    public static boolean switchJetpackOnOff(IEntityDataSaver player) {
+    public static void switchJetpackOnOff(IEntityDataSaver player) {
         NbtCompound nbt = player.getPersistentData();
         boolean isJetpackOn = nbt.getBoolean("dream_jetpack_on");
         isJetpackOn = !isJetpackOn;
         nbt.putBoolean("dream_jetpack_on", isJetpackOn);
-
-        return isJetpackOn;
     }
 
-    public static boolean setJetpackOnOff(IEntityDataSaver player, boolean isJetpackOn) {
+    public static void setJetpackOnOff(IEntityDataSaver player, boolean isJetpackOn) {
         NbtCompound nbt = player.getPersistentData();
 
         nbt.putBoolean("dream_jetpack_on", isJetpackOn);
 
-        return isJetpackOn;
     }
 
-    public static boolean setJetpackUp(IEntityDataSaver player, boolean newIsJetpackUp) {
+    public static void setJetpackUp(IEntityDataSaver player, boolean newIsJetpackUp) {
         NbtCompound nbt = player.getPersistentData();
         nbt.putBoolean("dream_jetpack_up", newIsJetpackUp);
 
-        return newIsJetpackUp;
     }
 
     public static boolean getJetpackOnOff(IEntityDataSaver player) {
         NbtCompound nbt = player.getPersistentData();
-        boolean isJetpackOn = nbt.getBoolean("dream_jetpack_on");
 
-        return isJetpackOn;
+        return nbt.getBoolean("dream_jetpack_on");
     }
 
     public static boolean getJetpackUp(IEntityDataSaver player) {
         NbtCompound nbt = player.getPersistentData();
-        boolean isJetpackUp = nbt.getBoolean("dream_jetpack_up");
 
-        return isJetpackUp;
+        return nbt.getBoolean("dream_jetpack_up");
     }
 
-    public static boolean switchJetpackUp(IEntityDataSaver player) {
+    public static void switchJetpackUp(IEntityDataSaver player) {
         NbtCompound nbt = player.getPersistentData();
         boolean isJetpackUp = nbt.getBoolean("dream_jetpack_up");
         isJetpackUp = !isJetpackUp;
         nbt.putBoolean("dream_jetpack_up", isJetpackUp);
 
-        return isJetpackUp;
-
     }
+
+    public static void setHadJetpackOn(IEntityDataSaver player, boolean hadJetpackOn) {
+        NbtCompound nbt = player.getPersistentData();
+
+        nbt.putBoolean("dream_jetpack_was_on", hadJetpackOn);
+    }
+
+    public static boolean hadJetpackOn(IEntityDataSaver player) {
+        NbtCompound nbt = player.getPersistentData();
+
+        return nbt.getBoolean("dream_jetpack_was_on");
+    }
+
 }

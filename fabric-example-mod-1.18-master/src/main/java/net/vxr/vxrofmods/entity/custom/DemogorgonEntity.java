@@ -201,4 +201,12 @@ public class DemogorgonEntity extends HostileEntity implements IAnimatable{
             }
         }
     } */
- }
+
+    /*@Override
+    protected void mobTick() {
+
+        this.getBoundingBox().expand(30).
+
+        super.mobTick();
+    } */
+}
