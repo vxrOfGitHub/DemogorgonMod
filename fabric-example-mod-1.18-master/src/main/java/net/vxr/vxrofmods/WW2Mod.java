@@ -18,6 +18,8 @@ import net.vxr.vxrofmods.recipe.ModRecipes;
 import net.vxr.vxrofmods.screen.ModScreenHandlers;
 import net.vxr.vxrofmods.sound.ModSounds;
 import net.vxr.vxrofmods.util.ModRegistries;
+import net.vxr.vxrofmods.world.feature.ModConfiguredFeatures;
+import net.vxr.vxrofmods.world.gen.ModOreGeneration;
 import net.vxr.vxrofmods.world.gen.ModWorldGen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,6 +38,8 @@ public class WW2Mod implements ModInitializer {
 	@Override
 	public void onInitialize() {
 
+		ModConfiguredFeatures.registerConfiguredFeatures();
+
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
@@ -50,6 +54,7 @@ public class WW2Mod implements ModInitializer {
 		ModScreenHandlers.registerAllScreenHandlers();
 		ModMessages.registerC2SPackets();
 		ModEnchantments.registerModEnchantments();
+		ModOreGeneration.generateOres();
 
 		ServerTickEvents.START_SERVER_TICK.register(new PlayerTickHandler());
 		ServerTickEvents.START_SERVER_TICK.register(new ServerTickHandler());

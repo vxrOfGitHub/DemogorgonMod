@@ -48,7 +48,7 @@ public class ModHelmetItem extends ArmorItem implements IAnimatable {
     public boolean hasGlint(ItemStack stack) {
         return false;
     }
-    private boolean hadPlayerEffect;
+    //private boolean hadPlayerEffect;
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         if(!world.isClient()) {
@@ -58,9 +58,8 @@ public class ModHelmetItem extends ArmorItem implements IAnimatable {
                 if(hasHelmetOn(player)) {
                     evaluateArmorEffects(player);
 
-                } else if(!hasHelmetOn(player) && hadPlayerEffect) {
+                } else if(!hasHelmetOn(player) && DreamHelmetData.hadHelmetOn(((IEntityDataSaver) entity))) {
                     player.removeStatusEffect(StatusEffects.NIGHT_VISION);
-                    hadPlayerEffect = false;
                     DreamHelmetData.setHadHelmetOn(((IEntityDataSaver) entity), false);
                 }
             }
@@ -78,12 +77,10 @@ public class ModHelmetItem extends ArmorItem implements IAnimatable {
 
             if(hasCorrectHelmetOn(mapArmorMaterial, player) && hasPlayerEffect) {
                 //addStatusEffectForMaterial(player, mapArmorMaterial, mapStatusEffect);
-                hadPlayerEffect = true;
                 DreamHelmetData.setHadHelmetOn(((IEntityDataSaver) player), true);
 
-            } else if(!hasCorrectHelmetOn(mapArmorMaterial, player) && hadPlayerEffect) {
+            } else if(!hasCorrectHelmetOn(mapArmorMaterial, player) && DreamHelmetData.hadHelmetOn(((IEntityDataSaver) player))) {
                 player.removeStatusEffect(StatusEffects.NIGHT_VISION);
-                hadPlayerEffect = false;
                 DreamHelmetData.setHadHelmetOn(((IEntityDataSaver) player), false);
             }
         }
