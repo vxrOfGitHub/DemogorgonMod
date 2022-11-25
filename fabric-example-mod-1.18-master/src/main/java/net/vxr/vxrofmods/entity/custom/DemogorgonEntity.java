@@ -8,6 +8,8 @@ import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.boss.BossBar;
+import net.minecraft.entity.boss.ServerBossBar;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
@@ -56,13 +58,15 @@ import java.util.List;
 import java.util.UUID;
 
 public class DemogorgonEntity extends HostileEntity implements IAnimatable{
-    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     private int dimensionDriftCooldown = 0;
-    private int dimensionDriftMaxCooldown = 400;
+    private final int dimensionDriftMaxCooldown = 400;
 
     public DemogorgonEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
+        ServerBossBar bossBar = new ServerBossBar(this.getDisplayName(), BossBar.Color.RED, BossBar.Style.PROGRESS);
     }
 
     // Normal
@@ -99,7 +103,14 @@ public class DemogorgonEntity extends HostileEntity implements IAnimatable{
         return PlayState.CONTINUE;
 
     }
-
+    private PlayState attackPredicate(AnimationEvent event) {
+        if(this.handSwinging && event.getController().getAnimationState().equals(AnimationState.Stopped)) {
+            event.getController().markNeedsReload();
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.demogorgon.attack1", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+            this.handSwinging = false;
+        }
+        return PlayState.CONTINUE;
+    }
     @Override
     public void registerControllers(AnimationData animationData) {
         animationData.addAnimationController(new AnimationController(this, "controller",
@@ -108,7 +119,9 @@ public class DemogorgonEntity extends HostileEntity implements IAnimatable{
                 0, this::attackPredicate));
     }
 
-    private PlayState attackPredicate(AnimationEvent animationEvent) {
+
+
+    /*private PlayState attackPredicate(AnimationEvent<> animationEvent) {
             if (this.handSwinging && animationEvent.getController().getAnimationState().equals(AnimationState.Stopped)) {
                 animationEvent.getController().markNeedsReload();
                 List<String> attackAnimationsList = new ArrayList<>();
@@ -118,7 +131,7 @@ public class DemogorgonEntity extends HostileEntity implements IAnimatable{
                         attackAnimationsList.get(random.nextInt(attackAnimationsList.size())), ILoopType.EDefaultLoopTypes.PLAY_ONCE));
             }
         return PlayState.CONTINUE;
-    }
+    } */
 
 
     public void writeCustomDataToNbt(NbtCompound nbt) {
@@ -158,6 +171,9 @@ public class DemogorgonEntity extends HostileEntity implements IAnimatable{
     }
 
 
+
+
+
     protected void initDataTracker() {
         super.initDataTracker();
         this.dataTracker.startTracking(DATA_ID_TYPE_VARIANT, 0);
@@ -187,6 +203,7 @@ public class DemogorgonEntity extends HostileEntity implements IAnimatable{
     private void setVariant(DemogorgonVariant variant) {
         this.dataTracker.set(DATA_ID_TYPE_VARIANT, variant.getId() & 255);
     }
+
 
     /*@Override
     public void tick() {
