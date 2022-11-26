@@ -56,8 +56,8 @@
         },
         {
           "type": "minecraft:item",
-          "name": "vxrofmods:dream_star",
-          "weight": 1
+          "name": "vxrofmods:dream_shard",
+          "weight": 2
         },
         {
           "type": "minecraft:item",

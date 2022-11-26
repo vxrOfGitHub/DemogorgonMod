@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ModConfiguredFeatures {
     public static final List<OreFeatureConfig.Target> END_DREAM_ORES = List.of(
-            OreFeatureConfig.createTarget(new BlockMatchRuleTest(Blocks.END_STONE), ModBlocks.DREAM_BLOCK.getDefaultState()));
+            OreFeatureConfig.createTarget(new BlockMatchRuleTest(Blocks.END_STONE), ModBlocks.DREAM_ORE.getDefaultState()));
 
     public static final RegistryEntry<ConfiguredFeature<OreFeatureConfig, ?>> DREAM_ORE =
             ConfiguredFeatures.register("dream_ore", Feature.ORE, new OreFeatureConfig(END_DREAM_ORES, 20));

@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.Material;
+import net.minecraft.block.OreBlock;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -11,6 +12,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.vxr.vxrofmods.WW2Mod;
@@ -27,6 +29,10 @@ public class ModBlocks {
     public static final Block DREAM_BLOCK =  registerBlock("dream_block",
             new DreamBlock(FabricBlockSettings.of(Material.METAL).strength(6f).requiresTool()
                     .luminance((state) -> state.get(DreamBlock.CLICKED) ? 15:0)), ModItemGroup.Custom_Mods);
+
+    public static final Block DREAM_ORE =  registerBlock("dream_ore",
+            new OreBlock(FabricBlockSettings.of(Material.METAL).strength(6f).requiresTool(),
+                    UniformIntProvider.create(5, 10)), ModItemGroup.Custom_Mods);
 
     public static final Block FRAGMENT_HOLDER =  registerBlock("fragment_holder",
             new FragmentHolderBlock(FabricBlockSettings.of(Material.METAL).nonOpaque().strength(12f)), ModItemGroup.Custom_Mods);

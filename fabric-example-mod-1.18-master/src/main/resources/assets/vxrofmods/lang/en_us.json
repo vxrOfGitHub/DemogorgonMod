@@ -37,6 +37,7 @@
   "item.vxrofmods.lapis_lazuli_fragment": "Lapis Lazuli Fragment",
   "item.vxrofmods.gold_fragment": "Gold Fragment",
   "item.vxrofmods.copper_fragment": "Copper Fragment",
+  "item.vxrofmods.dream_shard": "Dream Shard",
 
 
   "item.vxrofmods.dream_bow": "Dream Bow",
@@ -45,6 +46,7 @@
   "block.vxrofmods.speedy_block": "Speedy Block",
   "block.vxrofmods.diamond_miner_block": "Diamond Miner",
   "block.vxrofmods.fragment_holder": "Fragment Holder",
+  "block.vxrofmods.dream_ore": "Dream Ore",
 
   "itemGroup.vxrofmods.custom_mods": "WonderWorlds 2",
 

@@ -1,12 +1,22 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "##",
-    "##"
+    "###",
+    "DBC",
+    "###"
   ],
   "key": {
+    "B": {
+      "item": "minecraft:wither_star"
+    },
     "#": {
-      "item": "minecraft:nether_star"
+      "item": "vxrofmods:dream_shard"
+    },
+    "D": {
+      "item": "minecraft:iron_bars"
+    },
+    "C": {
+      "item": "minecraft:iron_bars"
     }
   },
   "result": {

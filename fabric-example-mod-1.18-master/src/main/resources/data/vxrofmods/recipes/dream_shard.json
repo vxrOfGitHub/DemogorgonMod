@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "cookingtime": 200,
+  "experience": 6.0,
+  "ingredient": {
+    "item": "vxrofmods:dream_ore"
+  },
+  "result": "vxrofmods:dream_shard"
+}
