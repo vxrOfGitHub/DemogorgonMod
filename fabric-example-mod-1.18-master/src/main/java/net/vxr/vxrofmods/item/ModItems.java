@@ -24,6 +24,12 @@ public class ModItems {
     public static final Item DREAM_SHARD = registerItem("dream_shard",
             new Item(new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
+    public static final Item WARDENS_EAR_ADE = registerItem("wardens_ear_ade",
+            new Item(new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
+
+    public static final Item DRAGONS_TEETH = registerItem("dragons_teeth",
+            new Item(new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
+
     public static final Item Foundation_Egg = registerItem("foundation_egg",
             new Item(new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 

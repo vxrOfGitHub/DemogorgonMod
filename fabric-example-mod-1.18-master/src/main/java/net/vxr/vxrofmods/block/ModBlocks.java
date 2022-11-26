@@ -10,6 +10,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
@@ -31,7 +32,7 @@ public class ModBlocks {
                     .luminance((state) -> state.get(DreamBlock.CLICKED) ? 15:0)), ModItemGroup.Custom_Mods);
 
     public static final Block DREAM_ORE =  registerBlock("dream_ore",
-            new OreBlock(FabricBlockSettings.of(Material.METAL).strength(6f).requiresTool(),
+            new OreBlock(FabricBlockSettings.of(Material.METAL).requiresTool().strength(30.0F, 1200.0F).sounds(BlockSoundGroup.STONE),
                     UniformIntProvider.create(5, 10)), ModItemGroup.Custom_Mods);
 
     public static final Block FRAGMENT_HOLDER =  registerBlock("fragment_holder",

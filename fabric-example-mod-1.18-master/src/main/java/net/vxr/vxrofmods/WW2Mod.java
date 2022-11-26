@@ -17,6 +17,7 @@ import net.vxr.vxrofmods.networking.ModMessages;
 import net.vxr.vxrofmods.recipe.ModRecipes;
 import net.vxr.vxrofmods.screen.ModScreenHandlers;
 import net.vxr.vxrofmods.sound.ModSounds;
+import net.vxr.vxrofmods.util.ModLootTableModifiers;
 import net.vxr.vxrofmods.util.ModRegistries;
 import net.vxr.vxrofmods.world.feature.ModConfiguredFeatures;
 import net.vxr.vxrofmods.world.gen.ModOreGeneration;
@@ -55,6 +56,7 @@ public class WW2Mod implements ModInitializer {
 		ModMessages.registerC2SPackets();
 		ModEnchantments.registerModEnchantments();
 		ModOreGeneration.generateOres();
+		ModLootTableModifiers.modifyLootTables();
 
 		ServerTickEvents.START_SERVER_TICK.register(new PlayerTickHandler());
 		ServerTickEvents.START_SERVER_TICK.register(new ServerTickHandler());
