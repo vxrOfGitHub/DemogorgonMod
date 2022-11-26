@@ -15,7 +15,9 @@ import static org.apache.commons.lang3.RandomUtils.nextInt;
 public class AfterRespawnHandler implements ServerPlayerEvents.AfterRespawn{
     @Override
     public void afterRespawn(ServerPlayerEntity oldPlayer, ServerPlayerEntity newPlayer, boolean alive) {
-        giveNegativeEffects(newPlayer);
+        if(!alive) {
+            giveNegativeEffects(newPlayer);
+        }
     }
 
     private void giveNegativeEffects(PlayerEntity newPlayer) {

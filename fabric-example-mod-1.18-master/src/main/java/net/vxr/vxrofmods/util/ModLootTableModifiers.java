@@ -26,7 +26,6 @@ public class ModLootTableModifiers {
             if(ENDER_DRAGON_ID.equals(id)) {
                 LootPool.Builder poolBuilder = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
-                        .conditionally(RandomChanceLootCondition.builder(1f)) // Drops 100% of the time
                         .with(ItemEntry.builder(ModItems.DRAGONS_TEETH)) // Drops Dragons Teeth
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 1.0f)).build()); // Amount to Drop = 1
                 tableBuilder.pool(poolBuilder.build());
