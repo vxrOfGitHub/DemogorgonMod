@@ -18,11 +18,11 @@ public class EntityUnloadEvent implements ServerEntityEvents.Unload{
             /*System.out.println("Would he drop Item: " + ((IEntityDataSaver) dragon).getPersistentData().getBoolean("vxrofmods_dragon_can_drop"));
             if(((IEntityDataSaver) dragon).getPersistentData().getBoolean("vxrofmods_dragon_can_drop")) {
                 System.out.println("-----------Dragon Droppped Item");
-                world.spawnEntity(new ItemEntity(world, dragon.getX(), dragon.getY(), dragon.getZ(), new ItemStack(ModItems.DRAGONS_TEETH)));
+                world.spawnEntity(new ItemEntity(world, dragon.getX(), dragon.getY(), dragon.getZ(), new ItemStack(ModItems.DRAGONS_CLAW)));
             } else {
                 System.out.println("----------Dragon didn't drop Item");
             } */
-            world.spawnEntity(new ItemEntity(world, dragon.getX(), dragon.getY(), dragon.getZ(), new ItemStack(ModItems.DRAGONS_TEETH)));
+            world.spawnEntity(new ItemEntity(world, dragon.getX(), dragon.getY(), dragon.getZ(), new ItemStack(ModItems.DRAGONS_CLAW)));
         }
     }
 }
