@@ -11,10 +11,7 @@ import net.vxr.vxrofmods.entity.ModEntities;
 import net.vxr.vxrofmods.entity.custom.DomeCapybaraAvatarEntity;
 import net.vxr.vxrofmods.entity.custom.MoritzDragonAvatarEntity;
 import net.vxr.vxrofmods.entity.custom.vxrPenguinAvatarEntity;
-import net.vxr.vxrofmods.event.AfterRespawnHandler;
-import net.vxr.vxrofmods.event.EntityUnloadEvent;
-import net.vxr.vxrofmods.event.ModPlayerEventCopyFrom;
-import net.vxr.vxrofmods.event.OnStopSleepingHandler;
+import net.vxr.vxrofmods.event.*;
 
 public class ModRegistries {
     public static void registerModStuffs() {

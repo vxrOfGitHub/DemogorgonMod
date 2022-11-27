@@ -7,16 +7,16 @@
   ],
   "key": {
     "B": {
-      "item": "minecraft:wither_star"
+      "item": "minecraft:nether_star"
     },
     "#": {
       "item": "vxrofmods:dream_shard"
     },
     "D": {
-      "item": "minecraft:iron_bars"
+      "item": "vxrofmods:wardens_ear_ade"
     },
     "C": {
-      "item": "minecraft:iron_bars"
+      "item": "vxrofmods:dragons_teeth"
     }
   },
   "result": {
