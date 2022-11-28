@@ -20,6 +20,11 @@ public class ModEntities {
             FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, vxrPenguinAvatarEntity::new)
                     .dimensions(EntityDimensions.fixed(0.4f, 0.55f)).build());
 
+    public static final EntityType<MichelWolfAvatarEntity> MICHEL_WOLF = Registry.register(
+            Registry.ENTITY_TYPE, new Identifier(WW2Mod.MOD_ID, "michel_wolf"),
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, MichelWolfAvatarEntity::new)
+                    .dimensions(EntityDimensions.fixed(0.6f, 1.1f)).build());
+
     public static final EntityType<MoritzDragonAvatarEntity> MORITZ_DRAGON = Registry.register(
             Registry.ENTITY_TYPE, new Identifier(WW2Mod.MOD_ID, "moritz_dragon"),
             FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, MoritzDragonAvatarEntity::new)

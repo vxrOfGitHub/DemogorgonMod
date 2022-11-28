@@ -6,11 +6,8 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.vxr.vxrofmods.command.*;
-import net.vxr.vxrofmods.entity.custom.DemogorgonEntity;
+import net.vxr.vxrofmods.entity.custom.*;
 import net.vxr.vxrofmods.entity.ModEntities;
-import net.vxr.vxrofmods.entity.custom.DomeCapybaraAvatarEntity;
-import net.vxr.vxrofmods.entity.custom.MoritzDragonAvatarEntity;
-import net.vxr.vxrofmods.entity.custom.vxrPenguinAvatarEntity;
 import net.vxr.vxrofmods.event.*;
 
 public class ModRegistries {
@@ -25,6 +22,7 @@ public class ModRegistries {
         FabricDefaultAttributeRegistry.register(ModEntities.MORITZ_DRAGON, MoritzDragonAvatarEntity.setAttributes());
         FabricDefaultAttributeRegistry.register(ModEntities.DOME_CAPYBARA, DomeCapybaraAvatarEntity.setAttributes());
         FabricDefaultAttributeRegistry.register(ModEntities.POKU_CAPYBARA, DomeCapybaraAvatarEntity.setAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.MICHEL_WOLF, MichelWolfAvatarEntity.setAttributes());
     }
 
 

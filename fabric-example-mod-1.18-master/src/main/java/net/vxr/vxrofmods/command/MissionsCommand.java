@@ -21,9 +21,7 @@ import net.vxr.vxrofmods.util.IEntityDataSaver;
 import net.vxr.vxrofmods.util.MissionsData;
 import net.vxr.vxrofmods.util.MissionsWeeklyData;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 public class MissionsCommand {
@@ -34,13 +32,13 @@ public class MissionsCommand {
 
 
         serverCommandSourceCommandDispatcher.register(CommandManager.literal("missions")
-            .executes(context -> runOutputBothMissions(context))
+            .executes(MissionsCommand::runOutputBothMissions)
                 // Daily Missions
             .then(CommandManager.literal("daily")
-                .executes((context) -> runOutputDailyMissions(context))
+                .executes(MissionsCommand::runOutputDailyMissions)
             .then(CommandManager.literal( "time").requires(source -> source.hasPermissionLevel(2))
             .then(CommandManager.literal("reset")
-                .executes(context -> runResetDailyMissions(context)))
+                .executes(MissionsCommand::runResetDailyMissions))
             .then(CommandManager.literal("set")
                 .then(CommandManager.argument("timeInTicks", IntegerArgumentType.integer(0))
                     .executes(context -> runSetDailyMissions(context, IntegerArgumentType.getInteger(context, "timeInTicks"))))))
@@ -53,7 +51,7 @@ public class MissionsCommand {
                             .then(CommandManager.argument("amountToKill", IntegerArgumentType.integer(1))
                                     .executes(context -> runAddDailyMissionsMobs(context, EntityArgumentType.getEntity(context, "MobToKill"),
                                             IntegerArgumentType.getInteger(context, "amountToKill")))))
-                    .then(CommandManager.literal("testPreset").executes(context -> runAddTestPresetDailyMissions(context))))
+                    .then(CommandManager.literal("testPreset").executes(MissionsCommand::runAddTestPresetDailyMissions)))
                     .then(CommandManager.literal("remove").requires(source -> source.hasPermissionLevel(2))
                             .then(CommandManager.argument("numberInList", IntegerArgumentType.integer())
                                     .executes(context -> runRemoveDailyMission(context, IntegerArgumentType.getInteger(context, "numberInList")))))
@@ -68,19 +66,19 @@ public class MissionsCommand {
                                     .then(CommandManager.literal("all")
                                             .executes(context -> runRerollAllDailyMissions(context, EntityArgumentType.getPlayers(context, "target"))))))
                     .then(CommandManager.literal("complete").then(CommandManager.literal("1")
-                            .executes(context -> runCompleteDailyMission1(context)))
-                            .then(CommandManager.literal("2").executes(context -> runCompleteDailyMission2(context)))
-                            .then(CommandManager.literal("3").executes(context -> runCompleteDailyMission3(context)))
-                            .then(CommandManager.literal("all").executes(context -> runCompleteAllDailyMissions(context)))
-                    .executes(context -> runCompleteAllDailyMissions(context)))
+                            .executes(MissionsCommand::runCompleteDailyMission1))
+                            .then(CommandManager.literal("2").executes(MissionsCommand::runCompleteDailyMission2))
+                            .then(CommandManager.literal("3").executes(MissionsCommand::runCompleteDailyMission3))
+                            .then(CommandManager.literal("all").executes(MissionsCommand::runCompleteAllDailyMissions))
+                    .executes(MissionsCommand::runCompleteAllDailyMissions))
                     .then(CommandManager.literal("list")
-                            .executes(context -> runOuputDailyMissionsList(context))))
+                            .executes(MissionsCommand::runOuputDailyMissionsList)))
                 // Weekly Missions
             .then(CommandManager.literal("weekly")
-                .executes(context -> runOutputWeeklyMissions(context))
+                .executes(MissionsCommand::runOutputWeeklyMissions)
                     .then(CommandManager.literal("time").requires(source -> source.hasPermissionLevel(2))
                             .then(CommandManager.literal("reset")
-                                    .executes(context -> runResetWeeklyMissions(context)))
+                                    .executes(MissionsCommand::runResetWeeklyMissions))
                             .then(CommandManager.literal("set")
                                     .then(CommandManager.argument("timeInTicks", IntegerArgumentType.integer(0))
                                             .executes(context -> runSetWeeklyMissions(context, IntegerArgumentType.getInteger(context, "timeInTicks"))))))
@@ -93,7 +91,7 @@ public class MissionsCommand {
                                     .then(CommandManager.argument("amountToKill", IntegerArgumentType.integer(1))
                                             .executes(context -> runAddWeeklyMissionsMobs(context, EntityArgumentType.getEntity(context, "MobToKill"),
                                                     IntegerArgumentType.getInteger(context, "amountToKill")))))
-                            .then(CommandManager.literal("testPreset").executes(context -> runAddTestPresetWeeklyMissions(context))))
+                            .then(CommandManager.literal("testPreset").executes(MissionsCommand::runAddTestPresetWeeklyMissions)))
                     .then(CommandManager.literal("remove").requires(source -> source.hasPermissionLevel(2))
                             .then(CommandManager.argument("numberInList", IntegerArgumentType.integer())
                                     .executes(context -> runRemoveWeeklyMission(context, IntegerArgumentType.getInteger(context, "numberInList")))))
@@ -108,13 +106,17 @@ public class MissionsCommand {
                                     .then(CommandManager.literal("all")
                                             .executes(context -> runRerollAllWeeklyMissions(context, EntityArgumentType.getPlayers(context, "target"))))))
                     .then(CommandManager.literal("complete").then(CommandManager.literal("1")
-                                    .executes(context -> runCompleteWeeklyMission1(context)))
-                            .then(CommandManager.literal("2").executes(context -> runCompleteWeeklyMission2(context)))
-                            .then(CommandManager.literal("3").executes(context -> runCompleteWeeklyMission3(context)))
-                            .then(CommandManager.literal("all").executes(context -> runCompleteAllWeeklyMissions(context)))
-                            .executes(context -> runCompleteAllWeeklyMissions(context)))
+                                    .executes(MissionsCommand::runCompleteWeeklyMission1))
+                            .then(CommandManager.literal("2").executes(MissionsCommand::runCompleteWeeklyMission2))
+                            .then(CommandManager.literal("3").executes(MissionsCommand::runCompleteWeeklyMission3))
+                            .then(CommandManager.literal("all").executes(MissionsCommand::runCompleteAllWeeklyMissions))
+                            .executes(MissionsCommand::runCompleteAllWeeklyMissions))
                     .then(CommandManager.literal("list")
-                            .executes(context -> runOuputWeeklyMissionsList(context)))));
+                            .executes(MissionsCommand::runOuputWeeklyMissionsList)))
+                //reroll Both Mission Types
+                .then(CommandManager.literal("reroll").requires(source -> source.hasPermissionLevel(2))
+                        .then(CommandManager.argument("target", EntityArgumentType.players())
+                        .executes(context -> runRerollBothMissions(context, EntityArgumentType.getPlayers(context, "target"))))));
 
 
 
@@ -124,11 +126,18 @@ public class MissionsCommand {
     public static final int rewardAmountWeeklyMission = 1000;
 
 
+    private static int runRerollBothMissions(CommandContext<ServerCommandSource> context, Collection<ServerPlayerEntity> target) throws CommandSyntaxException {
+
+        runRerollAllDailyMissions(context, target);
+        runRerollAllWeeklyMissions(context, target);
+
+        return 1;
+    }
+
+
     // ------------ Weekly Missions -------------------
 
     private static int runAddWeeklyMissionsItems(CommandContext<ServerCommandSource> context, ItemStackArgument stack, int amountOfItemsNeeded) throws CommandSyntaxException {
-
-        IEntityDataSaver playerSaver = (IEntityDataSaver)context.getSource().getPlayer();
 
         ServerTickHandler.itemsForWeeklyMission.add(stack.getItem().getDefaultStack());
         ServerTickHandler.amountOfItemsForWeeklyMission.add(amountOfItemsNeeded);
@@ -140,8 +149,6 @@ public class MissionsCommand {
     }
 
     private static int runOuputWeeklyMissionsList(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-
-        IEntityDataSaver playerSaver = (IEntityDataSaver)context.getSource().getPlayer();
 
         if(ServerTickHandler.itemsForWeeklyMission.size() <= 0 && ServerTickHandler.mobsForWeeklyMission.size() <= 0){
             context.getSource().sendFeedback(Text.literal("§cNo Weekly Mission yet!§r"), false);

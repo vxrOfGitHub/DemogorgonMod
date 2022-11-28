@@ -39,20 +39,20 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.List;
 
-public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatable {
+public class MichelWolfAvatarEntity extends TameableEntity implements IAnimatable {
 
-    private static final Item TamingItem = Items.COD;
-    private static final Item ArmorItem = ModItems.PENGUIN_HELMET;
+    private static final Item TamingItem = Items.BONE;
+    private static final Item ArmorItem = ModItems.MICHEL_WOLF_HELMET;
 
     private static final boolean hasDanceAnimation = true;
-    private static final String dancingAnimation = "animation.vxr_penguin.dance";
-    private static final String sittingAnimation = "animation.vxr_penguin.sitting";
-    private static final String walkAnimation = "animation.vxr_penguin.walk";
-    private static final String idleAnimation = "animation.vxr_penguin.idle";
+    private static final String dancingAnimation = "animation.michel_wolf.dance";
+    private static final String sittingAnimation = "animation.michel_wolf.sitting";
+    private static final String walkAnimation = "animation.michel_wolf.walking";
+    private static final String idleAnimation = "animation.michel_wolf.standing";
 
     private AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-    public vxrPenguinAvatarEntity(EntityType<? extends TameableEntity> entityType, World world) {
+    public MichelWolfAvatarEntity(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
     }
 
@@ -123,30 +123,30 @@ public class vxrPenguinAvatarEntity extends TameableEntity implements IAnimatabl
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.ENTITY_DOLPHIN_AMBIENT;
+        return SoundEvents.ENTITY_WOLF_AMBIENT;
     }
 
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.ENTITY_DOLPHIN_HURT;
+        return SoundEvents.ENTITY_WOLF_HURT;
     }
 
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.ENTITY_AXOLOTL_DEATH;
+        return SoundEvents.ENTITY_WOLF_DEATH;
     }
 
     // Tameable Entity
     private static final TrackedData<Boolean> SITTING =
-            DataTracker.registerData(vxrPenguinAvatarEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+            DataTracker.registerData(MichelWolfAvatarEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
     private static final TrackedData<Boolean> DANCING =
-            DataTracker.registerData(vxrPenguinAvatarEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+            DataTracker.registerData(MichelWolfAvatarEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
 
-    private static boolean musicIsPlayingNear(List<BlockState> nearJukeboxes, vxrPenguinAvatarEntity entity) {
+    private static boolean musicIsPlayingNear(List<BlockState> nearJukeboxes, MichelWolfAvatarEntity entity) {
         boolean musicIsPlayingNear = false;
         if(!entity.world.isClient() && nearJukeboxes.size() > 0) {
             for(int i = 0; i < nearJukeboxes.size(); i++) {
