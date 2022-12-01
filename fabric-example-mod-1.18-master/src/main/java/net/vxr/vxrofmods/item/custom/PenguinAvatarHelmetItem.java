@@ -33,7 +33,7 @@ public class PenguinAvatarHelmetItem extends ArmorItem implements IAnimatable {
 
     private static final Item TamingItem = Items.COD;
     private static final EntityType<?> avatarEntity = ModEntities.PENGUIN_AVATAR;
-    private static final String idleAnimation = "animation.moritz_dragon.flying";
+    private static final String idleAnimation = "animation.penguin_avatar_helmet_item.idle";
 
 
 
@@ -143,7 +143,7 @@ public class PenguinAvatarHelmetItem extends ArmorItem implements IAnimatable {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this, "controller", 20, this::predicate));
+        data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
     }
 
     @Override

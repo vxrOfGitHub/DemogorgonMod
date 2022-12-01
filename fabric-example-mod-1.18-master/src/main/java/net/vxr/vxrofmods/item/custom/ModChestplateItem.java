@@ -165,8 +165,8 @@ public class ModChestplateItem extends ArmorItem implements IAnimatable{
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this, "controller", 20, this::predicate));
-        data.addAnimationController(new AnimationController(this, "flyController", 20, this::flyPredicate));
+        data.addAnimationController(new AnimationController(this, "controller", 10, this::predicate));
+        data.addAnimationController(new AnimationController(this, "flyController", 10, this::flyPredicate));
     }
 
     @Override

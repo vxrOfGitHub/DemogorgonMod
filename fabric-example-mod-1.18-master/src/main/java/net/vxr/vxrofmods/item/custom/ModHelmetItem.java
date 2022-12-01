@@ -156,7 +156,7 @@ public class ModHelmetItem extends ArmorItem implements IAnimatable {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this, "controller", 20, this::predicate));
+        data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
     }
 
     @Override
