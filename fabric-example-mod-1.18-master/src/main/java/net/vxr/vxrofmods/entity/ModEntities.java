@@ -20,15 +20,20 @@ public class ModEntities {
             FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, vxrPenguinAvatarEntity::new)
                     .dimensions(EntityDimensions.fixed(0.4f, 0.55f)).build());
 
+    public static final EntityType<LennartGollumAvatarEntity> LENNART_GOLLUM = Registry.register(
+            Registry.ENTITY_TYPE, new Identifier(WW2Mod.MOD_ID, "lennart_gollum"),
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, LennartGollumAvatarEntity::new)
+                    .dimensions(EntityDimensions.fixed(0.95f, 0.85f)).build());
+
     public static final EntityType<JoshSumpfmausAvatarEntity> JOSH_SUMPFMAUS = Registry.register(
             Registry.ENTITY_TYPE, new Identifier(WW2Mod.MOD_ID, "josh_sumpfmaus"),
             FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, JoshSumpfmausAvatarEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.4f, 0.55f)).build());
+                    .dimensions(EntityDimensions.fixed(1.0f, 0.55f)).build());
 
     public static final EntityType<MichelWolfAvatarEntity> MICHEL_WOLF = Registry.register(
             Registry.ENTITY_TYPE, new Identifier(WW2Mod.MOD_ID, "michel_wolf"),
             FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, MichelWolfAvatarEntity::new)
-                    .dimensions(EntityDimensions.fixed(1.0f, 0.55f)).build());
+                    .dimensions(EntityDimensions.fixed(0.45f, 1.0f)).build());
 
     public static final EntityType<MoritzDragonAvatarEntity> MORITZ_DRAGON = Registry.register(
             Registry.ENTITY_TYPE, new Identifier(WW2Mod.MOD_ID, "moritz_dragon"),
@@ -38,10 +43,10 @@ public class ModEntities {
     public static final EntityType<DomeCapybaraAvatarEntity> DOME_CAPYBARA = Registry.register(
             Registry.ENTITY_TYPE, new Identifier(WW2Mod.MOD_ID, "dome_capybara"),
             FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, DomeCapybaraAvatarEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.8f, 1.2f)).build());
+                    .dimensions(EntityDimensions.fixed(1.0f, 1.0f)).build());
 
     public static final EntityType<PokuCapybaraAvatarEntity> POKU_CAPYBARA = Registry.register(
             Registry.ENTITY_TYPE, new Identifier(WW2Mod.MOD_ID, "poku_capybara"),
             FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, PokuCapybaraAvatarEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.8f, 1.2f)).build());
+                    .dimensions(EntityDimensions.fixed(1.0f, 1.05f)).build());
 }

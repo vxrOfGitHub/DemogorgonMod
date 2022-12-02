@@ -70,6 +70,10 @@ public class ModItems {
             new SpawnEggItem(ModEntities.PENGUIN_AVATAR,0x46487d, 0xffffff,
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
+    public static final Item LENNART_GOLLUM_SPAWN_EGG = registerItem("lennart_gollum_spawn_egg",
+            new SpawnEggItem(ModEntities.LENNART_GOLLUM,0xbea9a4, 0x5d4b4b,
+                    new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
+
     public static final Item JOSH_SUMPFMAUS_SPAWN_EGG = registerItem("josh_sumpfmaus_spawn_egg",
             new SpawnEggItem(ModEntities.JOSH_SUMPFMAUS,0x0f2226, 0x46fd62,
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
@@ -96,6 +100,10 @@ public class ModItems {
 
     public static final Item PENGUIN_HELMET = registerItem("penguin_helmet",
             new PenguinAvatarHelmetItem(ModArmorMaterials.AVATAR, EquipmentSlot.HEAD,
+                    new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
+
+    public static final Item LENNART_GOLLUM_HELMET = registerItem("lennart_gollum_helmet",
+            new LennartGollumAvatarHelmetItem(ModArmorMaterials.AVATAR, EquipmentSlot.HEAD,
                     new FabricItemSettings().group(ModItemGroup.Custom_Mods).maxCount(1)));
 
     public static final Item JOSH_SUMPFMAUS_HELMET = registerItem("josh_sumpfmaus_helmet",

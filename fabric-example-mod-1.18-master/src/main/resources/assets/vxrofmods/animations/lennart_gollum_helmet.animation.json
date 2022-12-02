@@ -1,0 +1,121 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.lennart_gollum_helmet.idle": {
+			"loop": true,
+			"animation_length": 2,
+			"bones": {
+				"Gollum": {
+					"rotation": {
+						"vector": [80, 0, 0]
+					},
+					"position": {
+						"vector": [0, 33.75, 0]
+					},
+					"scale": {
+						"vector": [1, 1, 1]
+					}
+				},
+				"head": {
+					"rotation": {
+						"vector": [-80, 0, 0]
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, -5, -2]
+						},
+						"1.0": {
+							"vector": [0, -5, -2.25]
+						},
+						"2.0": {
+							"vector": [0, -5, -2]
+						}
+					},
+					"scale": {
+						"vector": [1, 1, 1]
+					}
+				},
+				"rightleg": {
+					"rotation": {
+						"vector": [0, 0, 12.5]
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, -0.5, 0.25]
+						},
+						"1.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.0": {
+							"vector": [0, -0.5, 0.25]
+						}
+					},
+					"scale": {
+						"vector": [1, 1, 1]
+					}
+				},
+				"leftleg": {
+					"rotation": {
+						"vector": [-2.5, 0, -10]
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, -0.5, 0.25]
+						},
+						"2.0": {
+							"vector": [0, 0, 0]
+						}
+					},
+					"scale": {
+						"vector": [1, 1, 1]
+					}
+				},
+				"Arms": {
+					"rotation": {
+						"vector": [-82.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, 1, 1]
+					},
+					"scale": {
+						"vector": [1, 1, 1]
+					}
+				},
+				"right": {
+					"rotation": {
+						"0.0": {
+							"vector": [-2.49762, 0.10901, 2.49762]
+						},
+						"1.0": {
+							"vector": [5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.0": {
+							"vector": [-2.49762, 0.10901, 2.49762],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"left": {
+					"rotation": {
+						"0.0": {
+							"vector": [4.99527, 0.21782, -2.4905]
+						},
+						"1.0": {
+							"vector": [-2.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.0": {
+							"vector": [4.99527, 0.21782, -2.4905],
+							"easing": "easeInOutSine"
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

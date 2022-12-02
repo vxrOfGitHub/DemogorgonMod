@@ -28,12 +28,14 @@ public class WW2ClientMod implements ClientModInitializer {
     public void onInitializeClient() {
         EntityRendererRegistry.register(ModEntities.DEMOGORGON, DemogorgonRenderer::new);
         EntityRendererRegistry.register(ModEntities.PENGUIN_AVATAR, PenguinAvatarRenderer::new);
+        EntityRendererRegistry.register(ModEntities.LENNART_GOLLUM, LennartGollumAvatarRenderer::new);
         EntityRendererRegistry.register(ModEntities.JOSH_SUMPFMAUS, JoshSumpfmausAvatarRenderer::new);
         EntityRendererRegistry.register(ModEntities.MICHEL_WOLF, MichelWolfAvatarRenderer::new);
         EntityRendererRegistry.register(ModEntities.DOME_CAPYBARA, DomeCapybaraAvatarRenderer::new);
         EntityRendererRegistry.register(ModEntities.POKU_CAPYBARA, PokuCapybaraAvatarRenderer::new);
         EntityRendererRegistry.register(ModEntities.MORITZ_DRAGON, MoritzDragonAvatarRenderer::new);
         GeoArmorRenderer.registerArmorRenderer(new PenguinAvatarHelmetRenderer(), ModItems.PENGUIN_HELMET);
+        GeoArmorRenderer.registerArmorRenderer(new LennartGollumAvatarHelmetRenderer(), ModItems.LENNART_GOLLUM_HELMET);
         GeoArmorRenderer.registerArmorRenderer(new JoshSumpfmausAvatarHelmetRenderer(), ModItems.JOSH_SUMPFMAUS_HELMET);
         GeoArmorRenderer.registerArmorRenderer(new MichelWolfAvatarHelmetRenderer(), ModItems.MICHEL_WOLF_HELMET);
         GeoArmorRenderer.registerArmorRenderer(new DomeCapybaraAvatarHelmetRenderer(), ModItems.DOME_CAPYBARA_HELMET);
