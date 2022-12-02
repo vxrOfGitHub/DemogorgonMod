@@ -10,17 +10,7 @@
 						"vector": [0, 0, 0]
 					},
 					"position": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"1.0": {
-							"vector": [0, -0.5, 0],
-							"easing": "easeInOutSine"
-						},
-						"2.0": {
-							"vector": [0, 0, 0],
-							"easing": "easeInOutSine"
-						}
+						"vector": [0, -5, -3.25]
 					},
 					"scale": {
 						"vector": [1, 1, 1]
@@ -80,7 +70,7 @@
 						"vector": [-55, 0, 0]
 					},
 					"position": {
-						"vector": [0, -3, -2]
+						"vector": [0, -3.75, -3.5]
 					}
 				}
 			}

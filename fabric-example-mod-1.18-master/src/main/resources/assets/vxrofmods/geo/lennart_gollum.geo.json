@@ -6,7 +6,7 @@
 				"identifier": "geometry.lennart_gollum",
 				"texture_width": 64,
 				"texture_height": 64,
-				"visible_bounds_width": 2,
+				"visible_bounds_width": 3,
 				"visible_bounds_height": 2.5,
 				"visible_bounds_offset": [0, 0.75, 0]
 			},
@@ -19,10 +19,10 @@
 				{
 					"name": "head",
 					"parent": "Gollum",
-					"pivot": [0, 9, 7.6],
+					"pivot": [0, 13, 6.6],
 					"cubes": [
 						{
-							"origin": [-3, 5.93006, 1.54139],
+							"origin": [-3, 10.22027, 4.65427],
 							"size": [6, 6, 6],
 							"uv": {
 								"north": {"uv": [6, 6], "uv_size": [6, 6]},
