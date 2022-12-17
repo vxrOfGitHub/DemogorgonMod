@@ -21,6 +21,9 @@ public class ModItems {
     public static final Item COIN = registerItem("coin",
             new CoinItem(new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
+    public static final Item NBT_Item = registerItem("nbt_item",
+            new NBTItem(new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
+
     public static final Item DREAM_SHARD = registerItem("dream_shard",
             new Item(new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
