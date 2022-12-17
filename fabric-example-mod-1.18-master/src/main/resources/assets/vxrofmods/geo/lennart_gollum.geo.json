@@ -36,8 +36,13 @@
 					]
 				},
 				{
-					"name": "Body",
+					"name": "BodyNoHead",
 					"parent": "Gollum",
+					"pivot": [0, 5, -4]
+				},
+				{
+					"name": "Body",
+					"parent": "BodyNoHead",
 					"pivot": [0, 6.77326, -3.57035],
 					"rotation": [12.5, 0, 0],
 					"cubes": [
@@ -71,7 +76,7 @@
 				},
 				{
 					"name": "Legs",
-					"parent": "Gollum",
+					"parent": "BodyNoHead",
 					"pivot": [0, 2, -3]
 				},
 				{
@@ -114,7 +119,7 @@
 				},
 				{
 					"name": "Arms",
-					"parent": "Gollum",
+					"parent": "BodyNoHead",
 					"pivot": [0, 7, 0]
 				},
 				{

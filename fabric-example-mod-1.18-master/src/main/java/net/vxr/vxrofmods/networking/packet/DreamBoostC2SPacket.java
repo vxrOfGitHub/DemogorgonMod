@@ -26,8 +26,11 @@ public class DreamBoostC2SPacket {
                                PacketByteBuf buf, PacketSender responseSender) {
         // Everything here only happens on the Server
         boolean hasBootsOn = !player.getInventory().getArmorStack(0).isEmpty();
-        boolean hasCorrectBootsOn = ((ArmorItem)player.getInventory().getArmorStack(0).getItem())
-                .getMaterial() == ModArmorMaterials.Dream;
+        boolean hasCorrectBootsOn = false;
+        if(hasBootsOn) {
+            hasCorrectBootsOn = ((ArmorItem)player.getInventory().getArmorStack(0).getItem())
+                    .getMaterial() == ModArmorMaterials.Dream;
+        }
         ServerWorld world = player.getWorld();
 
         if(hasBootsOn && hasCorrectBootsOn && player.isOnGround() && DreamBoostCooldownData.getCooldown(((IEntityDataSaver) player)) <= 0) {

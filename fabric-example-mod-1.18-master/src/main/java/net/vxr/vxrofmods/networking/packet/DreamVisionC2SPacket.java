@@ -22,8 +22,11 @@ public class DreamVisionC2SPacket {
                                PacketByteBuf buf, PacketSender responseSender) {
         // Everything here only happens on the Server
         boolean hasHelmetOn = !player.getInventory().getArmorStack(3).isEmpty();
-        boolean hasCorrectHelmetOn = ((ArmorItem)player.getInventory().getArmorStack(3).getItem())
-                .getMaterial() == ModArmorMaterials.Dream;
+        boolean hasCorrectHelmetOn = false;
+        if(hasHelmetOn) {
+            hasCorrectHelmetOn = ((ArmorItem)player.getInventory().getArmorStack(3).getItem())
+                    .getMaterial() == ModArmorMaterials.Dream;
+        }
         boolean hasPlayerEffect = player.hasStatusEffect(StatusEffects.NIGHT_VISION);
 
         if(hasHelmetOn && hasCorrectHelmetOn && hasPlayerEffect) {

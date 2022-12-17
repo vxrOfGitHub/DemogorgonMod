@@ -38,6 +38,9 @@ public class ModLeggingsItem extends ArmorItem {
 
                 if(hasLeggingsOn(player)) {
                     evaluateArmorEffects(player);
+                    if(hasCorrectLeggingsOn(this.getMaterial(), player) && !player.isOnGround() && player.isSneaking()) {
+                        player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 6, 1));
+                    }
                 }
             }
         }

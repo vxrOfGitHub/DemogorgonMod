@@ -45,7 +45,7 @@ public class LennartGollumAvatarModel extends AnimatedGeoModel<LennartGollumAvat
 
         EntityModelData extraData = (EntityModelData) animationEvent.getExtraDataOfType(EntityModelData.class).get(0);
         if (head != null) {
-            head.setRotationX(extraData.headPitch * MathHelper.RADIANS_PER_DEGREE);
+            head.setRotationX(-(extraData.headPitch * MathHelper.RADIANS_PER_DEGREE));
             head.setRotationY(extraData.netHeadYaw * MathHelper.RADIANS_PER_DEGREE);
         }
     }

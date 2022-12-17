@@ -16,8 +16,13 @@
 					"pivot": [0, 0, 0]
 				},
 				{
-					"name": "beine",
+					"name": "bodyNoHead",
 					"parent": "bone",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "beine",
+					"parent": "bodyNoHead",
 					"pivot": [0, 0, 4]
 				},
 				{
@@ -228,7 +233,7 @@
 				},
 				{
 					"name": "schwanz",
-					"parent": "bone",
+					"parent": "bodyNoHead",
 					"pivot": [0, 0, 4]
 				},
 				{
@@ -329,7 +334,7 @@
 				},
 				{
 					"name": "korper",
-					"parent": "bone",
+					"parent": "bodyNoHead",
 					"pivot": [0, 0, 0]
 				},
 				{

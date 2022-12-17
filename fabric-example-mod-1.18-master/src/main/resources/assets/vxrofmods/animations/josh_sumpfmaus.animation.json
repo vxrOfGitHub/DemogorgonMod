@@ -423,126 +423,65 @@
 			"animation_length": 1.5,
 			"bones": {
 				"bone": {
-					"rotation": {
-						"vector": [-31, 0, 0],
-						"easing": "easeInSine"
-					},
-					"position": {
-						"vector": [0, 2.2, 0],
-						"easing": "linear"
-					}
+					"position": [0, 2.2, 0]
 				},
 				"fuss_h_l": {
-					"rotation": {
-						"vector": [31, 0, 0]
-					},
-					"position": {
-						"vector": [0, 0.1, 0.7]
-					}
+					"rotation": [31, 0, 0],
+					"position": [0, 0.1, 0.7]
 				},
 				"bein_h_l": {
-					"rotation": {
-						"vector": [22, 0, 0]
-					},
-					"position": {
-						"vector": [0, 0.6, -0.1]
-					}
+					"rotation": [22, 0, 0],
+					"position": [0, 0.6, -0.1]
 				},
 				"fuss_h_r": {
-					"rotation": {
-						"vector": [31, 0, 0]
-					},
-					"position": {
-						"vector": [0, 0.1, 0.7]
-					}
+					"rotation": [31, 0, 0],
+					"position": [0, 0.1, 0.7]
 				},
 				"bein_h_r": {
-					"rotation": {
-						"vector": [22, 0, 0]
-					},
-					"position": {
-						"vector": [0, 0.6, -0.1]
-					}
+					"rotation": [22, 0, 0],
+					"position": [0, 0.6, -0.1]
 				},
 				"vornelinks": {
-					"rotation": {
-						"vector": [33, 0, 0]
-					},
-					"position": {
-						"vector": [-0.2, -3.5, 0.5]
-					}
+					"rotation": [33, 0, 0],
+					"position": [-0.2, -3.5, 0.5]
 				},
 				"vornerechts": {
-					"rotation": {
-						"vector": [33, 0, 0]
-					},
-					"position": {
-						"vector": [0.2, -3.6, 0.6]
-					}
+					"rotation": [33, 0, 0],
+					"position": [0.2, -3.6, 0.6]
 				},
 				"schwanz1": {
-					"rotation": {
-						"vector": [39, 0, 0]
-					},
-					"position": {
-						"vector": [0, 0.1, -0.5]
-					}
+					"rotation": [39, 0, 0],
+					"position": [0, 0.1, -0.5]
 				},
 				"schwanz2": {
-					"rotation": {
-						"vector": [37, 0, 0]
-					},
-					"position": {
-						"vector": [0, 1.3, -0.9]
-					}
+					"rotation": [37, 0, 0],
+					"position": [0, 1.3, -0.9]
 				},
 				"schwanz3": {
-					"rotation": {
-						"vector": [59, 0, 0]
-					},
-					"position": {
-						"vector": [0, 1.9, -1.6]
-					}
+					"rotation": [59, 0, 0],
+					"position": [0, 1.9, -1.6]
 				},
 				"schwanz4": {
-					"rotation": {
-						"vector": [74, 0, 0]
-					},
-					"position": {
-						"vector": [0, 2.2, -3.5]
-					}
+					"rotation": [74, 0, 0],
+					"position": [0, 2.2, -3.5]
 				},
 				"koerper_mitte": {
-					"rotation": {
-						"vector": [21, 0, 0]
-					},
-					"position": {
-						"vector": [0, -0.8, 0]
-					}
+					"rotation": [21, 0, 0],
+					"position": [0, -0.8, 0]
 				},
 				"koerper_vorne": {
-					"rotation": {
-						"vector": [10.5, 0, 0]
-					},
-					"position": {
-						"vector": [0, -1.6, 0]
-					}
+					"rotation": [10.5, 0, 0],
+					"position": [0, -1.6, 0]
 				},
 				"hals": {
-					"rotation": {
-						"vector": [45, 0, 0]
-					},
-					"position": {
-						"vector": [0, -3.6, -0.3]
-					}
+					"rotation": [45, 0, 0],
+					"position": [0, -3.6, -0.3]
 				},
 				"kopf": {
-					"rotation": {
-						"vector": [38, 0, 0]
-					},
-					"position": {
-						"vector": [0, -3.6, -0.2]
-					}
+					"position": [0, -1.85, 1.3]
+				},
+				"bodyNoHead": {
+					"rotation": [-30, 0, 0]
 				}
 			}
 		},

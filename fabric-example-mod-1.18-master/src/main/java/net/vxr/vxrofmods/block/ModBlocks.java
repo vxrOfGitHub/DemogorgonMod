@@ -32,8 +32,8 @@ public class ModBlocks {
                     .luminance((state) -> state.get(DreamBlock.CLICKED) ? 15:0)), ModItemGroup.Custom_Mods);
 
     public static final Block DREAM_ORE =  registerBlock("dream_ore",
-            new OreBlock(FabricBlockSettings.of(Material.METAL).requiresTool().strength(30.0F, 1200.0F).sounds(BlockSoundGroup.STONE),
-                    UniformIntProvider.create(5, 10)), ModItemGroup.Custom_Mods);
+            new OreBlock(FabricBlockSettings.of(Material.METAL).requiresTool().strength(30.0F, 1200.0F).sounds(BlockSoundGroup.STONE))
+            , ModItemGroup.Custom_Mods);
 
     public static final Block FRAGMENT_HOLDER =  registerBlock("fragment_holder",
             new FragmentHolderBlock(FabricBlockSettings.of(Material.METAL).nonOpaque().strength(12f)), ModItemGroup.Custom_Mods);

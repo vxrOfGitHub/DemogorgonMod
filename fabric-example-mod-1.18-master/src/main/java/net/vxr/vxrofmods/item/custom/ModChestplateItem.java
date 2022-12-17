@@ -250,9 +250,10 @@ public class ModChestplateItem extends ArmorItem implements IAnimatable{
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         if(!world.isClient() && entity instanceof PlayerEntity player) {
-            if(!hasChestplateOn(player) && !hasCorrectChestplateOn(this.getMaterial(), player) && DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player))) {
-                System.out.println("Doesn*t have Chestplate on or false one and the Jetpack's still on");
-                ClientPlayNetworking.send(ModMessages.DREAM_JETPACK_ID, PacketByteBufs.create());
+            if(!hasChestplateOn(player) && DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player))) {
+                if(!hasCorrectChestplateOn(this.getMaterial(), player)) {
+                    ClientPlayNetworking.send(ModMessages.DREAM_JETPACK_ID, PacketByteBufs.create());
+                }
             }
         }
 

@@ -20,8 +20,11 @@ public class DreamJetpackC2SPacket {
                                PacketByteBuf buf, PacketSender responseSender) {
         // Everything here only happens on the Server
         boolean hasChestplateOn = !player.getInventory().getArmorStack(2).isEmpty();
-        boolean hasCorrectChestplateOn = ((ArmorItem)player.getInventory().getArmorStack(2).getItem())
-                .getMaterial() == ModArmorMaterials.Dream;
+        boolean hasCorrectChestplateOn = false;
+        if(hasChestplateOn) {
+            hasCorrectChestplateOn = ((ArmorItem)player.getInventory().getArmorStack(2).getItem())
+                    .getMaterial() == ModArmorMaterials.Dream;
+        }
 
         if(hasChestplateOn && hasCorrectChestplateOn) {
             DreamJetpackData.switchJetpackOnOff(((IEntityDataSaver) player));
