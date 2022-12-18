@@ -157,6 +157,7 @@ public class ModItems {
 
     public static void registerModItems() {
         WW2Mod.LOGGER.info("Registering Mod Items for " + WW2Mod.MOD_ID);
+        SpawnChangerItem.addPossibleEntityTypes();
     }
 
 

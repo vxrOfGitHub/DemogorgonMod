@@ -21,6 +21,8 @@ import net.minecraft.world.MobSpawnerLogic;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,10 +30,19 @@ public class SpawnChangerItem extends Item {
     private static final Map<EntityType<? extends MobEntity>, SpawnChangerItem> SPAWN_CHANGER_TYPE = Maps.newIdentityHashMap();
     private EntityType<?> type = EntityType.SILVERFISH;
 
+    public static List<EntityType> possibleEntityTypes = new ArrayList<>();
+
     public SpawnChangerItem(/*EntityType<? extends MobEntity> type,*/ Item.Settings settings) {
         super(settings);
         //this.type = type;
         SPAWN_CHANGER_TYPE.put((EntityType<? extends MobEntity>) type, this);
+    }
+
+    public static void addPossibleEntityTypes() {
+        possibleEntityTypes.add(EntityType.SKELETON);
+        possibleEntityTypes.add(EntityType.SLIME);
+        possibleEntityTypes.add(EntityType.ALLAY);
+        possibleEntityTypes.add(EntityType.WARDEN);
     }
 
     public void setEntityTypeOfSpawnChanger(EntityType<? extends MobEntity> type) {
@@ -45,7 +56,7 @@ public class SpawnChangerItem extends Item {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        tooltip.add(Text.literal("SpawnChanger for " + this.type.getName().getString()));
+        tooltip.add(Text.literal(this.asItem().getName().toString() + " for " + this.type.getName().getString()));
         super.appendTooltip(stack, world, tooltip, context);
     }
 
