@@ -36,15 +36,15 @@ public class SpawnCommand {
                         .executes(SpawnCommand::runSpawnChangerTypesList)
                         .then(CommandManager.literal("add").requires(source -> source.hasPermissionLevel(2))
                                 .then(CommandManager.argument("entity", EntityArgumentType.entity())
-                                        .executes(context -> runAddEntityType(context, EntityArgumentType.getEntity(context, "entityType")))))));
+                                        .executes(context -> runAddEntityType(context, EntityArgumentType.getEntity(context, "entity")))))));
 
 
 
     }
 
     private static int runAddEntityType(CommandContext<ServerCommandSource> context, Entity entity) throws CommandSyntaxException {
-        SpawnChangerItem.possibleEntityTypes.add(entity.getType());
-        context.getSource().sendFeedback(Text.literal(Objects.requireNonNull(context.getSource().getPlayer()).getName().getString() + " added " + entity.getType().getName().getString() + " to the List"),true);
+        SpawnChangerItem.addPossibleEntityTypes(entity.getType());
+        context.getSource().sendFeedback(Text.literal(Objects.requireNonNull(context.getSource().getPlayer()).getName().getString() + " added " + entity.getType().getName().getString() + " to the Spawn Changer List"),true);
         return 1;
     }
 
@@ -63,15 +63,14 @@ public class SpawnCommand {
         
         assert player != null;
         if(CustomMoneyData.getMoney(playerSaver) >= 1000) {
-            if(target > SpawnChangerItem.possibleEntityTypes.size()) {
-                context.getSource().sendFeedback(Text.literal("§cThe given Number is bigger than the List!§r"), false);
+            if(target > SpawnChangerItem.possibleEntityTypes.size() || target < 1) {
+                context.getSource().sendFeedback(Text.literal("§cThe given Number is bigger or smaller than the List!§r"), false);
             } else {
                 target--;
                 ItemStack stack = player.getStackInHand(player.getActiveHand());
                 if(!stack.isEmpty() && stack.getItem().equals(ModItems.SPAWN_CHANGER)) {
-                    EntityType entityType = SpawnChangerItem.possibleEntityTypes.get(target);
-                    SpawnChangerItem spawnChangerItem = ((SpawnChangerItem) stack.getItem());
-                    spawnChangerItem.setEntityTypeOfSpawnChanger(entityType);
+                    SpawnChangerItem.setEntityTypeOfSpawnChanger(stack, target);
+                    EntityType<?> entityType = SpawnChangerItem.possibleEntityTypes.get(target);
                     CustomMoneyData.addOrSubtractMoney(playerSaver, -1000);
                     context.getSource().sendFeedback(Text.literal("Your Spawn Changer now converts to " + entityType.getName().getString()), false);
                 } else {
