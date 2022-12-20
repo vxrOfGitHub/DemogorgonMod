@@ -35,7 +35,7 @@ public class ModRegistries {
         CommandRegistrationCallback.EVENT.register(WithdrawMoneyCommand::register);
         CommandRegistrationCallback.EVENT.register(MissionsCommand::register);
         CommandRegistrationCallback.EVENT.register(TestCommand::register);
-        CommandRegistrationCallback.EVENT.register(SpawnCommand::register);
+        CommandRegistrationCallback.EVENT.register(SpawnChangerCommands::register);
 
     }
 

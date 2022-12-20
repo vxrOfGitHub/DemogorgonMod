@@ -65,8 +65,14 @@ public class SpawnChangerItem extends Item {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        assert stack.getNbt() != null;
-        int typeInList = stack.getNbt().getInt("vxrofmods.spawn_changer");
+        int typeInList = -1;
+        if(stack.hasNbt()) {
+            assert stack.getNbt() != null;
+            if (stack.getNbt().getInt("vxrofmods.spawn_changer") >= possibleEntityTypes.size()) {
+                stack.getNbt().putInt("vxrofmods.spawn_changer", -1);
+            }
+            typeInList = stack.getNbt().getInt("vxrofmods.spawn_changer");
+        }
         if(typeInList >= 0) {
             EntityType<?> type = possibleEntityTypes.get(typeInList);
 
@@ -81,6 +87,13 @@ public class SpawnChangerItem extends Item {
             NbtCompound nbt = new NbtCompound();
             nbt.putInt("vxrofmods.spawn_changer", -1);
             stack.setNbt(nbt);
+        } else {
+            if (stack.hasNbt()) {
+                assert stack.getNbt() != null;
+                if (stack.getNbt().getInt("vxrofmods.spawn_changer") >= possibleEntityTypes.size()) {
+                    stack.getNbt().putInt("vxrofmods.spawn_changer", -1);
+                }
+            }
         }
         super.inventoryTick(stack, world, entity, slot, selected);
     }

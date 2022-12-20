@@ -8,7 +8,6 @@ import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.command.CommandManager;
@@ -19,10 +18,9 @@ import net.vxr.vxrofmods.item.custom.SpawnChangerItem;
 import net.vxr.vxrofmods.util.CustomMoneyData;
 import net.vxr.vxrofmods.util.IEntityDataSaver;
 
-import java.util.Collection;
 import java.util.Objects;
 
-public class SpawnCommand {
+public class SpawnChangerCommands {
     public static void register(CommandDispatcher<ServerCommandSource> serverCommandSourceCommandDispatcher,
                                 CommandRegistryAccess commandRegistryAccess,
                                 CommandManager.RegistrationEnvironment registrationEnvironment) {
@@ -33,13 +31,23 @@ public class SpawnCommand {
                         .then(CommandManager.argument("target", IntegerArgumentType.integer())
                                 .executes(context -> runBuySpawnChangerType(context, IntegerArgumentType.getInteger(context, "target")))))
                 .then(CommandManager.literal("list")
-                        .executes(SpawnCommand::runSpawnChangerTypesList)
+                        .executes(SpawnChangerCommands::runSpawnChangerTypesList)
                         .then(CommandManager.literal("add").requires(source -> source.hasPermissionLevel(2))
                                 .then(CommandManager.argument("entity", EntityArgumentType.entity())
-                                        .executes(context -> runAddEntityType(context, EntityArgumentType.getEntity(context, "entity")))))));
+                                        .executes(context -> runAddEntityType(context, EntityArgumentType.getEntity(context, "entity")))))
+                        .then(CommandManager.literal("remove").requires(source -> source.hasPermissionLevel(2))
+                        .then(CommandManager.argument("numberInList", IntegerArgumentType.integer())
+                                .executes(context -> runRemoveEntityType(context, IntegerArgumentType.getInteger(context, "numberInList")))))));
 
 
 
+    }
+
+    private static int runRemoveEntityType(CommandContext<ServerCommandSource> context, int numberInList) throws CommandSyntaxException {
+        context.getSource().sendFeedback(Text.literal(Objects.requireNonNull(context.getSource().getPlayer()).getName().getString()
+                + " removed " + SpawnChangerItem.possibleEntityTypes.get(numberInList - 1).getName().getString() + " from the Spawn Changer Type List!"), true);
+        SpawnChangerItem.possibleEntityTypes.remove(numberInList - 1);
+        return 1;
     }
 
     private static int runAddEntityType(CommandContext<ServerCommandSource> context, Entity entity) throws CommandSyntaxException {
