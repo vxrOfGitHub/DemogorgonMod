@@ -24,6 +24,9 @@ import net.vxr.vxrofmods.util.MissionsWeeklyData;
 import java.util.Collection;
 import java.util.Objects;
 
+import static net.vxr.vxrofmods.event.ServerTickHandler.DailyMissionCountdown;
+import static net.vxr.vxrofmods.event.ServerTickHandler.WeeklyMissionCountdown;
+
 public class MissionsCommand {
 
     public static void register(CommandDispatcher<ServerCommandSource> serverCommandSourceCommandDispatcher,
@@ -38,10 +41,15 @@ public class MissionsCommand {
                 .executes(MissionsCommand::runOutputDailyMissions)
             .then(CommandManager.literal( "time").requires(source -> source.hasPermissionLevel(2))
             .then(CommandManager.literal("reset")
-                .executes(MissionsCommand::runResetDailyMissions))
+                .executes(MissionsCommand::runResetDailyMissionsTime))
             .then(CommandManager.literal("set")
                 .then(CommandManager.argument("timeInTicks", IntegerArgumentType.integer(0))
-                    .executes(context -> runSetDailyMissions(context, IntegerArgumentType.getInteger(context, "timeInTicks"))))))
+                    .executes(context -> runSetDailyMissionsTicks(context, IntegerArgumentType.getInteger(context, "timeInTicks"))))
+                    .then(CommandManager.argument("hours", IntegerArgumentType.integer(0))
+                            .then(CommandManager.argument("minutes", IntegerArgumentType.integer(0))
+                                    .then(CommandManager.argument("seconds", IntegerArgumentType.integer(0))
+                                            .executes(context -> runSetDailyMissionsTime(context, IntegerArgumentType.getInteger(context, "hours"),
+                                                    IntegerArgumentType.getInteger(context, "minutes"), IntegerArgumentType.getInteger(context, "seconds"))))))))
             .then(CommandManager.literal("add").requires(source -> source.hasPermissionLevel(2))
                 .then(CommandManager.argument("desiredItem", ItemStackArgumentType.itemStack(commandRegistryAccess))
                     .then(CommandManager.argument("amountOfItemToComplete", IntegerArgumentType.integer(1))
@@ -78,10 +86,18 @@ public class MissionsCommand {
                 .executes(MissionsCommand::runOutputWeeklyMissions)
                     .then(CommandManager.literal("time").requires(source -> source.hasPermissionLevel(2))
                             .then(CommandManager.literal("reset")
-                                    .executes(MissionsCommand::runResetWeeklyMissions))
+                                    .executes(MissionsCommand::runResetWeeklyMissionsTime))
                             .then(CommandManager.literal("set")
                                     .then(CommandManager.argument("timeInTicks", IntegerArgumentType.integer(0))
-                                            .executes(context -> runSetWeeklyMissions(context, IntegerArgumentType.getInteger(context, "timeInTicks"))))))
+                                            .executes(context -> runSetWeeklyMissionsTicks(context, IntegerArgumentType.getInteger(context, "timeInTicks"))))
+                                    .then(CommandManager.argument("days", IntegerArgumentType.integer(0))
+                                            .then(CommandManager.argument("hours", IntegerArgumentType.integer(0))
+                                                    .then(CommandManager.argument("minutes", IntegerArgumentType.integer(0))
+                                                            .then(CommandManager.argument("seconds", IntegerArgumentType.integer(0))
+                                                                    .executes(context -> runSetWeeklyMissionsTime(context, IntegerArgumentType.getInteger(context, "days"),
+                                                                            IntegerArgumentType.getInteger(context, "hours"),
+                                                                            IntegerArgumentType.getInteger(context, "minutes"),
+                                                                            IntegerArgumentType.getInteger(context, "seconds")))))))))
                     .then(CommandManager.literal("add").requires(source -> source.hasPermissionLevel(2))
                             .then(CommandManager.argument("desiredItem", ItemStackArgumentType.itemStack(commandRegistryAccess))
                                     .then(CommandManager.argument("amountOfItemToComplete", IntegerArgumentType.integer(1))
@@ -116,12 +132,26 @@ public class MissionsCommand {
                 //reroll Both Mission Types
                 .then(CommandManager.literal("reroll").requires(source -> source.hasPermissionLevel(2))
                         .then(CommandManager.argument("target", EntityArgumentType.players())
-                        .executes(context -> runRerollBothMissions(context, EntityArgumentType.getPlayers(context, "target"))))));
+                        .executes(context -> runRerollBothMissions(context, EntityArgumentType.getPlayers(context, "target")))))
+                //set Time for Both Mission Types
+                .then(CommandManager.literal("time").requires(source -> source.hasPermissionLevel(2))
+                        .then(CommandManager.literal("reset")
+                                .executes(MissionsCommand::runResetBothMissionsTime))
+                        .then(CommandManager.literal("set")
+                                .then(CommandManager.argument("days", IntegerArgumentType.integer(0))
+                                        .then(CommandManager.argument("hours", IntegerArgumentType.integer(0))
+                                                .then(CommandManager.argument("minutes", IntegerArgumentType.integer(0))
+                                                        .then(CommandManager.argument("seconds", IntegerArgumentType.integer(0))
+                                                                .executes(context -> runSetBothMissionsTime(context, IntegerArgumentType.getInteger(context, "days"),
+                                                                        IntegerArgumentType.getInteger(context, "hours"),
+                                                                        IntegerArgumentType.getInteger(context, "minutes"),
+                                                                        IntegerArgumentType.getInteger(context, "seconds"))))))))));
 
 
 
 
     }
+
     public static final int rewardAmountDailyMission = 100;
     public static final int rewardAmountWeeklyMission = 1000;
 
@@ -134,8 +164,41 @@ public class MissionsCommand {
         return 1;
     }
 
+    private static int runResetBothMissionsTime(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        runResetDailyMissionsTime(context);
+        runResetWeeklyMissionsTime(context);
+        return 1;
+    }
+
+    private static int runSetBothMissionsTime(CommandContext<ServerCommandSource> context, int days, int hours, int minutes, int seconds) throws CommandSyntaxException {
+        runSetDailyMissionsTime(context, hours, minutes, seconds);
+        runSetWeeklyMissionsTime(context, days, hours, minutes, seconds);
+        return 1;
+    }
 
     // ------------ Weekly Missions -------------------
+
+    private static int runSetWeeklyMissionsTime(CommandContext<ServerCommandSource> context, int days, int hours, int minutes, int seconds) throws CommandSyntaxException {
+
+        int daysInTicks = days * 1728000;
+        int hoursInTicks = hours * 72000;
+        int minutesInTicks = minutes * 1200;
+        int secondsInTicks = seconds * 20;
+        int timeInTicks = ServerTickHandler.MaxWeeklyMissionCountdown - (daysInTicks + hoursInTicks + minutesInTicks + secondsInTicks);
+
+        IEntityDataSaver playerSaver = (IEntityDataSaver)context.getSource().getPlayer();
+
+        WeeklyMissionCountdown = timeInTicks;
+
+        MissionsData.setWeeklyMissionTime(((IEntityDataSaver) Objects.requireNonNull(context.getSource().getPlayer())), WeeklyMissionCountdown);
+
+        assert playerSaver != null;
+        context.getSource().sendFeedback(Text.literal(
+                "§n" + Objects.requireNonNull(context.getSource().getPlayer()).getName().getString() + "§r has set the §dWeekly-Mission-Timer§r to §3"
+                        + MissionsData.getWeeklyMissionTime(playerSaver) + "§r"), true);
+
+        return 1;
+    }
 
     private static int runAddWeeklyMissionsItems(CommandContext<ServerCommandSource> context, ItemStackArgument stack, int amountOfItemsNeeded) throws CommandSyntaxException {
 
@@ -500,6 +563,27 @@ public class MissionsCommand {
 
     // -------------- Daily Missions-----------------
 
+    private static int runSetDailyMissionsTime(CommandContext<ServerCommandSource> context, int hours, int minutes, int seconds) throws CommandSyntaxException {
+
+        int hoursInTicks = hours * 72000;
+        int minutesInTicks = minutes * 1200;
+        int secondsInTicks = seconds * 20;
+        int timeInTicks = ServerTickHandler.MaxDailyMissionCountdown - (hoursInTicks + minutesInTicks + secondsInTicks);
+
+        IEntityDataSaver playerSaver = (IEntityDataSaver)context.getSource().getPlayer();
+
+        DailyMissionCountdown = timeInTicks;
+
+        MissionsData.setDailyMissionTime(((IEntityDataSaver) Objects.requireNonNull(context.getSource().getPlayer())), DailyMissionCountdown);
+
+        assert playerSaver != null;
+        context.getSource().sendFeedback(Text.literal(
+                "§n" + Objects.requireNonNull(context.getSource().getPlayer()).getName().getString() + "§r has set the §aDaily-Mission-Timer§r to §b"
+                        + MissionsData.getDailyMissionTime(playerSaver) + "§r"), true);
+
+        return 1;
+    }
+
     private static int runCompleteAllDailyMissions(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
 
         runCompleteDailyMission1(context);
@@ -838,11 +922,11 @@ public class MissionsCommand {
         return 1;
     }
 
-    private static int runResetDailyMissions(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+    private static int runResetDailyMissionsTime(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
 
         IEntityDataSaver playerSaver = (IEntityDataSaver)context.getSource().getPlayer();
 
-        ServerTickHandler.DailyMissionCountdown = ServerTickHandler.MaxDailyMissionCountdown;
+        DailyMissionCountdown = ServerTickHandler.MaxDailyMissionCountdown;
 
         context.getSource().sendFeedback(Text.literal(
                 "§n" + Objects.requireNonNull(context.getSource().getPlayer()).getName().getString() + "§r has reset the §aDaily-Mission-Timer§r!"), true);
@@ -853,11 +937,13 @@ public class MissionsCommand {
         return 1;
     }
 
-    private static int runSetDailyMissions(CommandContext<ServerCommandSource> context, int newTimeInTicks) throws CommandSyntaxException {
+    private static int runSetDailyMissionsTicks(CommandContext<ServerCommandSource> context, int newTimeInTicks) throws CommandSyntaxException {
 
         IEntityDataSaver playerSaver = (IEntityDataSaver)context.getSource().getPlayer();
 
-        ServerTickHandler.DailyMissionCountdown = newTimeInTicks;
+        DailyMissionCountdown = newTimeInTicks;
+
+        MissionsData.setDailyMissionTime(((IEntityDataSaver) Objects.requireNonNull(context.getSource().getPlayer())), DailyMissionCountdown);
 
         assert playerSaver != null;
         context.getSource().sendFeedback(Text.literal(
@@ -867,11 +953,11 @@ public class MissionsCommand {
         return 1;
     }
 
-    private static int runResetWeeklyMissions(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+    private static int runResetWeeklyMissionsTime(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
 
         IEntityDataSaver playerSaver = (IEntityDataSaver)context.getSource().getPlayer();
 
-        ServerTickHandler.WeeklyMissionCountdown = ServerTickHandler.MaxWeeklyMissionCountdown;
+        WeeklyMissionCountdown = ServerTickHandler.MaxWeeklyMissionCountdown;
 
         context.getSource().sendFeedback(Text.literal(
                 "§n" + Objects.requireNonNull(context.getSource().getPlayer()).getName().getString() + "§r has reset the §dWeekly-Mission-Timer§r!"), true);
@@ -882,11 +968,13 @@ public class MissionsCommand {
         return 1;
     }
 
-    private static int runSetWeeklyMissions(CommandContext<ServerCommandSource> context, int newTimeInTicks) throws CommandSyntaxException {
+    private static int runSetWeeklyMissionsTicks(CommandContext<ServerCommandSource> context, int newTimeInTicks) throws CommandSyntaxException {
 
         IEntityDataSaver playerSaver = (IEntityDataSaver)context.getSource().getPlayer();
 
-        ServerTickHandler.WeeklyMissionCountdown = newTimeInTicks;
+        WeeklyMissionCountdown = newTimeInTicks;
+
+        MissionsData.setWeeklyMissionTime(((IEntityDataSaver) Objects.requireNonNull(context.getSource().getPlayer())), WeeklyMissionCountdown);
 
         assert playerSaver != null;
         context.getSource().sendFeedback(Text.literal(
