@@ -18,6 +18,9 @@ public class ModEnchantments {
             new IceAspectEnchantment(Enchantment.Rarity.UNCOMMON,
                     EnchantmentTarget.WEAPON, EquipmentSlot.MAINHAND));
 
+    public static Enchantment RESEEDING = register("reseeding",
+            new ReseedingEnchantment(Enchantment.Rarity.UNCOMMON,
+                    EnchantmentTarget.DIGGER, EquipmentSlot.MAINHAND));
     public static Enchantment LUCK_OF_THE_SEED = register("luck_of_the_seed",
             new LuckOfTheSeedEnchantment(Enchantment.Rarity.UNCOMMON,
                     EnchantmentTarget.DIGGER, EquipmentSlot.MAINHAND));

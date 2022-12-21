@@ -12,15 +12,36 @@ import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.vxr.vxrofmods.WW2Mod;
-import net.vxr.vxrofmods.item.ModItems;
+import net.vxr.vxrofmods.util.InventoryUtil;
+
 import static org.apache.commons.lang3.RandomUtils.nextInt;
 
 public class BlockBreakHandler implements PlayerBlockBreakEvents.After{
     @Override
     public void afterBlockBreak(World world, PlayerEntity player, BlockPos pos, BlockState state, BlockEntity blockEntity) {
         luckOfTheSeedEnchantment(world, player, pos, state);
+        reseedingEnchantment(world, player, pos, state);
     }
 
+    private void reseedingEnchantment (World world, PlayerEntity player, BlockPos pos, BlockState state) {
+        if(!world.isClient() && state.getBlock() instanceof CropBlock && world.getLightLevel(pos) >= 8) {
+            ItemStack stack = player.getMainHandStack();
+            for(int i = 0; i < stack.getEnchantments().size(); i++) {
+
+                if (stack.getEnchantments().get(i).toString().contains(WW2Mod.MOD_ID + ":reseeding")) {
+
+                    if(InventoryUtil.hasPlayerStackInInventory(player, state.getBlock().getPickStack(world, pos, state).getItem()) &&
+                    world.getBlockState(pos.down()).isOf(Blocks.FARMLAND) && world.getBlockState(pos).isOf(Blocks.AIR)) {
+
+                        world.setBlockState(pos, state.getBlock().getDefaultState());
+                        player.getInventory().getStack(InventoryUtil.getFirstInventoryIndex(player, state.getBlock().getPickStack(world, pos, state).getItem()))
+                                .decrement(1);
+
+                    }
+                }
+            }
+        }
+    }
 
     private void luckOfTheSeedEnchantment (World world, PlayerEntity player, BlockPos pos, BlockState state) {
         if(!world.isClient()) {
