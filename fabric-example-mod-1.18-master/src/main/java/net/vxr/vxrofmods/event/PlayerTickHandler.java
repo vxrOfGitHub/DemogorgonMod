@@ -16,6 +16,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.vxr.vxrofmods.item.ModArmorMaterials;
+import net.vxr.vxrofmods.item.ModItems;
 import net.vxr.vxrofmods.item.custom.ModHelmetItem;
 import net.vxr.vxrofmods.networking.ModMessages;
 import net.vxr.vxrofmods.util.DreamBoostCooldownData;
@@ -44,8 +45,12 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
     }
 
     private void DreamJetpackTick(ServerPlayerEntity player) {
-        boolean hasCorrectChestplateOn = !player.getInventory().getArmorStack(2).isEmpty() && ((ArmorItem)player.getInventory().getArmorStack(2).getItem())
-                .getMaterial().equals(ModArmorMaterials.Dream);
+        boolean hasChestplateOn = !player.getInventory().getArmorStack(2).isEmpty();
+        boolean hasCorrectChestplateOn = false;
+        if(hasChestplateOn) {
+            hasCorrectChestplateOn = player.getInventory().getArmorStack(2).getItem().equals(ModItems.Dream_Chestplate);
+        }
+
         // Jetpack Down
         if(DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player)) && player.isSneaking() &&
                 !DreamJetpackData.getJetpackUp(((IEntityDataSaver) player))) {
@@ -69,8 +74,8 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
         // Spawn Jetpack Particles
         } if(DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player))) {
             spawnJetpackParticles(player);
-        // Take effects away when putting off helmet
-        } if(!hasCorrectChestplateOn && DreamJetpackData.hadJetpackOn(((IEntityDataSaver) player))) {
+        // Take effects away when putting off chestplate
+        } if(!hasChestplateOn || !hasCorrectChestplateOn && DreamJetpackData.hadJetpackOn(((IEntityDataSaver) player))) {
             player.setNoGravity(false);
             player.removeStatusEffect(StatusEffects.LEVITATION);
             DreamJetpackData.setJetpackUp(((IEntityDataSaver) player), false);

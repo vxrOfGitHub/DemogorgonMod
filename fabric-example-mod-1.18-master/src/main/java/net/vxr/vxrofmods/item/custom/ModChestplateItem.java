@@ -84,27 +84,19 @@ public class ModChestplateItem extends ArmorItem implements IAnimatable{
 
 
                 // If the living entity is an armorstand just play the animation nonstop
-                if (livingEntity instanceof ArmorStandEntity) {
-                    return PlayState.STOP;
-                }
 
-                // The entity is a player, so we want to only play if the player is wearing the
-                // full set of armor
-                else if (livingEntity instanceof PlayerEntity) {
+                // Get all the equipment, aka the armor, currently held item, and offhand item
+                List<Item> equipmentList = new ArrayList<>();
+                player.getItemsEquipped().forEach((x) -> equipmentList.add(x.getItem()));
 
-                    // Get all the equipment, aka the armor, currently held item, and offhand item
-                    List<Item> equipmentList = new ArrayList<>();
-                    player.getItemsEquipped().forEach((x) -> equipmentList.add(x.getItem()));
+                // elements 2 to 6 are the armor so we take the sublist. Armorlist now only
+                // contains the 4 armor slots
+                List<Item> armorList = equipmentList.subList(2, 6);
 
-                    // elements 2 to 6 are the armor so we take the sublist. Armorlist now only
-                    // contains the 4 armor slots
-                    List<Item> armorList = equipmentList.subList(2, 6);
-
-                    // Make sure the player is wearing all the armor. If they are, continue playing
-                    // the animation, otherwise stop
-                    boolean isWearingAll = armorList.containsAll(Arrays.asList(ModItems.Dream_Chestplate) );
-                    return isWearingAll ? PlayState.CONTINUE : PlayState.STOP;
-                }
+                // Make sure the player is wearing all the armor. If they are, continue playing
+                // the animation, otherwise stop
+                boolean isWearingAll = new HashSet<>(armorList).contains(ModItems.Dream_Chestplate);
+                return isWearingAll ? PlayState.CONTINUE : PlayState.STOP;
             }
         }
         return PlayState.STOP;
@@ -132,29 +124,19 @@ public class ModChestplateItem extends ArmorItem implements IAnimatable{
 
 
                 // If the living entity is an armorstand just play the animation nonstop
-                if (livingEntity instanceof ArmorStandEntity) {
-                    return PlayState.STOP;
-                }
 
-                // The entity is a player, so we want to only play if the player is wearing the
-                // full set of armor
-                else if (livingEntity instanceof PlayerEntity) {
+                // Get all the equipment, aka the armor, currently held item, and offhand item
+                List<Item> equipmentList = new ArrayList<>();
+                player.getItemsEquipped().forEach((x) -> equipmentList.add(x.getItem()));
 
-                    // Get all the equipment, aka the armor, currently held item, and offhand item
-                    List<Item> equipmentList = new ArrayList<>();
-                    player.getItemsEquipped().forEach((x) -> equipmentList.add(x.getItem()));
+                // elements 2 to 6 are the armor so we take the sublist. Armorlist now only
+                // contains the 4 armor slots
+                List<Item> armorList = equipmentList.subList(2, 6);
 
-                    // elements 2 to 6 are the armor so we take the sublist. Armorlist now only
-                    // contains the 4 armor slots
-                    List<Item> armorList = equipmentList.subList(2, 6);
-
-                    // Make sure the player is wearing all the armor. If they are, continue playing
-                    // the animation, otherwise stop
-                    boolean isWearingAll = armorList.containsAll(Arrays.asList(ModItems.Dream_Chestplate));
-                    return isWearingAll ? PlayState.CONTINUE : PlayState.STOP;
-                } else {
-                    return PlayState.STOP;
-                }
+                // Make sure the player is wearing all the armor. If they are, continue playing
+                // the animation, otherwise stop
+                boolean isWearingAll = armorList.containsAll(Arrays.asList(ModItems.Dream_Chestplate));
+                return isWearingAll ? PlayState.CONTINUE : PlayState.STOP;
             }
         }
         return PlayState.CONTINUE;
@@ -249,13 +231,12 @@ public class ModChestplateItem extends ArmorItem implements IAnimatable{
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-        if(!world.isClient() && entity instanceof PlayerEntity player) {
-            if(!hasChestplateOn(player) && DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player))) {
-                if(!hasCorrectChestplateOn(this.getMaterial(), player)) {
-                    ClientPlayNetworking.send(ModMessages.DREAM_JETPACK_ID, PacketByteBufs.create());
-                }
+        /*if(!world.isClient() && entity instanceof PlayerEntity player) {
+            if(!hasChestplateOn(player) && DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player)) || !hasCorrectChestplateOn(this.getMaterial(), player)) {
+                player.setNoGravity(false);
+                DreamJetpackData.setJetpackOnOff(((IEntityDataSaver) player), false);
             }
-        }
+        } */
 
         super.inventoryTick(stack, world, entity, slot, selected);
     }
@@ -266,7 +247,7 @@ public class ModChestplateItem extends ArmorItem implements IAnimatable{
     }
 
     private boolean hasCorrectChestplateOn(ArmorMaterial material, PlayerEntity player) {
-        ArmorItem chestplate = ((ArmorItem)player.getInventory().getArmorStack(3).getItem());
+        ArmorItem chestplate = ((ArmorItem)player.getInventory().getArmorStack(2).getItem());
 
         return chestplate.getMaterial() == material;
     }
