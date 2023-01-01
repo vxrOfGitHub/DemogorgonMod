@@ -37,9 +37,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, ImplementedInventory {
+public class DiamondMinerBlockEntity /*extends BlockEntity implements NamedScreenHandlerFactory, ImplementedInventory*/ {
 
-    private final DefaultedList<ItemStack> inventory =
+    /*private final DefaultedList<ItemStack> inventory =
             DefaultedList.ofSize(3, ItemStack.EMPTY);
 
 
@@ -305,6 +305,6 @@ public class DiamondMinerBlockEntity extends BlockEntity implements NamedScreenH
     private static boolean canInsertAmountIntoOutputSlot(SimpleInventory inventory) {
         return inventory.getStack(2).getMaxCount() > inventory.getStack(2).getCount();
     }
-
+*/
 
 }

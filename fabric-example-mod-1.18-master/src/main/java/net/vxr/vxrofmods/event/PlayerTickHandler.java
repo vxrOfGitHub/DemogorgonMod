@@ -58,30 +58,30 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
             DreamJetpackData.setJetpackUp(((IEntityDataSaver) player), false);
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 6, 1));
             DreamJetpackData.setJetpackUp(((IEntityDataSaver) player), false);
-            System.out.println("Jetpack Down");
         //Jetpack Stay
         } if(DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player)) && !player.isSneaking() &&
                 !DreamJetpackData.getJetpackUp(((IEntityDataSaver) player))) {
             DreamJetpackData.setJetpackUp(((IEntityDataSaver) player), false);
             player.setNoGravity(true);
-            System.out.println("Jetpack Stay " + DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player)));
         // Jetpack up
         } if(DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player)) && !player.isSneaking() &&
                 DreamJetpackData.getJetpackUp(((IEntityDataSaver) player))) {
             player.setNoGravity(false);
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.LEVITATION, 3, 5));
-            System.out.println("Jetpack Up: ");
         // Spawn Jetpack Particles
         } if(DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player))) {
             spawnJetpackParticles(player);
         // Take effects away when putting off chestplate
-        } if(!hasChestplateOn || !hasCorrectChestplateOn && DreamJetpackData.hadJetpackOn(((IEntityDataSaver) player))) {
-            player.setNoGravity(false);
-            player.removeStatusEffect(StatusEffects.LEVITATION);
-            DreamJetpackData.setJetpackUp(((IEntityDataSaver) player), false);
-            DreamJetpackData.setJetpackOnOff(((IEntityDataSaver) player), false);
-            DreamJetpackData.setHadJetpackOn(((IEntityDataSaver) player), false);
-            System.out.println("Jetpack took effects");
+        } if(!hasChestplateOn || !hasCorrectChestplateOn) {
+            if(DreamJetpackData.hadJetpackOn(((IEntityDataSaver) player))) {
+                player.setNoGravity(false);
+                player.removeStatusEffect(StatusEffects.LEVITATION);
+                DreamJetpackData.setJetpackUp(((IEntityDataSaver) player), false);
+                DreamJetpackData.setJetpackOnOff(((IEntityDataSaver) player), false);
+                DreamJetpackData.setHadJetpackOn(((IEntityDataSaver) player), false);
+                System.out.println("Jetpack took effects from " + player.getName().getString());
+            }
+
         }
     }
 

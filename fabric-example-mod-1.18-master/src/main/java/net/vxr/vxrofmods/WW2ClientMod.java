@@ -44,7 +44,7 @@ public class WW2ClientMod implements ClientModInitializer {
         GeoArmorRenderer.registerArmorRenderer(new DreamHelmetRenderer(), ModItems.Dream_Helmet);
         GeoArmorRenderer.registerArmorRenderer(new DreamChestplateRenderer(), ModItems.Dream_Chestplate);
 
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.DIAMOND_MINER_BLOCK, RenderLayer.getCutout());
+        //BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.DIAMOND_MINER_BLOCK, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.FRAGMENT_HOLDER, RenderLayer.getCutout());
 
         HandledScreens.register(ModScreenHandlers.DIAMOND_MINER_SCREEN_HANDLER, DiamondMinerScreen::new);
@@ -55,7 +55,7 @@ public class WW2ClientMod implements ClientModInitializer {
 
         ModMessages.registerS2CPackets();
 
-        BlockEntityRendererRegistry.register(ModBlockEntities.DIAMOND_MINER, DiamondMinerBlockEntityRenderer::new);
+        //BlockEntityRendererRegistry.register(ModBlockEntities.DIAMOND_MINER, DiamondMinerBlockEntityRenderer::new);
 
 
     }

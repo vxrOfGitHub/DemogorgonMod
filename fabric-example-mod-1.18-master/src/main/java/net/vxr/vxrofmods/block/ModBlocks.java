@@ -38,8 +38,8 @@ public class ModBlocks {
     public static final Block FRAGMENT_HOLDER =  registerBlock("fragment_holder",
             new FragmentHolderBlock(FabricBlockSettings.of(Material.METAL).nonOpaque().strength(12f)), ModItemGroup.Custom_Mods);
 
-    public static final Block DIAMOND_MINER_BLOCK =  registerBlock("diamond_miner_block",
-            new DiamondMinerBlock(FabricBlockSettings.of(Material.METAL).nonOpaque().strength(3f).requiresTool()), ModItemGroup.Custom_Mods);
+    /*public static final Block DIAMOND_MINER_BLOCK =  registerBlock("diamond_miner_block",
+            new DiamondMinerBlock(FabricBlockSettings.of(Material.METAL).nonOpaque().strength(3f).requiresTool()), ModItemGroup.Custom_Mods);*/
 
     private static Block registerBlock(String name, Block block, ItemGroup group, String tooltipKey) {
         registerBlockItem(name, block, group, tooltipKey);

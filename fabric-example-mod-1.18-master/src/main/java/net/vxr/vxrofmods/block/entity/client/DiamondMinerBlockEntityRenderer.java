@@ -18,8 +18,9 @@ import net.minecraft.world.World;
 import net.vxr.vxrofmods.block.custom.DiamondMinerBlock;
 import net.vxr.vxrofmods.block.entity.DiamondMinerBlockEntity;
 
-/* public class DiamondMinerBlockEntityRenderer implements BlockEntityRenderer<DiamondMinerBlockEntity> {
+public class DiamondMinerBlockEntityRenderer /*  implements BlockEntityRenderer<DiamondMinerBlockEntity> */ {
 
+    /*
       public DiamondMinerBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
 
     }
@@ -53,6 +54,6 @@ import net.vxr.vxrofmods.block.entity.DiamondMinerBlockEntity;
         int sLight = world.getLightLevel(LightType.SKY, pos);
         return LightmapTextureManager.pack(bLight, sLight);
     }
-
-} */
+*/
+}
 

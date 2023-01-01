@@ -24,8 +24,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Stream;
 
-public class DiamondMinerBlock extends BlockWithEntity implements BlockEntityProvider {
-    public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
+public class DiamondMinerBlock/* extends BlockWithEntity implements BlockEntityProvider*/ {
+    /*public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 
     public DiamondMinerBlock(Settings settings) {
         super(settings);
@@ -113,7 +113,7 @@ public class DiamondMinerBlock extends BlockWithEntity implements BlockEntityPro
         if (state.getBlock() != newState.getBlock()) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if(blockEntity instanceof DiamondMinerBlockEntity) {
-                ItemScatterer.spawn(world, pos, (DiamondMinerBlockEntity)blockEntity);
+                //ItemScatterer.spawn(world, pos, (DiamondMinerBlockEntity)blockEntity);
                 world.updateComparators(pos, this);
             }
             super.onStateReplaced(state, world, pos, newState, moved);
@@ -132,15 +132,15 @@ public class DiamondMinerBlock extends BlockWithEntity implements BlockEntityPro
         return ActionResult.SUCCESS;
     }
 
-    @Nullable
+    /*@Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new DiamondMinerBlockEntity(pos, state);
-    }
+    }*/
 
-    @Nullable
+    /*@Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         return checkType(type, ModBlockEntities.DIAMOND_MINER, DiamondMinerBlockEntity::tick);
-    }
+    }*/
 }
