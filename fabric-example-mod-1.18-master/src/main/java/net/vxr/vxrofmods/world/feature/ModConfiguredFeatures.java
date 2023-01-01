@@ -14,7 +14,7 @@ public class ModConfiguredFeatures {
             OreFeatureConfig.createTarget(new BlockMatchRuleTest(Blocks.END_STONE), ModBlocks.DREAM_ORE.getDefaultState()));
 
     public static final RegistryEntry<ConfiguredFeature<OreFeatureConfig, ?>> DREAM_ORE =
-            ConfiguredFeatures.register("dream_ore", Feature.ORE, new OreFeatureConfig(END_DREAM_ORES, 1));
+            ConfiguredFeatures.register("dream_ore", Feature.ORE, new OreFeatureConfig(END_DREAM_ORES, 3)); // size = ore vein size in world
 
     public static void registerConfiguredFeatures() {
         WW2Mod.LOGGER.debug("Registering the ModConfiguredFeatures for " + WW2Mod.MOD_ID);

@@ -22,7 +22,7 @@ public class ModItems {
             new CoinItem(new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
     public static final Item SPAWN_CHANGER = registerItem("spawn_changer",
-            new SpawnChangerItem(new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
+            new SpawnChangerItem(new FabricItemSettings().maxCount(1).group(ModItemGroup.Custom_Mods)));
 
     public static final Item DREAM_SHARD = registerItem("dream_shard",
             new Item(new FabricItemSettings().group(ModItemGroup.Custom_Mods)));

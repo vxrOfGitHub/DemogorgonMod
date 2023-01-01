@@ -8,7 +8,7 @@ import net.vxr.vxrofmods.world.feature.ModPlacedFeatures;
 
 public class ModOreGeneration {
     public static void generateOres() {
-        BiomeModifications.addFeature(BiomeSelectors.includeByKey(BiomeKeys.END_HIGHLANDS),
+        BiomeModifications.addFeature(BiomeSelectors.includeByKey(BiomeKeys.END_HIGHLANDS, BiomeKeys.END_MIDLANDS),
                 GenerationStep.Feature.UNDERGROUND_ORES, ModPlacedFeatures.DREAM_ORE_PLACED.getKey().get());
     }
 }

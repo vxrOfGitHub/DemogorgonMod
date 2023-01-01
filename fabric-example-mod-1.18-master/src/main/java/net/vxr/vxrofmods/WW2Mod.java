@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.vxr.vxrofmods.block.ModBlocks;
-import net.vxr.vxrofmods.block.entity.ModBlockEntities;
 import net.vxr.vxrofmods.effect.ModEffects;
 import net.vxr.vxrofmods.enchantment.ModEnchantments;
 import net.vxr.vxrofmods.event.BlockBreakHandler;
@@ -50,7 +49,7 @@ public class WW2Mod implements ModInitializer {
 		ModEffects.registerEffects();
 		ModSounds.registerSounds();
 		ModWorldGen.generateModWorldGen();
-		ModBlockEntities.registerBlockEntities();
+		//ModBlockEntities.registerBlockEntities();
 		ModRecipes.registerRecipes();
 		ModScreenHandlers.registerAllScreenHandlers();
 		ModMessages.registerC2SPackets();

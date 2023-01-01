@@ -17,7 +17,6 @@ import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.vxr.vxrofmods.WW2Mod;
-import net.vxr.vxrofmods.block.custom.DiamondMinerBlock;
 import net.vxr.vxrofmods.block.custom.DreamBlock;
 import net.vxr.vxrofmods.block.custom.FragmentHolderBlock;
 import net.vxr.vxrofmods.item.ModItemGroup;
@@ -32,7 +31,8 @@ public class ModBlocks {
                     .luminance((state) -> state.get(DreamBlock.CLICKED) ? 15:0)), ModItemGroup.Custom_Mods);
 
     public static final Block DREAM_ORE =  registerBlock("dream_ore",
-            new OreBlock(FabricBlockSettings.of(Material.METAL).requiresTool().strength(30.0F, 1200.0F).sounds(BlockSoundGroup.STONE))
+            new OreBlock(FabricBlockSettings.of(Material.METAL).strength(30.0F, 1200.0F).sounds(BlockSoundGroup.STONE).requiresTool()
+            , UniformIntProvider.create(3, 7))
             , ModItemGroup.Custom_Mods);
 
     public static final Block FRAGMENT_HOLDER =  registerBlock("fragment_holder",

@@ -11,7 +11,7 @@ import java.util.List;
 public class ModPlacedFeatures {
 
     public static final RegistryEntry<PlacedFeature> DREAM_ORE_PLACED = PlacedFeatures.register("dream_ore_placed",
-            ModConfiguredFeatures.DREAM_ORE, modifiersWithCount(1,
+            ModConfiguredFeatures.DREAM_ORE, modifiersWithCount(3, // Veins per Chunk
                     HeightRangePlacementModifier.trapezoid(YOffset.fixed(-80), YOffset.fixed(80))));
 
     private static List<PlacementModifier> modifiers(PlacementModifier countModifier, PlacementModifier heightModifier) {

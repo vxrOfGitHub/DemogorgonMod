@@ -25,7 +25,7 @@ public class ModMessages {
     }
 
     public static void registerS2CPackets() {
-        ClientPlayNetworking.registerGlobalReceiver(ITEM_SYNC, ItemStackSyncS2CPacket::receive);
+        //ClientPlayNetworking.registerGlobalReceiver(ITEM_SYNC, ItemStackSyncS2CPacket::receive);
         ClientPlayNetworking.registerGlobalReceiver(DREAM_JETPACK_PARTICLE_SPAWN, DreamJetpackParticleSpawnS2CPacket::receive);
     }
 
