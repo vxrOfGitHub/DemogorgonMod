@@ -57,7 +57,7 @@ public class SpawnChangerCommands {
     }
 
     private static int runSpawnChangerTypesList(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        context.getSource().sendFeedback(Text.literal("It costs §6§l1000 Coins§r§r to convert your Spawn Changer to following:"), false);
+        context.getSource().sendFeedback(Text.literal("It costs §6§l" + SpawnChangerItem.sellingPrice + " Coins§r§r to convert your Spawn Changer to following:"), false);
         for(int i = 0; i < SpawnChangerItem.possibleEntityTypes.size(); i++) {
             int x = i + 1;
             context.getSource().sendFeedback(Text.literal(x + " = " + SpawnChangerItem.possibleEntityTypes.get(i).getName().getString()), false);
@@ -70,7 +70,7 @@ public class SpawnChangerCommands {
         IEntityDataSaver playerSaver = ((IEntityDataSaver) player);
         
         assert player != null;
-        if(CustomMoneyData.getMoney(playerSaver) >= 1000) {
+        if(CustomMoneyData.getMoney(playerSaver) >= SpawnChangerItem.sellingPrice) {
             if(target > SpawnChangerItem.possibleEntityTypes.size() || target < 1) {
                 context.getSource().sendFeedback(Text.literal("§cThe given Number is bigger or smaller than the List!§r"), false);
             } else {
@@ -79,7 +79,7 @@ public class SpawnChangerCommands {
                 if(!stack.isEmpty() && stack.getItem().equals(ModItems.SPAWN_CHANGER)) {
                     SpawnChangerItem.setEntityTypeOfSpawnChanger(stack, target);
                     EntityType<?> entityType = SpawnChangerItem.possibleEntityTypes.get(target);
-                    CustomMoneyData.addOrSubtractMoney(playerSaver, -1000);
+                    CustomMoneyData.addOrSubtractMoney(playerSaver, -SpawnChangerItem.sellingPrice);
                     context.getSource().sendFeedback(Text.literal("Your Spawn Changer now converts to " + entityType.getName().getString()), false);
                 } else {
                     context.getSource().sendFeedback(Text.literal("§cYour are not holding a Spawn Changer in your Hand!§r"), false);

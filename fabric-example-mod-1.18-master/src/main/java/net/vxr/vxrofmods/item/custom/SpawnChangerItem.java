@@ -35,11 +35,22 @@ public class SpawnChangerItem extends Item {
     }
 
     public static void addPossibleEntityTypesPreset() {
+        possibleEntityTypes.add(EntityType.DROWNED);
         possibleEntityTypes.add(EntityType.SKELETON);
+        possibleEntityTypes.add(EntityType.ZOMBIE);
+        possibleEntityTypes.add(EntityType.CREEPER);
+        possibleEntityTypes.add(EntityType.PHANTOM);
+        possibleEntityTypes.add(EntityType.SQUID);
+        possibleEntityTypes.add(EntityType.ENDERMAN);
+        possibleEntityTypes.add(EntityType.ZOMBIFIED_PIGLIN);
+        possibleEntityTypes.add(EntityType.STRIDER);
+        possibleEntityTypes.add(EntityType.SPIDER);
         possibleEntityTypes.add(EntityType.SLIME);
-        possibleEntityTypes.add(EntityType.ALLAY);
-        possibleEntityTypes.add(EntityType.WARDEN);
+        possibleEntityTypes.add(EntityType.BAT);
+        possibleEntityTypes.add(EntityType.MAGMA_CUBE);
     }
+
+    public static final int sellingPrice = 1000;
 
     public static void addPossibleEntityTypes(EntityType<?> type) {
         possibleEntityTypes.add(type);
