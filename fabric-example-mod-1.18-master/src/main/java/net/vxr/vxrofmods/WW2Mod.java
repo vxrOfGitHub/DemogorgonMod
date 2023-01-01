@@ -44,6 +44,8 @@ public class WW2Mod implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 		ModItems.registerModItems();
+		ServerTickHandler.SetupDailyMissions();
+		ServerTickHandler.SetupWeeklyMissions();
 		ModBlocks.registerModBlocks();
 		ModRegistries.registerModStuffs();
 		ModEffects.registerEffects();
