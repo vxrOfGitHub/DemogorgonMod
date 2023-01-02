@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.vxr.vxrofmods.item.custom.DreamBootsItem;
@@ -22,6 +23,7 @@ public class KeyInputHandler {
     public static KeyBinding dreamJetpackKey;
     public static KeyBinding dreamVisionKey;
     public static KeyBinding dreamJetpackUpKey;
+
 
     public static void registerKeyInputs() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -44,7 +46,7 @@ public class KeyInputHandler {
         dreamBoostKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 KEY_DREAM_BOOST,
                 InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_X,
+                GLFW.GLFW_KEY_B,
                 KEY_CATEGORY_WW2MOD
         ));
 
@@ -65,7 +67,7 @@ public class KeyInputHandler {
         dreamJetpackUpKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 KEY_DREAM_JETPACK_UP,
                 InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_SPACE,
+                GLFW.GLFW_KEY_X,
                 KEY_CATEGORY_WW2MOD
         ));
         registerKeyInputs();

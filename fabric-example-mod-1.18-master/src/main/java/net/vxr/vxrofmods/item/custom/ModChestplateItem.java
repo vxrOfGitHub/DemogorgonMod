@@ -1,5 +1,9 @@
 package net.vxr.vxrofmods.item.custom;
 
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -8,8 +12,13 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 import net.vxr.vxrofmods.item.ModItems;
+import net.vxr.vxrofmods.networking.ModMessages;
+import net.vxr.vxrofmods.util.DreamJetpackData;
+import net.vxr.vxrofmods.util.IEntityDataSaver;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -214,6 +223,16 @@ public class ModChestplateItem extends ArmorItem implements IAnimatable{
                 DreamJetpackData.setJetpackOnOff(((IEntityDataSaver) player), false);
             }
         } */
+        if(entity instanceof PlayerEntity player && hasCorrectChestplateOn(player, stack.getItem())
+                //&& DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player))
+        ) {
+            if(!world.isClient() && DreamJetpackData.getJetpackOnOff(((IEntityDataSaver)player))) {
+                System.out.println("Jetpack Is On!");
+                ServerPlayNetworking.send(((ServerPlayerEntity) player), ModMessages.DREAM_JETPACK_PARTICLE_SPAWN, PacketByteBufs.create());
+            }
+        }
+
+
 
         super.inventoryTick(stack, world, entity, slot, selected);
     }
@@ -223,10 +242,8 @@ public class ModChestplateItem extends ArmorItem implements IAnimatable{
         return !chestplate.isEmpty();
     }
 
-    private boolean hasCorrectChestplateOn(ArmorMaterial material, PlayerEntity player) {
-        ArmorItem chestplate = ((ArmorItem)player.getInventory().getArmorStack(2).getItem());
-
-        return chestplate.getMaterial() == material;
+    private boolean hasCorrectChestplateOn(PlayerEntity player, Item thisItem) {
+        return player.getInventory().getArmorStack(2).isOf(thisItem);
     }
 
 }
