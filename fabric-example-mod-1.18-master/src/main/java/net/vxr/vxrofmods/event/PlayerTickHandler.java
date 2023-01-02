@@ -58,19 +58,17 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
             } else {
                 player.setNoGravity(true);
                 ItemStack chestplate = player.getInventory().getArmorStack(2);
-
-                if(!chestplate.hasNbt()) {
-                    chestplate.setNbt(new NbtCompound());
-                    assert chestplate.getNbt() != null;
-                    chestplate.getNbt().putInt("durabilityTick", 0);
+                NbtCompound nbt = new NbtCompound();
+                if(chestplate.hasNbt()) {
+                    nbt = chestplate.getNbt();
                 } else {
-                    assert chestplate.getNbt() != null;
-                    chestplate.getNbt().putInt("durabilityTick", chestplate.getNbt().getInt("durabilityTick") + 1);
+                    nbt.putInt("durabilityTick", 0);
                 }
-                if(chestplate.getNbt().getInt("durabilityTick") >= 40) {
-                    chestplate.setDamage(chestplate.getDamage() + 1);
-                    chestplate.getNbt().putInt("durabilityTick",0);
-                }
+                assert nbt != null;
+                nbt.putInt("durabilityTick", nbt.getInt("durabilityTick") + 1);
+                System.out.println("Durability Tick: " + nbt.getInt("durabilityTick"));
+                chestplate.setNbt(nbt);
+                if(chestplate.getNbt().getInt("durabilityTick") % )
             }
         }
 
