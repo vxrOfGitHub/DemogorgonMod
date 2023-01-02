@@ -9,6 +9,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
@@ -21,10 +22,7 @@ import net.vxr.vxrofmods.item.ModArmorMaterials;
 import net.vxr.vxrofmods.item.ModItems;
 import net.vxr.vxrofmods.item.custom.ModHelmetItem;
 import net.vxr.vxrofmods.networking.ModMessages;
-import net.vxr.vxrofmods.util.DreamBoostCooldownData;
-import net.vxr.vxrofmods.util.DreamHelmetData;
-import net.vxr.vxrofmods.util.DreamJetpackData;
-import net.vxr.vxrofmods.util.IEntityDataSaver;
+import net.vxr.vxrofmods.util.*;
 
 public class PlayerTickHandler implements ServerTickEvents.StartTick{
     @Override
@@ -51,11 +49,11 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
         boolean hasCorrectChestplateOn = player.getInventory().getArmorStack(2).getItem().equals(ModItems.Dream_Chestplate);
         IEntityDataSaver playerSaver = ((IEntityDataSaver) player);
         if(DreamJetpackData.getJetpackOnOff(playerSaver)) {
-            if(!hasCorrectChestplateOn) {
+            if(!hasCorrectChestplateOn || !InventoryUtil.hasPlayerStackInInventory(player, Items.FIREWORK_ROCKET)) {
                 player.setNoGravity(false);
                 DreamJetpackData.setJetpackOnOff(playerSaver, false);
                 //player.speed = DreamJetpackData.getEarlierForwardSpeed(playerSaver);
-            } else {
+            } else if(InventoryUtil.hasPlayerStackInInventory(player, Items.FIREWORK_ROCKET)) {
                 player.setNoGravity(true);
                 ItemStack chestplate = player.getInventory().getArmorStack(2);
                 NbtCompound nbt = new NbtCompound();
@@ -68,7 +66,12 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
                 nbt.putInt("durabilityTick", nbt.getInt("durabilityTick") + 1);
                 System.out.println("Durability Tick: " + nbt.getInt("durabilityTick"));
                 chestplate.setNbt(nbt);
-                if(chestplate.getNbt().getInt("durabilityTick") % )
+                assert chestplate.getNbt() != null;
+                if(chestplate.getNbt().getInt("durabilityTick") % 160 == 0) {
+                    if(InventoryUtil.hasPlayerStackInInventory(player, Items.FIREWORK_ROCKET)) {
+                        player.getInventory().getStack(InventoryUtil.getFirstInventoryIndex(player, Items.FIREWORK_ROCKET)).decrement(1);
+                    }
+                }
             }
         }
 
