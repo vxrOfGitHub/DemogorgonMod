@@ -45,14 +45,21 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
     }
 
     private void DreamJetpackTick(ServerPlayerEntity player) {
-        boolean hasChestplateOn = !player.getInventory().getArmorStack(2).isEmpty();
-        boolean hasCorrectChestplateOn = false;
-        if(hasChestplateOn) {
-            hasCorrectChestplateOn = player.getInventory().getArmorStack(2).getItem().equals(ModItems.Dream_Chestplate);
+        //boolean hasChestplateOn = !player.getInventory().getArmorStack(2).isEmpty();
+        boolean hasCorrectChestplateOn = player.getInventory().getArmorStack(2).getItem().equals(ModItems.Dream_Chestplate);
+        IEntityDataSaver playerSaver = ((IEntityDataSaver) player);
+        if(DreamJetpackData.getJetpackOnOff(playerSaver)) {
+            if(!hasCorrectChestplateOn) {
+                player.setNoGravity(false);
+                DreamJetpackData.setJetpackOnOff(playerSaver, false);
+                //player.speed = DreamJetpackData.getEarlierForwardSpeed(playerSaver);
+            } else {
+                player.setNoGravity(true);
+            }
         }
 
         // Jetpack Down
-        if(DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player)) && player.isSneaking() &&
+        /* if(DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player)) && player.isSneaking() &&
                 !DreamJetpackData.getJetpackUp(((IEntityDataSaver) player))) {
             player.setNoGravity(false);
             DreamJetpackData.setJetpackUp(((IEntityDataSaver) player), false);
@@ -82,7 +89,7 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
                 System.out.println("Jetpack took effects from " + player.getName().getString());
             }
 
-        }
+        }*/
     }
 
     private void spawnJetpackParticles(PlayerEntity player) {

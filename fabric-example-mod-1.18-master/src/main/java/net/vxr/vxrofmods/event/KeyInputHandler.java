@@ -17,12 +17,12 @@ public class KeyInputHandler {
     public static final String KEY_DREAM_BOOST = "key.vxrofmods.dream_boost";
     public static final String KEY_DREAM_VISION = "key.vxrofmods.dream_vision";
     public static final String KEY_DREAM_JETPACK = "key.vxrofmods.dream_jetpack";
-    public static final String KEY_DREAM_JETPACK_UP = "key.vxrofmods.dream_jetpack_up";
+    //public static final String KEY_DREAM_JETPACK_UP = "key.vxrofmods.dream_jetpack_up";
 
     public static KeyBinding dreamBoostKey;
     public static KeyBinding dreamJetpackKey;
     public static KeyBinding dreamVisionKey;
-    public static KeyBinding dreamJetpackUpKey;
+    //public static KeyBinding dreamJetpackUpKey;
 
 
     public static void registerKeyInputs() {
@@ -36,9 +36,9 @@ public class KeyInputHandler {
             if (dreamJetpackKey.wasPressed()) {
                 ClientPlayNetworking.send(ModMessages.DREAM_JETPACK_ID, PacketByteBufs.create());
             }
-            if (dreamJetpackUpKey.wasPressed()) {
+            /*if (dreamJetpackUpKey.wasPressed()) {
                 ClientPlayNetworking.send(ModMessages.DREAM_JETPACK_UP_ID, PacketByteBufs.create());
-            }
+            }*/
         });
     }
 
@@ -64,12 +64,12 @@ public class KeyInputHandler {
                 KEY_CATEGORY_WW2MOD
         ));
 
-        dreamJetpackUpKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        /*dreamJetpackUpKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 KEY_DREAM_JETPACK_UP,
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_X,
                 KEY_CATEGORY_WW2MOD
-        ));
+        ));*/
         registerKeyInputs();
     }
 

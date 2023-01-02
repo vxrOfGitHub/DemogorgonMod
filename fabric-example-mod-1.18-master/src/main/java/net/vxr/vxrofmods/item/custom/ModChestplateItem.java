@@ -226,9 +226,15 @@ public class ModChestplateItem extends ArmorItem implements IAnimatable{
         if(entity instanceof PlayerEntity player && hasCorrectChestplateOn(player, stack.getItem())
                 //&& DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player))
         ) {
-            if(!world.isClient() && DreamJetpackData.getJetpackOnOff(((IEntityDataSaver)player))) {
-                System.out.println("Jetpack Is On!");
-                ServerPlayNetworking.send(((ServerPlayerEntity) player), ModMessages.DREAM_JETPACK_PARTICLE_SPAWN, PacketByteBufs.create());
+            if(world.isClient()) {
+                //boolean jumpKeyPressed = ((ClientPlayerEntity) player).input.jumping;
+                if(((ClientPlayerEntity) player).input.jumping) {
+                    ClientPlayNetworking.send(ModMessages.FLY_UPWARD_ID, PacketByteBufs.create());
+                    //player.addStatusEffect(new StatusEffectInstance(((ServerPlayerEntity) player).upwardSpeed = 1000))
+                }
+                if(((ClientPlayerEntity) player).input.sneaking) {
+                    ClientPlayNetworking.send(ModMessages.FLY_DOWNWARD_ID, PacketByteBufs.create());
+                }
             }
         }
 

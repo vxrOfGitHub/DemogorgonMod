@@ -10,6 +10,16 @@ public class DreamJetpackData {
         nbt.putBoolean("dream_jetpack_on", isJetpackOn);
     }
 
+    public static void setEarlierForwardSpeed(IEntityDataSaver player, float earlierForwardSpeed) {
+        NbtCompound nbt = player.getPersistentData();
+        nbt.putFloat("dream_jetpack_airstrafing_speed",earlierForwardSpeed);
+    }
+
+    public static float getEarlierForwardSpeed(IEntityDataSaver player) {
+        NbtCompound nbt = player.getPersistentData();
+        return nbt.getFloat("dream_jetpack_airstrafing_speed");
+    }
+
     public static void setJetpackOnOff(IEntityDataSaver player, boolean isJetpackOn) {
         NbtCompound nbt = player.getPersistentData();
 
