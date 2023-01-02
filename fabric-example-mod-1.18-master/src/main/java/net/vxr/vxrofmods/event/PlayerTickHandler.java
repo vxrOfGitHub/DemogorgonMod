@@ -3,11 +3,13 @@ package net.vxr.vxrofmods.event;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.MinecraftServer;
@@ -55,6 +57,20 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
                 //player.speed = DreamJetpackData.getEarlierForwardSpeed(playerSaver);
             } else {
                 player.setNoGravity(true);
+                ItemStack chestplate = player.getInventory().getArmorStack(2);
+
+                if(!chestplate.hasNbt()) {
+                    chestplate.setNbt(new NbtCompound());
+                    assert chestplate.getNbt() != null;
+                    chestplate.getNbt().putInt("durabilityTick", 0);
+                } else {
+                    assert chestplate.getNbt() != null;
+                    chestplate.getNbt().putInt("durabilityTick", chestplate.getNbt().getInt("durabilityTick") + 1);
+                }
+                if(chestplate.getNbt().getInt("durabilityTick") >= 40) {
+                    chestplate.setDamage(chestplate.getDamage() + 1);
+                    chestplate.getNbt().putInt("durabilityTick",0);
+                }
             }
         }
 
