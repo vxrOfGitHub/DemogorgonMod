@@ -38,5 +38,15 @@ public class InventoryUtil {
         return -1;
     }
 
+    public static int getAmountOfItemInInventory(PlayerEntity player, Item item) {
+        int amountOfItemInInventory = 0;
+        for(int i = 0; i < player.getInventory().size(); i++) {
+            ItemStack currentStack = player.getInventory().getStack(i);
+            if(!currentStack.isEmpty() && currentStack.getItem().equals(item)) {
+                amountOfItemInInventory += currentStack.getCount();
+            }
+        }
+        return amountOfItemInInventory;
+    }
 
 }

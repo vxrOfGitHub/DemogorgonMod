@@ -15,6 +15,9 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -70,6 +73,10 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
                 if(chestplate.getNbt().getInt("durabilityTick") % 160 == 0) {
                     if(InventoryUtil.hasPlayerStackInInventory(player, Items.FIREWORK_ROCKET)) {
                         player.getInventory().getStack(InventoryUtil.getFirstInventoryIndex(player, Items.FIREWORK_ROCKET)).decrement(1);
+                        if(InventoryUtil.getAmountOfItemInInventory(player, Items.FIREWORK_ROCKET) <= 10) {
+                            player.sendMessage(Text.literal("§c§lLOW ON ROCKETS: " + InventoryUtil.getAmountOfItemInInventory(player, Items.FIREWORK_ROCKET) + "!§r"), true);
+                        }
+                        player.getWorld().playSound(player, player.getBlockPos(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 0.75f, 10f);
                     }
                 }
             }
