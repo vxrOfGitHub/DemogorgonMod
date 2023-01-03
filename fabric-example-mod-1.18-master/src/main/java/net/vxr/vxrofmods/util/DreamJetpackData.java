@@ -27,6 +27,18 @@ public class DreamJetpackData {
 
     }
 
+    public static void setFuelTick(IEntityDataSaver player, int ticks) {
+        NbtCompound nbtCompound = player.getPersistentData();
+
+        nbtCompound.putInt("dream_jetpack_fuel_tick", ticks);
+    }
+
+    public static int getFuelTick(IEntityDataSaver player) {
+        NbtCompound nbtCompound = player.getPersistentData();
+
+        return nbtCompound.getInt("dream_jetpack_fuel_tick");
+    }
+
     public static void setJetpackUp(IEntityDataSaver player, boolean newIsJetpackUp) {
         NbtCompound nbt = player.getPersistentData();
         nbt.putBoolean("dream_jetpack_up", newIsJetpackUp);

@@ -7,8 +7,8 @@
 				"texture_width": 256,
 				"texture_height": 256,
 				"visible_bounds_width": 6,
-				"visible_bounds_height": 3.5,
-				"visible_bounds_offset": [0, 1.25, 0]
+				"visible_bounds_height": 4.5,
+				"visible_bounds_offset": [0, 1.75, 0]
 			},
 			"bones": [
 				{
@@ -499,7 +499,7 @@
 				},
 				{
 					"name": "Right_Wings",
-					"parent": "bipedBody",
+					"parent": "armorBody",
 					"pivot": [0, 20.5, 3.25],
 					"rotation": [10, 0, 25]
 				},
@@ -561,7 +561,7 @@
 				},
 				{
 					"name": "Left_Wings",
-					"parent": "bipedBody",
+					"parent": "armorBody",
 					"pivot": [0, 20.5, 3.25],
 					"rotation": [10, 0, -25]
 				},

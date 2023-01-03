@@ -52,7 +52,7 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
             } else if(InventoryUtil.hasPlayerStackInInventory(player, Items.FIREWORK_ROCKET)) {
                 player.setNoGravity(true);
                 ItemStack chestplate = player.getInventory().getArmorStack(2);
-                NbtCompound nbt = new NbtCompound();
+                /*NbtCompound nbt = new NbtCompound();
                 if(chestplate.hasNbt()) {
                     nbt = chestplate.getNbt();
                 } else {
@@ -60,7 +60,6 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
                 }
                 assert nbt != null;
                 nbt.putInt("durabilityTick", nbt.getInt("durabilityTick") + 1);
-                System.out.println("Durability Tick: " + nbt.getInt("durabilityTick"));
                 chestplate.setNbt(nbt);
                 assert chestplate.getNbt() != null;
                 if(chestplate.getNbt().getInt("durabilityTick") % 160 == 0) {
@@ -70,6 +69,17 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
                             player.sendMessage(Text.literal("§c§lLOW ON ROCKETS: " + InventoryUtil.getAmountOfItemInInventory(player, Items.FIREWORK_ROCKET) + "!§r"), true);
                         }
                         player.getWorld().playSound(null, player.getBlockPos(), SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.PLAYERS   ,
+                                0.125F, nextFloat(0F, 1F));
+                    }
+                }*/
+                DreamJetpackData.setFuelTick(playerSaver, DreamJetpackData.getFuelTick(playerSaver) + 1);
+                if(DreamJetpackData.getFuelTick(playerSaver) % 160 == 0) {
+                    if(InventoryUtil.hasPlayerStackInInventory(player, Items.FIREWORK_ROCKET)) {
+                        player.getInventory().getStack(InventoryUtil.getFirstInventoryIndex(player, Items.FIREWORK_ROCKET)).decrement(1);
+                        if(InventoryUtil.getAmountOfItemInInventory(player, Items.FIREWORK_ROCKET) <= 10) {
+                            player.sendMessage(Text.literal("§c§lLOW ON ROCKETS: " + InventoryUtil.getAmountOfItemInInventory(player, Items.FIREWORK_ROCKET) + "!§r"), true);
+                        }
+                        player.getWorld().playSound(null, player.getBlockPos(), SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.PLAYERS,
                                 0.125F, nextFloat(0F, 1F));
                     }
                 }
