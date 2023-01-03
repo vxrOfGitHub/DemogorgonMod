@@ -13,6 +13,7 @@ public class ModMessages {
     //public static final Identifier DREAM_JETPACK_UP_ID = new Identifier(WW2Mod.MOD_ID, "dream_jetpack_up");
     public static final Identifier FLY_UPWARD_ID = new Identifier(WW2Mod.MOD_ID, "fly_upward");
     public static final Identifier FLY_DOWNWARD_ID = new Identifier(WW2Mod.MOD_ID, "fly_downward");
+    public static final Identifier PLAY_FIRE_EXTINCTION_SOUND_ID = new Identifier(WW2Mod.MOD_ID, "play_fire_extinction_sound");
     //public static final Identifier TEST_FOR_FLYING_ID = new Identifier(WW2Mod.MOD_ID, "fly_test");
 
 
@@ -33,6 +34,7 @@ public class ModMessages {
         //ClientPlayNetworking.registerGlobalReceiver(ITEM_SYNC, ItemStackSyncS2CPacket::receive);
         ClientPlayNetworking.registerGlobalReceiver(DREAM_JETPACK_PARTICLE_SPAWN, DreamJetpackParticleSpawnS2CPacket::receive);
         //ClientPlayNetworking.registerGlobalReceiver(TEST_FOR_FLYING_ID, TestForFlyingS2CPacket::receive);
+        ClientPlayNetworking.registerGlobalReceiver(PLAY_FIRE_EXTINCTION_SOUND_ID, PlayFireExtinctionSoundS2CPacket::receive);
     }
 
 }

@@ -3,29 +3,22 @@ package net.vxr.vxrofmods.event;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.vxr.vxrofmods.item.ModArmorMaterials;
 import net.vxr.vxrofmods.item.ModItems;
-import net.vxr.vxrofmods.item.custom.ModHelmetItem;
 import net.vxr.vxrofmods.networking.ModMessages;
 import net.vxr.vxrofmods.util.*;
+
+import static org.apache.commons.lang3.RandomUtils.nextFloat;
 
 public class PlayerTickHandler implements ServerTickEvents.StartTick{
     @Override
@@ -76,7 +69,8 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
                         if(InventoryUtil.getAmountOfItemInInventory(player, Items.FIREWORK_ROCKET) <= 10) {
                             player.sendMessage(Text.literal("§c§lLOW ON ROCKETS: " + InventoryUtil.getAmountOfItemInInventory(player, Items.FIREWORK_ROCKET) + "!§r"), true);
                         }
-                        player.getWorld().playSound(player, player.getBlockPos(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 0.75f, 10f);
+                        player.getWorld().playSound(null, player.getBlockPos(), SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.PLAYERS   ,
+                                0.125F, nextFloat(0F, 1F));
                     }
                 }
             }
