@@ -51,8 +51,8 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
                 //player.speed = DreamJetpackData.getEarlierForwardSpeed(playerSaver);
             } else if(InventoryUtil.hasPlayerStackInInventory(player, Items.FIREWORK_ROCKET)) {
                 player.setNoGravity(true);
-                ItemStack chestplate = player.getInventory().getArmorStack(2);
-                /*NbtCompound nbt = new NbtCompound();
+                /*ItemStack chestplate = player.getInventory().getArmorStack(2);
+                NbtCompound nbt = new NbtCompound();
                 if(chestplate.hasNbt()) {
                     nbt = chestplate.getNbt();
                 } else {
@@ -73,15 +73,18 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
                     }
                 }*/
                 DreamJetpackData.setFuelTick(playerSaver, DreamJetpackData.getFuelTick(playerSaver) + 1);
-                if(DreamJetpackData.getFuelTick(playerSaver) % 160 == 0) {
+                System.out.println("FuelTick: " + DreamJetpackData.getFuelTick(playerSaver));
+                int remainder = 160;
+                if(DreamJetpackData.getFuelTick(playerSaver) % remainder == 0) {
                     if(InventoryUtil.hasPlayerStackInInventory(player, Items.FIREWORK_ROCKET)) {
                         player.getInventory().getStack(InventoryUtil.getFirstInventoryIndex(player, Items.FIREWORK_ROCKET)).decrement(1);
                         if(InventoryUtil.getAmountOfItemInInventory(player, Items.FIREWORK_ROCKET) <= 10) {
                             player.sendMessage(Text.literal("§c§lLOW ON ROCKETS: " + InventoryUtil.getAmountOfItemInInventory(player, Items.FIREWORK_ROCKET) + "!§r"), true);
                         }
                         player.getWorld().playSound(null, player.getBlockPos(), SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.PLAYERS,
-                                0.125F, nextFloat(0F, 1F));
+                                0.175F, nextFloat(0F, 1F));
                     }
+                    DreamJetpackData.setFuelTick(playerSaver, 0);
                 }
             }
         }
