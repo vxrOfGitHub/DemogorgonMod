@@ -10,6 +10,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.vxr.vxrofmods.item.ModItems;
 import net.vxr.vxrofmods.util.IEntityDataSaver;
+import net.vxr.vxrofmods.util.MissionsData;
+import net.vxr.vxrofmods.util.MissionsWeeklyData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,18 @@ public class ModPlayerEventCopyFrom implements ServerPlayerEvents.CopyFrom {
 
         // Save Money when dying
         saveMoney(player, original, oldPlayer);
+        // Save Missions when dying
+        saveMissions(player, original);
 
+    }
+
+    private void saveMissions(IEntityDataSaver player, IEntityDataSaver original) {
+        MissionsData.setDailyMission1(player, MissionsData.getDailyMission1(original));
+        MissionsData.setDailyMission2(player, MissionsData.getDailyMission2(original));
+        MissionsData.setDailyMission3(player, MissionsData.getDailyMission3(original));
+        MissionsWeeklyData.setWeeklyMission1(player, MissionsWeeklyData.getWeeklyMission1(original));
+        MissionsWeeklyData.setWeeklyMission2(player, MissionsWeeklyData.getWeeklyMission2(original));
+        MissionsWeeklyData.setWeeklyMission3(player, MissionsWeeklyData.getWeeklyMission3(original));
     }
 
     private void saveMoney(IEntityDataSaver player, IEntityDataSaver original, PlayerEntity oldPlayer) {
