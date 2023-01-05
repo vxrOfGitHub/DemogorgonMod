@@ -14,7 +14,8 @@ import net.vxr.vxrofmods.util.IEntityDataSaver;
 public class EntityUnloadEvent implements ServerEntityEvents.Unload{
     @Override
     public void onUnload(Entity entity, ServerWorld world) {
-        if(entity instanceof EnderDragonEntity dragon && !dragon.world.isClient()) {
+        if(entity instanceof EnderDragonEntity dragon && !dragon.world.isClient() && dragon.isDead()) {
+            System.out.println("Ender Dargon unloaded!");
             /*System.out.println("Would he drop Item: " + ((IEntityDataSaver) dragon).getPersistentData().getBoolean("vxrofmods_dragon_can_drop"));
             if(((IEntityDataSaver) dragon).getPersistentData().getBoolean("vxrofmods_dragon_can_drop")) {
                 System.out.println("-----------Dragon Droppped Item");
