@@ -15,9 +15,7 @@ public class OnStopSleepingHandler implements EntitySleepEvents.StopSleeping {
     @Override
     public void onStopSleeping(LivingEntity entity, BlockPos sleepingPos) {
         World world = entity.getWorld();
-        System.out.println("Is it Day? " + world.isDay());
         if(entity.getStatusEffects().size() > 0 && world.isDay()) {
-            System.out.println("Has Effects and its Day");
             List<StatusEffect> negativeEffects = new ArrayList<>();
             negativeEffects.add(StatusEffects.BLINDNESS);
             negativeEffects.add(StatusEffects.MINING_FATIGUE);
