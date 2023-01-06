@@ -22,7 +22,7 @@ public class LifeStealEnchantment extends Enchantment {
     @Override
     public void onTargetDamaged(LivingEntity user, Entity target, int level) {
 
-        if(!user.world.isClient()) {
+        if(!user.world.isClient() && target != null) {
 
             float damage = Objects.requireNonNull(((LivingEntity) target).getDamageTracker().getMostRecentDamage()).getDamage();
 
