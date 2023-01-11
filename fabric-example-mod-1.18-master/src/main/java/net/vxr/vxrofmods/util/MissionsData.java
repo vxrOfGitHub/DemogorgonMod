@@ -3,12 +3,9 @@ package net.vxr.vxrofmods.util;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.predicate.entity.DistancePredicate;
 import net.vxr.vxrofmods.command.MissionsCommand;
-import net.vxr.vxrofmods.event.ServerTickHandler;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static org.apache.commons.lang3.RandomUtils.nextInt;
 
@@ -26,6 +23,80 @@ public class MissionsData {
         String ticks2Time = ticks2Hour + "h " + ticks2Min + "min " + ticks2Sec + "sec";
 
         return ticks2Time;
+
+    }
+
+    public static boolean hasServerRerollTimes(IEntityDataSaver player) {
+
+        NbtCompound nbt = player.getPersistentData();
+
+        return nbt.getBoolean("has_server_reroll_times");
+
+    }
+    public static void setHasRerollTimes(IEntityDataSaver player, boolean hasServerRerollTimes) {
+
+        NbtCompound nbt = player.getPersistentData();
+
+        nbt.putBoolean("has_server_reroll_times", hasServerRerollTimes);
+
+    }
+
+    public static int getPlayerDailyRerollTimes(IEntityDataSaver player) {
+
+        NbtCompound nbt = player.getPersistentData();
+
+        return nbt.getInt("daily_player_reroll_times");
+
+    }
+    public static void setPlayerDailyRerollTimes(IEntityDataSaver player, int rerolledTimes) {
+
+        NbtCompound nbt = player.getPersistentData();
+
+        nbt.putInt("daily_player_reroll_times", rerolledTimes);
+
+    }
+
+    public static int getPlayerWeeklyRerollTimes(IEntityDataSaver player) {
+
+        NbtCompound nbt = player.getPersistentData();
+
+        return nbt.getInt("weekly_player_reroll_times");
+
+    }
+    public static void setPlayerWeeklyRerollTimes(IEntityDataSaver player, int rerolledTimes) {
+
+        NbtCompound nbt = player.getPersistentData();
+
+        nbt.putInt("weekly_player_reroll_times", rerolledTimes);
+
+    }
+    public static int getServerDailyRerollTimesFromPlayer(IEntityDataSaver player) {
+
+        NbtCompound nbt = player.getPersistentData();
+
+        return nbt.getInt("daily_reroll_times");
+
+    }
+    public static void saveServerDailyRerollTimesOnPlayer(IEntityDataSaver player, int rerolledTimes) {
+
+        NbtCompound nbt = player.getPersistentData();
+
+        nbt.putInt("daily_reroll_times", rerolledTimes);
+
+    }
+
+    public static int getServerWeeklyRerollTimesFromPlayer(IEntityDataSaver player) {
+
+        NbtCompound nbt = player.getPersistentData();
+
+        return nbt.getInt("weekly_reroll_times");
+
+    }
+    public static void saveServerWeeklyRerollTimesOnPlayer(IEntityDataSaver player, int rerolledTimes) {
+
+        NbtCompound nbt = player.getPersistentData();
+
+        nbt.putInt("weekly_reroll_times", rerolledTimes);
 
     }
 
@@ -104,11 +175,11 @@ public class MissionsData {
                     x = nextInt(0, itemStackList.size());
                 }
             }
-            System.out.println("----Item Mission");
-            System.out.println("----Random Zahl ist: " + x);
+            //System.out.println("----Item Mission");
+            //System.out.println("----Random Zahl ist: " + x);
             setDailyMissionType1(player, 0);
             setDailyMission1(player, x);
-            System.out.println("----GetMedthod1 bekommt: " + getDailyMission1(player));
+            //System.out.println("----GetMedthod1 bekommt: " + getDailyMission1(player));
         } else {
             //Mob Kill Mission
             int x = nextInt(0, entityTypeList.size());
@@ -117,11 +188,11 @@ public class MissionsData {
                     x = nextInt(0, entityTypeList.size());
                 }
             }
-            System.out.println("----Mob Kill Mission");
-            System.out.println("----Random Zahl ist: " + x);
+            //System.out.println("----Mob Kill Mission");
+            //System.out.println("----Random Zahl ist: " + x);
             setDailyMissionType1(player, 1);
             setDailyMission1(player, x);
-            System.out.println("----GetMedthod1 bekommt: " + getDailyMission1(player));
+            //System.out.println("----GetMedthod1 bekommt: " + getDailyMission1(player));
         }
         setDailyMissionProgress(player, 1, 0);
         setDailyMissionComplete(player, 1, false);
@@ -135,11 +206,11 @@ public class MissionsData {
                     x = nextInt(0, itemStackList.size());
                 }
             }
-            System.out.println("----Item Mission");
-            System.out.println("----Random Zahl ist: " + x);
+            //System.out.println("----Item Mission");
+            //System.out.println("----Random Zahl ist: " + x);
             setDailyMissionType2(player, 0);
             setDailyMission2(player, x);
-            System.out.println("----GetMedthod2 bekommt: " + getDailyMission2(player));
+            //System.out.println("----GetMedthod2 bekommt: " + getDailyMission2(player));
         } else {
             //Mob Kill Mission
             int x = nextInt(0, entityTypeList.size());
@@ -148,11 +219,11 @@ public class MissionsData {
                     x = nextInt(0, entityTypeList.size());
                 }
             }
-            System.out.println("----Mob Kill Mission");
-            System.out.println("----Random Zahl ist: " + x);
+            //System.out.println("----Mob Kill Mission");
+            //System.out.println("----Random Zahl ist: " + x);
             setDailyMissionType2(player, 1);
             setDailyMission2(player, x);
-            System.out.println("----GetMedthod2 bekommt: " + getDailyMission2(player));
+            //System.out.println("----GetMedthod2 bekommt: " + getDailyMission2(player));
         }
         setDailyMissionProgress(player, 2, 0);
         setDailyMissionComplete(player, 2, false);
@@ -166,11 +237,11 @@ public class MissionsData {
                     x = nextInt(0, itemStackList.size());
                 }
             }
-            System.out.println("----Item Mission");
-            System.out.println("----Random Zahl ist: " + x);
+            //System.out.println("----Item Mission");
+            //System.out.println("----Random Zahl ist: " + x);
             setDailyMissionType3(player, 0);
             setDailyMission3(player, x);
-            System.out.println("----GetMedthod3 bekommt: " + getDailyMission3(player));
+            //System.out.println("----GetMedthod3 bekommt: " + getDailyMission3(player));
         } else {
             //Mob Kill Mission
             int x = nextInt(0, entityTypeList.size());
@@ -179,11 +250,11 @@ public class MissionsData {
                     x = nextInt(0, entityTypeList.size());
                 }
             }
-            System.out.println("----Mob Kill Mission");
-            System.out.println("----Random Zahl ist: " + x);
+            //System.out.println("----Mob Kill Mission");
+            //System.out.println("----Random Zahl ist: " + x);
             setDailyMissionType3(player, 1);
             setDailyMission3(player, x);
-            System.out.println("----GetMedthod3 bekommt: " + getDailyMission3(player));
+            //System.out.println("----GetMedthod3 bekommt: " + getDailyMission3(player));
         }
         setDailyMissionProgress(player, 3, 0);
         setDailyMissionComplete(player, 3, false);

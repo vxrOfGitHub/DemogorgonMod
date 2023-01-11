@@ -54,11 +54,11 @@ public class MissionsWeeklyData {
                     x = nextInt(0, itemStackList.size());
                 }
             }
-            System.out.println("----Item Mission");
-            System.out.println("----Random Zahl ist: " + x);
+            /*System.out.println("----Item Mission");
+            System.out.println("----Random Zahl ist: " + x);*/
             setWeeklyMissionType1(player, 0);
             setWeeklyMission1(player, x);
-            System.out.println("----GetMedthod1 bekommt: " + getWeeklyMission1(player));
+            //System.out.println("----GetMedthod1 bekommt: " + getWeeklyMission1(player));
         } else {
             //Mob Kill Mission
             int x = nextInt(0, entityTypeList.size());
@@ -67,11 +67,11 @@ public class MissionsWeeklyData {
                     x = nextInt(0, entityTypeList.size());
                 }
             }
-            System.out.println("----Mob Kill Mission");
-            System.out.println("----Random Zahl ist: " + x);
+            //System.out.println("----Mob Kill Mission");
+            //System.out.println("----Random Zahl ist: " + x);
             setWeeklyMissionType1(player, 1);
             setWeeklyMission1(player, x);
-            System.out.println("----GetMedthod1 bekommt: " + getWeeklyMission1(player));
+            //System.out.println("----GetMedthod1 bekommt: " + getWeeklyMission1(player));
         }
         setWeeklyMissionProgress(player, 1, 0);
         setWeeklyMissionComplete(player, 1, false);
@@ -85,11 +85,11 @@ public class MissionsWeeklyData {
                     x = nextInt(0, itemStackList.size());
                 }
             }
-            System.out.println("----Item Mission");
-            System.out.println("----Random Zahl ist: " + x);
+            //System.out.println("----Item Mission");
+            //System.out.println("----Random Zahl ist: " + x);
             setWeeklyMissionType2(player, 0);
             setWeeklyMission2(player, x);
-            System.out.println("----GetMedthod2 bekommt: " + getWeeklyMission2(player));
+            //System.out.println("----GetMedthod2 bekommt: " + getWeeklyMission2(player));
         } else {
             //Mob Kill Mission
             int x = nextInt(0, entityTypeList.size());
@@ -98,11 +98,11 @@ public class MissionsWeeklyData {
                     x = nextInt(0, entityTypeList.size());
                 }
             }
-            System.out.println("----Mob Kill Mission");
-            System.out.println("----Random Zahl ist: " + x);
+            //System.out.println("----Mob Kill Mission");
+            //System.out.println("----Random Zahl ist: " + x);
             setWeeklyMissionType2(player, 1);
             setWeeklyMission2(player, x);
-            System.out.println("----GetMedthod2 bekommt: " + getWeeklyMission2(player));
+            //System.out.println("----GetMedthod2 bekommt: " + getWeeklyMission2(player));
         }
         setWeeklyMissionProgress(player, 2, 0);
         setWeeklyMissionComplete(player, 2, false);
@@ -116,11 +116,11 @@ public class MissionsWeeklyData {
                     x = nextInt(0, itemStackList.size());
                 }
             }
-            System.out.println("----Item Mission");
-            System.out.println("----Random Zahl ist: " + x);
+            //System.out.println("----Item Mission");
+            //System.out.println("----Random Zahl ist: " + x);
             setWeeklyMissionType3(player, 0);
             setWeeklyMission3(player, x);
-            System.out.println("----GetMedthod3 bekommt: " + getWeeklyMission3(player));
+            //System.out.println("----GetMedthod3 bekommt: " + getWeeklyMission3(player));
         } else {
             //Mob Kill Mission
             int x = nextInt(0, entityTypeList.size());
@@ -129,11 +129,11 @@ public class MissionsWeeklyData {
                     x = nextInt(0, entityTypeList.size());
                 }
             }
-            System.out.println("----Mob Kill Mission");
-            System.out.println("----Random Zahl ist: " + x);
+            //System.out.println("----Mob Kill Mission");
+            //System.out.println("----Random Zahl ist: " + x);
             setWeeklyMissionType3(player, 1);
             setWeeklyMission3(player, x);
-            System.out.println("----GetMedthod3 bekommt: " + getWeeklyMission3(player));
+            //System.out.println("----GetMedthod3 bekommt: " + getWeeklyMission3(player));
         }
         setWeeklyMissionProgress(player, 3, 0);
         setWeeklyMissionComplete(player, 3, false);

@@ -5,9 +5,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -18,6 +16,7 @@ import net.vxr.vxrofmods.item.ModItems;
 import net.vxr.vxrofmods.networking.ModMessages;
 import net.vxr.vxrofmods.util.*;
 
+import static net.vxr.vxrofmods.event.ServerTickHandler.*;
 import static org.apache.commons.lang3.RandomUtils.nextFloat;
 
 public class PlayerTickHandler implements ServerTickEvents.StartTick{
@@ -28,6 +27,35 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
             DreamBoostTick(player);
             DreamJetpackTick(player);
             DreamHelmetTick(player);
+            rerollMissionsIfNeeded(player);
+        }
+    }
+
+    private void rerollMissionsIfNeeded(ServerPlayerEntity player) {
+        IEntityDataSaver playerSaver = ((IEntityDataSaver) player);
+        if(MissionsData.hasServerRerollTimes(playerSaver) && serverRestarted) {
+            totalDailyRerolls = MissionsData.getServerDailyRerollTimesFromPlayer(playerSaver);
+            totalWeeklyRerolls = MissionsData.getServerWeeklyRerollTimesFromPlayer(playerSaver);
+            MissionsData.setHasRerollTimes(playerSaver, false);
+            serverRestarted = false;
+            System.out.println("Uploaded Mission Reroll Times from " + player.getName().getString() + "!");
+        } else {
+            if(MissionsData.getPlayerDailyRerollTimes(playerSaver) != totalDailyRerolls ||
+            MissionsData.getDailyMission1(playerSaver) == MissionsData.getDailyMission2(playerSaver)) {
+                MissionsData.setPlayerDailyRerollTimes(playerSaver, totalDailyRerolls);
+                MissionsData.setRandomDailyMission1((playerSaver), itemsForDailyMission, mobsForDailyMission);
+                MissionsData.setRandomDailyMission2((playerSaver), itemsForDailyMission, mobsForDailyMission);
+                MissionsData.setRandomDailyMission3((playerSaver), itemsForDailyMission, mobsForDailyMission);
+                System.out.println("Rerolled Daily Missions" + player.getName().getString() + "!");
+            }
+            if(MissionsData.getPlayerWeeklyRerollTimes(playerSaver) != totalWeeklyRerolls ||
+            MissionsWeeklyData.getWeeklyMission1(playerSaver) == MissionsWeeklyData.getWeeklyMission2(playerSaver)) {
+                MissionsData.setPlayerWeeklyRerollTimes(playerSaver, totalWeeklyRerolls);
+                MissionsWeeklyData.setRandomWeeklyMission1((playerSaver), itemsForWeeklyMission, mobsForWeeklyMission);
+                MissionsWeeklyData.setRandomWeeklyMission2((playerSaver), itemsForWeeklyMission, mobsForWeeklyMission);
+                MissionsWeeklyData.setRandomWeeklyMission3((playerSaver), itemsForWeeklyMission, mobsForWeeklyMission);
+                System.out.println("Rerolled Weekly Missions" + player.getName().getString() + "!");
+            }
         }
     }
 

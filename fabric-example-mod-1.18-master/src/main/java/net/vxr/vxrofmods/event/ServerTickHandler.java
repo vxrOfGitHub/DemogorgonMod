@@ -42,46 +42,41 @@ public class ServerTickHandler implements ServerTickEvents.StartTick{
         MissionsData.setDailyMissionTime(((IEntityDataSaver) player), DailyMissionCountdown);
     }
 
-    private void PlayerSetDailyMission1(MinecraftServer server) {
-        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-            MissionsData.setRandomDailyMission1(((IEntityDataSaver) player), itemsForDailyMission, mobsForDailyMission);
-        }
+    private void PlayerSetDailyMission1(ServerPlayerEntity player) {
+        MissionsData.setRandomDailyMission1((((IEntityDataSaver) player)), itemsForDailyMission, mobsForDailyMission);
     }
-    private void PlayerSetDailyMission2(MinecraftServer server) {
-        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-            MissionsData.setRandomDailyMission2(((IEntityDataSaver) player), itemsForDailyMission, mobsForDailyMission);
-        }
+    private void PlayerSetDailyMission2(ServerPlayerEntity player) {
+        MissionsData.setRandomDailyMission2(((IEntityDataSaver) player), itemsForDailyMission, mobsForDailyMission);
     }
-    private void PlayerSetDailyMission3(MinecraftServer server) {
-        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-            MissionsData.setRandomDailyMission3(((IEntityDataSaver) player), itemsForDailyMission, mobsForDailyMission);
-        }
+    private void PlayerSetDailyMission3 (ServerPlayerEntity player) {
+        MissionsData.setRandomDailyMission3(((IEntityDataSaver) player), itemsForDailyMission, mobsForDailyMission);
     }
-    private void PlayerSetWeeklyMission1(MinecraftServer server) {
-        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-            MissionsWeeklyData.setRandomWeeklyMission1(((IEntityDataSaver) player), itemsForWeeklyMission, mobsForWeeklyMission);
-        }
+    private void PlayerSetWeeklyMission1(IEntityDataSaver player) {
+        MissionsWeeklyData.setRandomWeeklyMission1((player), itemsForWeeklyMission, mobsForWeeklyMission);
     }
-    private void PlayerSetWeeklyMission2(MinecraftServer server) {
-        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-            MissionsWeeklyData.setRandomWeeklyMission2(((IEntityDataSaver) player), itemsForWeeklyMission, mobsForWeeklyMission);
-        }
+    private void PlayerSetWeeklyMission2 (IEntityDataSaver player) {
+        MissionsWeeklyData.setRandomWeeklyMission2((player), itemsForWeeklyMission, mobsForWeeklyMission);
     }
-    private void PlayerSetWeeklyMission3(MinecraftServer server) {
-        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-            MissionsWeeklyData.setRandomWeeklyMission3(((IEntityDataSaver) player), itemsForWeeklyMission, mobsForWeeklyMission);
-        }
+    private void PlayerSetWeeklyMission3(IEntityDataSaver player) {
+        MissionsWeeklyData.setRandomWeeklyMission3((player), itemsForWeeklyMission, mobsForWeeklyMission);
     }
 
+    public static int totalDailyRerolls = 0;
+    public static int totalWeeklyRerolls = 0;
 
     private void DailyMissionsTime(MinecraftServer server){
         if(DailyMissionCountdown > 0) {
             DailyMissionCountdown--;
         } else {
-            PlayerSetDailyMission1(server);
-            PlayerSetDailyMission2(server);
-            PlayerSetDailyMission3(server);
-            DailyMissionCountdown = MaxDailyMissionCountdown;
+            totalDailyRerolls++;
+            for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+                IEntityDataSaver playerSaver = ((IEntityDataSaver) player);
+                PlayerSetDailyMission1(player);
+                PlayerSetDailyMission2(player);
+                PlayerSetDailyMission3(player);
+                DailyMissionCountdown = MaxDailyMissionCountdown;
+                MissionsData.setPlayerDailyRerollTimes(playerSaver, totalDailyRerolls);
+            }
         }
     }
 
@@ -93,10 +88,15 @@ public class ServerTickHandler implements ServerTickEvents.StartTick{
         if(WeeklyMissionCountdown > 0) {
             WeeklyMissionCountdown--;
         } else {
-            PlayerSetWeeklyMission1(server);
-            PlayerSetWeeklyMission2(server);
-            PlayerSetWeeklyMission3(server);
-            WeeklyMissionCountdown = MaxWeeklyMissionCountdown;
+            totalWeeklyRerolls++;
+            for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+                IEntityDataSaver playerSaver = ((IEntityDataSaver) player);
+                PlayerSetWeeklyMission1(playerSaver);
+                PlayerSetWeeklyMission2(playerSaver);
+                PlayerSetWeeklyMission3(playerSaver);
+                WeeklyMissionCountdown = MaxWeeklyMissionCountdown;
+                MissionsData.setPlayerWeeklyRerollTimes((playerSaver), totalWeeklyRerolls);
+            }
         }
     }
 
@@ -345,4 +345,5 @@ public class ServerTickHandler implements ServerTickEvents.StartTick{
 
     public static List<Integer> amountOfMobToKillForWeeklyMission = new ArrayList<>();
 
+    public static boolean serverRestarted = true;
 }

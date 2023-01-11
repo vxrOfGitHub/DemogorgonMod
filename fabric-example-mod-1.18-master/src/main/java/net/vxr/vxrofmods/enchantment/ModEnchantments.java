@@ -12,7 +12,8 @@ public class ModEnchantments {
 
     /*public static Enchantment LIFESTEAL = register("lifesteal",
             new LifeStealEnchantment(Enchantment.Rarity.VERY_RARE,
-                    EnchantmentTarget.WEAPON, EquipmentSlot.MAINHAND)); */
+                    EnchantmentTarget.WEAPON, EquipmentSlot.MAINHAND));*/
+
 
     public static Enchantment ICE_ASPECT = register("ice_aspect",
             new IceAspectEnchantment(Enchantment.Rarity.UNCOMMON,

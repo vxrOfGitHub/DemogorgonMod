@@ -24,8 +24,7 @@ import net.vxr.vxrofmods.util.MissionsWeeklyData;
 import java.util.Collection;
 import java.util.Objects;
 
-import static net.vxr.vxrofmods.event.ServerTickHandler.DailyMissionCountdown;
-import static net.vxr.vxrofmods.event.ServerTickHandler.WeeklyMissionCountdown;
+import static net.vxr.vxrofmods.event.ServerTickHandler.*;
 
 public class MissionsCommand {
 
@@ -145,11 +144,64 @@ public class MissionsCommand {
                                                                 .executes(context -> runSetBothMissionsTime(context, IntegerArgumentType.getInteger(context, "days"),
                                                                         IntegerArgumentType.getInteger(context, "hours"),
                                                                         IntegerArgumentType.getInteger(context, "minutes"),
-                                                                        IntegerArgumentType.getInteger(context, "seconds"))))))))));
+                                                                        IntegerArgumentType.getInteger(context, "seconds")))))))))
+                .then(CommandManager.literal("saveRerollTimes").requires(source -> source.hasPermissionLevel(2))
+                        .executes(MissionsCommand::runSaveMissionsRerollTimes))
+                .then(CommandManager.literal("uploadRerollTimes").requires(source -> source.hasPermissionLevel(2))
+                        .then(CommandManager.argument("newDailyRerolledTimes", IntegerArgumentType.integer())
+                        .then(CommandManager.argument("newWeeklyRerolledTimes", IntegerArgumentType.integer())
+                        .executes(context -> runUploadMissionsRerollTimes(context, IntegerArgumentType.getInteger(context, "newDailyRerolledTimes"),
+                                IntegerArgumentType.getInteger(context ,"newWeeklyRerolledTimes"))))))
+                .then(CommandManager.literal("getRerolledTimes").requires(source -> source.hasPermissionLevel(2))
+                        .executes(MissionsCommand::runOutputRerolledTimes)));
 
 
 
 
+    }
+
+    private static int runOutputRerolledTimes(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        context.getSource().sendFeedback(Text.literal("Daily Rerolled Times:"), false);
+        context.getSource().sendFeedback(Text.literal(ServerTickHandler.totalDailyRerolls + ""), false);
+        context.getSource().sendFeedback(Text.literal("Weekly Rerolled Times:"), false);
+        context.getSource().sendFeedback(Text.literal(ServerTickHandler.totalWeeklyRerolls + ""), false);
+        return 1;
+    }
+
+    private static int runUploadMissionsRerollTimes(CommandContext<ServerCommandSource> context, int newDailyRerolledTimes, int newWeeklyRerolledTimes) throws CommandSyntaxException {
+
+        if(context.getSource().isExecutedByPlayer()) {
+            PlayerEntity player = context.getSource().getPlayer();
+            IEntityDataSaver playerSaver = ((IEntityDataSaver) player);
+
+            assert playerSaver != null;
+            ServerTickHandler.totalDailyRerolls = newDailyRerolledTimes;
+            ServerTickHandler.totalWeeklyRerolls = newWeeklyRerolledTimes;
+        }
+
+        return 1;
+
+    }
+
+    private static int runSaveMissionsRerollTimes(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        if(context.getSource().isExecutedByPlayer()) {
+            PlayerEntity player = context.getSource().getPlayer();
+            IEntityDataSaver playerSaver = ((IEntityDataSaver) player);
+
+            assert playerSaver != null;
+            serverRestarted = false;
+            MissionsData.saveServerDailyRerollTimesOnPlayer(playerSaver, ServerTickHandler.totalDailyRerolls);
+            MissionsData.saveServerWeeklyRerollTimesOnPlayer(playerSaver, ServerTickHandler.totalWeeklyRerolls);
+            MissionsData.setHasRerollTimes(playerSaver, true);
+
+            context.getSource().sendFeedback(Text.literal( MissionsData.hasServerRerollTimes(playerSaver) + " Saved Missions Rerolled Times on this Player: " + player.getName().getString()), true);
+
+        }
+        else {
+            context.getSource().sendFeedback(Text.literal("Couldn't save Missions Rerolled Times!"), true);
+        }
+
+        return 1;
     }
 
     public static final int rewardAmountDailyMission = 100;

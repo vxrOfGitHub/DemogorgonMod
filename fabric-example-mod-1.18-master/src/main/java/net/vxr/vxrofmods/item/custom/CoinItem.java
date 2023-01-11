@@ -38,22 +38,22 @@ public class CoinItem extends Item {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemstack = user.getStackInHand(hand);
 
-        if(itemstack.hasNbt()) {
+        if(itemstack.hasNbt() && !world.isClient()) {
             int coinValue = itemstack.getNbt().getInt("vxrofmods.coin_value");
             CustomMoneyData.addOrSubtractMoney(((IEntityDataSaver) user), coinValue);
             itemstack.decrement(1);
-            if(i == 1) {
+            user.sendMessage(Text.literal("You deposited §6§l" + coinValue + " Coins §r§r"), false);
+            user.sendMessage(Text.literal("You now have " + "§6§l" + CustomMoneyData.getMoney(((IEntityDataSaver) user)) + " Coins" + "§r§r"), false);
+            /*if(i == 1) {
                 user.sendMessage(Text.literal("You deposited §6§l" + coinValue + " Coins §r§r"), false);
-                user.sendMessage(
+                /*user.sendMessage(
                         Text.literal("You now have " + "§6§l" + CustomMoneyData.getMoney(((IEntityDataSaver) user)) + " Coins" + "§r§r"), false);
                 i = 0;
             } else {
                 i++;
-            }
+            } */
         }
         return super.use(world, user, hand);
     }
-
-    private int i;
 
 }
