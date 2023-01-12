@@ -38,6 +38,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.List;
+import java.util.Objects;
 
 public class JoshSumpfmausAvatarEntity extends TameableEntity implements IAnimatable {
 
@@ -183,37 +184,41 @@ public class JoshSumpfmausAvatarEntity extends TameableEntity implements IAnimat
         }
 
         if(isTamed() && !this.world.isClient() && hand == Hand.MAIN_HAND) {
-            if(hasDanceAnimation) {
-                if(isSitting() && !isDancing()) {
-                    setDancing(true);
-                } else if (isDancing()) {
-                    setSit(false);
-                    setDancing(false);
-                } else if (!isSitting()) {
-                    setSit(true);
+            if(Objects.equals(this.getOwnerUuid(), player.getUuid())) {
+                if(hasDanceAnimation) {
+                    if(isSitting() && !isDancing()) {
+                        setDancing(true);
+                    } else if (isDancing()) {
+                        setSit(false);
+                        setDancing(false);
+                    } else if (!isSitting()) {
+                        setSit(true);
+                    }
+                    return ActionResult.SUCCESS;
+                } else {
+                    setSit(!this.isSitting());
                 }
-                return ActionResult.SUCCESS;
-            } else {
-                setSit(!this.isSitting());
             }
         }
 
 
 
         if (isTamed() && !this.world.isClient() && player.isInSneakingPose()) {
-            if(this.getCustomName() != null){
-                System.out.println("----------- Penguin Name = " + this.getName().getString() + "------------");
-                armorItemStack = this.addNbtToHelmet(player, this.getName().getString(), armorItemStack);
-            } else {
-                System.out.println("-------- Hatte keinen Namen!!! -------------");
-            }
-            player.giveItemStack(armorItemStack);
-            this.discard();
-            return ActionResult.SUCCESS;
-        }
+            if (Objects.equals(this.getOwnerUuid(), player.getUuid())) {
+                if (this.getCustomName() != null) {
 
-        if (itemstack.getItem() == TamingItem) {
-            return ActionResult.PASS;
+                    armorItemStack = this.addNbtToHelmet(player, this.getName().getString(), armorItemStack);
+                } else {
+
+                }
+                player.giveItemStack(armorItemStack);
+                this.discard();
+                return ActionResult.SUCCESS;
+            }
+
+            if (itemstack.getItem() == TamingItem) {
+                return ActionResult.PASS;
+            }
         }
 
         return super.interactMob(player, hand);
