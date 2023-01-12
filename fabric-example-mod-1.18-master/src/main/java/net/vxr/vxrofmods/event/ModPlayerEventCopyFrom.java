@@ -37,10 +37,22 @@ public class ModPlayerEventCopyFrom implements ServerPlayerEvents.CopyFrom {
         MissionsData.setDailyMission1(player, MissionsData.getDailyMission1(original));
         MissionsData.setDailyMission2(player, MissionsData.getDailyMission2(original));
         MissionsData.setDailyMission3(player, MissionsData.getDailyMission3(original));
+        MissionsData.setDailyMissionProgress(player, 1, MissionsData.getDailyMissionProgress(player, 1));
+        MissionsData.setDailyMissionProgress(player, 2, MissionsData.getDailyMissionProgress(player, 2));
+        MissionsData.setDailyMissionProgress(player, 3, MissionsData.getDailyMissionProgress(player, 3));
+        MissionsData.setDailyMissionComplete(player, 1, MissionsData.getDailyMissionComplete(player, 1));
+        MissionsData.setDailyMissionComplete(player, 2, MissionsData.getDailyMissionComplete(player, 2));
+        MissionsData.setDailyMissionComplete(player, 3, MissionsData.getDailyMissionComplete(player, 3));
         MissionsData.setPlayerDailyRerollTimes(player, MissionsData.getPlayerDailyRerollTimes(original));
         MissionsWeeklyData.setWeeklyMission1(player, MissionsWeeklyData.getWeeklyMission1(original));
         MissionsWeeklyData.setWeeklyMission2(player, MissionsWeeklyData.getWeeklyMission2(original));
         MissionsWeeklyData.setWeeklyMission3(player, MissionsWeeklyData.getWeeklyMission3(original));
+        MissionsWeeklyData.setWeeklyMissionProgress(player, 1, MissionsWeeklyData.getWeeklyMissionProgress(player, 1));
+        MissionsWeeklyData.setWeeklyMissionProgress(player, 2, MissionsWeeklyData.getWeeklyMissionProgress(player, 2));
+        MissionsWeeklyData.setWeeklyMissionProgress(player, 3, MissionsWeeklyData.getWeeklyMissionProgress(player, 3));
+        MissionsWeeklyData.setWeeklyMissionComplete(player,1, MissionsWeeklyData.getWeeklyMissionComplete(player, 1));
+        MissionsWeeklyData.setWeeklyMissionComplete(player,2, MissionsWeeklyData.getWeeklyMissionComplete(player, 2));
+        MissionsWeeklyData.setWeeklyMissionComplete(player,3, MissionsWeeklyData.getWeeklyMissionComplete(player, 3));
         MissionsData.setPlayerWeeklyRerollTimes(player, MissionsData.getPlayerWeeklyRerollTimes(original));
     }
 
