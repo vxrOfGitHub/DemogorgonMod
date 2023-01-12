@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.vxr.vxrofmods.item.ModItems;
+import net.vxr.vxrofmods.util.CustomMoneyData;
 import net.vxr.vxrofmods.util.IEntityDataSaver;
 import net.vxr.vxrofmods.util.MissionsData;
 import net.vxr.vxrofmods.util.MissionsWeeklyData;
@@ -25,35 +26,43 @@ public class ModPlayerEventCopyFrom implements ServerPlayerEvents.CopyFrom {
         IEntityDataSaver player = ((IEntityDataSaver) newPlayer);
 
         // Save Money when dying
-        saveMoney(player, original, oldPlayer);
+        saveMoney(player, original, oldPlayer, alive);
         // Save Missions when dying
         saveMissions(player, original);
 
     }
 
     private void saveMissions(IEntityDataSaver player, IEntityDataSaver original) {
+        System.out.println("SavedMissions!");
         MissionsData.setDailyMission1(player, MissionsData.getDailyMission1(original));
         MissionsData.setDailyMission2(player, MissionsData.getDailyMission2(original));
         MissionsData.setDailyMission3(player, MissionsData.getDailyMission3(original));
+        MissionsData.setPlayerDailyRerollTimes(player, MissionsData.getPlayerDailyRerollTimes(original));
         MissionsWeeklyData.setWeeklyMission1(player, MissionsWeeklyData.getWeeklyMission1(original));
         MissionsWeeklyData.setWeeklyMission2(player, MissionsWeeklyData.getWeeklyMission2(original));
         MissionsWeeklyData.setWeeklyMission3(player, MissionsWeeklyData.getWeeklyMission3(original));
+        MissionsData.setPlayerWeeklyRerollTimes(player, MissionsData.getPlayerWeeklyRerollTimes(original));
     }
 
-    private void saveMoney(IEntityDataSaver player, IEntityDataSaver original, PlayerEntity oldPlayer) {
+    private void saveMoney(IEntityDataSaver player, IEntityDataSaver original, PlayerEntity oldPlayer, boolean alive) {
 
         int originalMoneyAmount = original.getPersistentData().getInt("current_money");
-        int looseAmount = originalMoneyAmount / 10;
-        int newMoneyAmount = originalMoneyAmount - looseAmount;
-        int amountToDrop = looseAmount / 2;
 
-        player.getPersistentData().putInt("current_money", newMoneyAmount);
+        if(alive) {
+            CustomMoneyData.setMoney(player, CustomMoneyData.getMoney(original));
+        } else {
+            int looseAmount = originalMoneyAmount / 10;
+            int newMoneyAmount = originalMoneyAmount - looseAmount;
+            int amountToDrop = looseAmount / 2;
 
-        ItemStack moneyToDrop = new ItemStack(ModItems.COIN);
-        NbtCompound nbtCompound = new NbtCompound();
-        nbtCompound.putInt("vxrofmods.coin_value", amountToDrop);
-        moneyToDrop.setNbt(nbtCompound);
+            CustomMoneyData.setMoney(player, newMoneyAmount);
 
-        oldPlayer.dropStack(moneyToDrop);
+            ItemStack moneyToDrop = new ItemStack(ModItems.COIN);
+            NbtCompound nbtCompound = new NbtCompound();
+            nbtCompound.putInt("vxrofmods.coin_value", amountToDrop);
+            moneyToDrop.setNbt(nbtCompound);
+
+            oldPlayer.dropStack(moneyToDrop);
+        }
     }
 }
