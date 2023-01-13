@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.vxr.vxrofmods.command.MissionsCommand;
 import net.vxr.vxrofmods.item.ModItems;
 import net.vxr.vxrofmods.util.CustomMoneyData;
 import net.vxr.vxrofmods.util.IEntityDataSaver;
@@ -37,12 +38,13 @@ public class ModPlayerEventCopyFrom implements ServerPlayerEvents.CopyFrom {
         MissionsData.setDailyMission1(player, MissionsData.getDailyMission1(original));
         MissionsData.setDailyMission2(player, MissionsData.getDailyMission2(original));
         MissionsData.setDailyMission3(player, MissionsData.getDailyMission3(original));
-        MissionsData.setDailyMissionProgress(player, 1, MissionsData.getDailyMissionProgress(player, 1));
-        MissionsData.setDailyMissionProgress(player, 2, MissionsData.getDailyMissionProgress(player, 2));
-        MissionsData.setDailyMissionProgress(player, 3, MissionsData.getDailyMissionProgress(player, 3));
-        MissionsData.setDailyMissionComplete(player, 1, MissionsData.getDailyMissionComplete(player, 1));
-        MissionsData.setDailyMissionComplete(player, 2, MissionsData.getDailyMissionComplete(player, 2));
-        MissionsData.setDailyMissionComplete(player, 3, MissionsData.getDailyMissionComplete(player, 3));
+        for(int i = 1; i <=3; i++) {
+            NbtCompound nbt = player.getPersistentData();
+            nbt.putBoolean("daily_mission_" + i + "_complete", MissionsData.getDailyMissionComplete(original, i));
+            nbt.putBoolean("weekly_mission_" + i + "_complete", MissionsWeeklyData.getWeeklyMissionComplete(original, i));
+            nbt.putInt("daily_mission_" + i + "_progress", MissionsData.getDailyMissionProgress(original, i));
+            nbt.putInt("weekly_mission_" + i + "_progress", MissionsWeeklyData.getWeeklyMissionProgress(player, i));
+        }
         MissionsData.setPlayerDailyRerollTimes(player, MissionsData.getPlayerDailyRerollTimes(original));
         MissionsWeeklyData.setWeeklyMission1(player, MissionsWeeklyData.getWeeklyMission1(original));
         MissionsWeeklyData.setWeeklyMission2(player, MissionsWeeklyData.getWeeklyMission2(original));

@@ -16,7 +16,7 @@ public class ModItems {
             new Item(new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
 
     public static final Item Dream_Star = registerItem("dream_star",
-            new Item(new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
+            new Item(new FabricItemSettings().fireproof().group(ModItemGroup.Custom_Mods)));
 
     public static final Item COIN = registerItem("coin",
             new CoinItem(new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
@@ -25,7 +25,7 @@ public class ModItems {
             new SpawnChangerItem(new FabricItemSettings().maxCount(1).group(ModItemGroup.Custom_Mods)));
 
     public static final Item DREAM_SHARD = registerItem("dream_shard",
-            new Item(new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
+            new Item(new FabricItemSettings().fireproof().group(ModItemGroup.Custom_Mods)));
 
     public static final Item WARDENS_HEARING_AID = registerItem("wardens_hearing_aid",
             new Item(new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
@@ -39,31 +39,31 @@ public class ModItems {
 
     public static final Item Dream_Sword = registerItem("dream_sword",
             new DreamSword(ModToolMaterials.DREAM, 2, -2.0f,
-                    new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
+                    new FabricItemSettings().fireproof().group(ModItemGroup.Custom_Mods)));
 
     public static final Item Dream_Axe = registerItem("dream_axe",
         new DreamAxeItem(ModToolMaterials.DREAM, 4, -2.6f,
-                new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
+                new FabricItemSettings().fireproof().group(ModItemGroup.Custom_Mods)));
 
     public static final Item Dream_Pickaxe = registerItem("dream_pickaxe",
             new DreamPickAxeItem(ModToolMaterials.DREAM, 0, -2.4f,
-                    new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
+                    new FabricItemSettings().fireproof().group(ModItemGroup.Custom_Mods)));
 
     public static final Item Dream_Helmet = registerItem("dream_helmet",
             new ModHelmetItem(ModArmorMaterials.Dream, EquipmentSlot.HEAD,
-                    new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
+                    new FabricItemSettings().fireproof().group(ModItemGroup.Custom_Mods)));
 
     public static final Item Dream_Chestplate = registerItem("dream_chestplate",
             new ModChestplateItem(ModArmorMaterials.Dream, EquipmentSlot.CHEST,
-                    new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
+                    new FabricItemSettings().fireproof().group(ModItemGroup.Custom_Mods)));
 
     public static final Item Dream_Leggings = registerItem("dream_leggings",
             new ModLeggingsItem(ModArmorMaterials.Dream, EquipmentSlot.LEGS,
-                    new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
+                    new FabricItemSettings().fireproof().group(ModItemGroup.Custom_Mods)));
 
     public static final Item Dream_Boots = registerItem("dream_boots",
             new DreamBootsItem(ModArmorMaterials.Dream, EquipmentSlot.FEET,
-                    new FabricItemSettings().group(ModItemGroup.Custom_Mods)));
+                    new FabricItemSettings().fireproof().group(ModItemGroup.Custom_Mods)));
 
     public static final Item DEMOGORGON_SPAWN_EGG = registerItem("demogorgon_spawn_egg",
             new SpawnEggItem(ModEntities.DEMOGORGON,0x707070, 0x755b5b,

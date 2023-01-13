@@ -28,12 +28,14 @@ public class ModBlocks {
 
     public static final Block DREAM_BLOCK =  registerBlock("dream_block",
             new DreamBlock(FabricBlockSettings.of(Material.METAL).strength(6f).requiresTool()
-                    .luminance((state) -> state.get(DreamBlock.CLICKED) ? 15:0)), ModItemGroup.Custom_Mods);
+                    .luminance((state) -> state.get(DreamBlock.CLICKED) ? 15:0)), ModItemGroup.Custom_Mods
+            , new FabricItemSettings().fireproof());
 
     public static final Block DREAM_ORE =  registerBlock("dream_ore",
             new OreBlock(FabricBlockSettings.of(Material.METAL).strength(30.0F, 1200.0F).sounds(BlockSoundGroup.STONE).requiresTool()
             , UniformIntProvider.create(3, 7))
-            , ModItemGroup.Custom_Mods);
+            , ModItemGroup.Custom_Mods
+            , new FabricItemSettings().fireproof());
 
     public static final Block FRAGMENT_HOLDER =  registerBlock("fragment_holder",
             new FragmentHolderBlock(FabricBlockSettings.of(Material.METAL).nonOpaque().strength(12f)), ModItemGroup.Custom_Mods);
@@ -48,6 +50,8 @@ public class ModBlocks {
 
     private static Item registerBlockItem(String name, Block block, ItemGroup group, String tooltipKey) {
         return Registry.register(Registry.ITEM, new Identifier(WW2Mod.MOD_ID, name),
+
+
                 new BlockItem(block, new FabricItemSettings().group(group)) {
                     @Override
                     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
@@ -59,8 +63,25 @@ public class ModBlocks {
         registerBlockItem(name, block, group);
         return Registry.register(Registry.BLOCK, new Identifier(WW2Mod.MOD_ID, name), block);
     }
+    private static Block registerBlock(String name, Block block, ItemGroup group, FabricItemSettings settings) {
+        registerBlockItem(name, block, group, settings);
+        return Registry.register(Registry.BLOCK, new Identifier(WW2Mod.MOD_ID, name), block);
+    }
+
+    private static Item registerBlockItem(String name, Block block, ItemGroup group, FabricItemSettings settings) {
+        /*if(block.equals(ModBlocks.DREAM_BLOCK) || block.equals(ModBlocks.DREAM_ORE)) {
+            return Registry.register(Registry.ITEM, new Identifier(WW2Mod.MOD_ID, name),
+                    new BlockItem(block, new FabricItemSettings().fireproof().group(group)));
+        }*/
+        return Registry.register(Registry.ITEM, new Identifier(WW2Mod.MOD_ID, name),
+                new BlockItem(block, settings.group(group)));
+    }
 
     private static Item registerBlockItem(String name, Block block, ItemGroup group) {
+        /*if(block.equals(ModBlocks.DREAM_BLOCK) || block.equals(ModBlocks.DREAM_ORE)) {
+            return Registry.register(Registry.ITEM, new Identifier(WW2Mod.MOD_ID, name),
+                    new BlockItem(block, new FabricItemSettings().fireproof().group(group)));
+        }*/
         return Registry.register(Registry.ITEM, new Identifier(WW2Mod.MOD_ID, name),
                 new BlockItem(block, new FabricItemSettings().group(group)));
     }
