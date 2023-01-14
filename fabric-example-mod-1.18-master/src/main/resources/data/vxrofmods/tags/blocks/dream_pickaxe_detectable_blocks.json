@@ -15,6 +15,13 @@
     "minecraft:tuff",
     "minecraft:polished_basalt",
     "minecraft:basalt",
-    "minecraft:blackstone"
+    "minecraft:blackstone",
+    "minecraft:red_terracotta",
+    "minecraft:orange_terracotta",
+    "minecraft:yellow_terracotta",
+    "minecraft:brown_terracotta",
+    "minecraft:light_gray_terracotta",
+    "minecraft:terracotta",
+    "minecraft:white_terracotta"
   ]
 }
