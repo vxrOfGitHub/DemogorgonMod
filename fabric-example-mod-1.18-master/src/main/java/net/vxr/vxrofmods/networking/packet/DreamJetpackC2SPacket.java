@@ -22,6 +22,9 @@ public class DreamJetpackC2SPacket {
             DreamJetpackData.switchJetpackOnOff(((IEntityDataSaver) player));
             ItemStack chestplateStack = player.getInventory().getArmorStack(2);
             NbtCompound nbt = new NbtCompound();
+            if(chestplateStack.hasNbt()) {
+                nbt = chestplateStack.getNbt();
+            }
             nbt.putBoolean("dream_jetpack_on", DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player)));
             DreamJetpackData.setHadJetpackOn(((IEntityDataSaver) player), DreamJetpackData.getJetpackOnOff(((IEntityDataSaver) player)));
 
