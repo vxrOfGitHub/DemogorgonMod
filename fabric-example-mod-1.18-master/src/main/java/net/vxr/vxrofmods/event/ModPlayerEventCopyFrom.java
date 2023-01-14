@@ -35,9 +35,15 @@ public class ModPlayerEventCopyFrom implements ServerPlayerEvents.CopyFrom {
 
     private void saveMissions(IEntityDataSaver player, IEntityDataSaver original) {
         System.out.println("SavedMissions!");
+        // Saving Daily Missions
         MissionsData.setDailyMission1(player, MissionsData.getDailyMission1(original));
         MissionsData.setDailyMission2(player, MissionsData.getDailyMission2(original));
         MissionsData.setDailyMission3(player, MissionsData.getDailyMission3(original));
+        // Saving Weekly Missions
+        MissionsWeeklyData.setWeeklyMission1(player, MissionsWeeklyData.getWeeklyMission1(original));
+        MissionsWeeklyData.setWeeklyMission2(player, MissionsWeeklyData.getWeeklyMission2(original));
+        MissionsWeeklyData.setWeeklyMission3(player, MissionsWeeklyData.getWeeklyMission3(original));
+        // Saving both Progress and both Complete Missions
         for(int i = 1; i <=3; i++) {
             NbtCompound nbt = player.getPersistentData();
             nbt.putBoolean("daily_mission_" + i + "_complete", MissionsData.getDailyMissionComplete(original, i));
@@ -45,16 +51,8 @@ public class ModPlayerEventCopyFrom implements ServerPlayerEvents.CopyFrom {
             nbt.putInt("daily_mission_" + i + "_progress", MissionsData.getDailyMissionProgress(original, i));
             nbt.putInt("weekly_mission_" + i + "_progress", MissionsWeeklyData.getWeeklyMissionProgress(player, i));
         }
+        // Saving Both Reroll Times
         MissionsData.setPlayerDailyRerollTimes(player, MissionsData.getPlayerDailyRerollTimes(original));
-        MissionsWeeklyData.setWeeklyMission1(player, MissionsWeeklyData.getWeeklyMission1(original));
-        MissionsWeeklyData.setWeeklyMission2(player, MissionsWeeklyData.getWeeklyMission2(original));
-        MissionsWeeklyData.setWeeklyMission3(player, MissionsWeeklyData.getWeeklyMission3(original));
-        MissionsWeeklyData.setWeeklyMissionProgress(player, 1, MissionsWeeklyData.getWeeklyMissionProgress(player, 1));
-        MissionsWeeklyData.setWeeklyMissionProgress(player, 2, MissionsWeeklyData.getWeeklyMissionProgress(player, 2));
-        MissionsWeeklyData.setWeeklyMissionProgress(player, 3, MissionsWeeklyData.getWeeklyMissionProgress(player, 3));
-        MissionsWeeklyData.setWeeklyMissionComplete(player,1, MissionsWeeklyData.getWeeklyMissionComplete(player, 1));
-        MissionsWeeklyData.setWeeklyMissionComplete(player,2, MissionsWeeklyData.getWeeklyMissionComplete(player, 2));
-        MissionsWeeklyData.setWeeklyMissionComplete(player,3, MissionsWeeklyData.getWeeklyMissionComplete(player, 3));
         MissionsData.setPlayerWeeklyRerollTimes(player, MissionsData.getPlayerWeeklyRerollTimes(original));
     }
 
@@ -63,13 +61,14 @@ public class ModPlayerEventCopyFrom implements ServerPlayerEvents.CopyFrom {
         int originalMoneyAmount = original.getPersistentData().getInt("current_money");
 
         if(alive) {
-            CustomMoneyData.setMoney(player, CustomMoneyData.getMoney(original));
+            System.out.println("Is Alive");
+            player.getPersistentData().putInt("current_money", originalMoneyAmount);
         } else {
             int looseAmount = originalMoneyAmount / 10;
             int newMoneyAmount = originalMoneyAmount - looseAmount;
             int amountToDrop = looseAmount / 2;
-
-            CustomMoneyData.setMoney(player, newMoneyAmount);
+            System.out.println("NewMoneyAmount: " + newMoneyAmount);
+            player.getPersistentData().putInt("current_money", newMoneyAmount);
 
             ItemStack moneyToDrop = new ItemStack(ModItems.COIN);
             NbtCompound nbtCompound = new NbtCompound();
