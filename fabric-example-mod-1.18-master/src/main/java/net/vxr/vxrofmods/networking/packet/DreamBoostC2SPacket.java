@@ -43,7 +43,7 @@ public class DreamBoostC2SPacket {
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.LEVITATION, 15, 40));
             DreamBoostCooldownData.resetCooldown(((IEntityDataSaver) player));
             System.out.println("Dream Jump");
-            player.move(MovementType.SELF, new Vec3d(0,100,0));
+            //player.move(MovementType.SELF, new Vec3d(0,100,0));
         }
     }
 }
