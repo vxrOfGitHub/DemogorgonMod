@@ -107,9 +107,8 @@ public class ModHelmetItem extends ArmorItem implements IAnimatable {
     }
 
     private boolean hasCorrectHelmetOn(ArmorMaterial material, PlayerEntity player) {
-        Item helmet = player.getInventory().getArmorStack(3).getItem();
 
-        return helmet == this;
+        return player.getInventory().getArmorStack(3).isOf(this);
     }
 
 

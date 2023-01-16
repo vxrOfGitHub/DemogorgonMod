@@ -1,7 +1,6 @@
 package net.vxr.vxrofmods.item.custom;
 
 import com.google.common.collect.ImmutableMap;
-import net.vxr.vxrofmods.item.ModArmorMaterials;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -9,12 +8,12 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.vxr.vxrofmods.item.ModArmorMaterials;
 
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class ModLeggingsItem extends ArmorItem {
     private static final Map<ArmorMaterial, StatusEffectInstance> MATERIAL_TO_EFFECT_MAP =
@@ -79,9 +78,8 @@ public class ModLeggingsItem extends ArmorItem {
     }
 
     private boolean hasCorrectLeggingsOn(ArmorMaterial material, PlayerEntity player) {
-        ArmorItem leggings = ((ArmorItem)player.getInventory().getArmorStack(1).getItem());
 
-        return leggings.getMaterial() == material;
+        return player.getInventory().getArmorStack(1).isOf(this);
     }
 
 }

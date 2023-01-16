@@ -7,6 +7,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.vxr.vxrofmods.item.ModArmorMaterials;
 
@@ -99,9 +100,8 @@ public class DreamBootsItem extends ArmorItem {
     }
 
     private boolean hasCorrectBootsOn(ArmorMaterial material, PlayerEntity player) {
-        ArmorItem boots = ((ArmorItem)player.getInventory().getArmorStack(0).getItem());
 
-        return boots.getMaterial() == material;
+        return player.getInventory().getArmorStack(0).isOf(this);
     }
 
     public static int dreamJumpCooldown = 5;
