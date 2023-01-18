@@ -40,7 +40,7 @@ public class DreamBoostC2SPacket {
         if(hasBootsOn && hasCorrectBootsOn && player.isOnGround() && DreamBoostCooldownData.getCooldown(((IEntityDataSaver) player)) <= 0) {
             world.playSound(null, player.getBlockPos(), SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.PLAYERS,
                     1F, world.random.nextFloat() * 0.1F - 0.4F);
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.LEVITATION, 15, 40));
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.LEVITATION, 15, 40, false, false));
             DreamBoostCooldownData.resetCooldown(((IEntityDataSaver) player));
             System.out.println("Dream Jump");
             //player.move(MovementType.SELF, new Vec3d(0,100,0));

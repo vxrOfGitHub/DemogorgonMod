@@ -12,10 +12,14 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
+import net.vxr.vxrofmods.WW2Mod;
 import net.vxr.vxrofmods.event.ServerTickHandler;
 import net.vxr.vxrofmods.util.IEntityDataSaver;
 import net.vxr.vxrofmods.util.MissionsData;
@@ -175,8 +179,21 @@ public class MissionsCommand {
             IEntityDataSaver playerSaver = ((IEntityDataSaver) player);
 
             assert playerSaver != null;
+            //Saving the new Reroll Times in Server NBT
+            MinecraftServer server = context.getSource().getServer();
+            NbtCompound nbt = new NbtCompound();
+            if(server.getDataCommandStorage().get(saveMissionsRerollTimesID) != null) {
+                nbt = server.getDataCommandStorage().get(saveMissionsRerollTimesID);
+            }
+            nbt.putInt(dailyMissionRerollTimesKey, newDailyRerolledTimes);
+            nbt.putInt(weeklyMissionRerollTimesKey, newWeeklyRerolledTimes);
+            server.getDataCommandStorage().set(saveMissionsRerollTimesID, nbt);
+
+            //Saving the new Reroll Times directly in Code
             ServerTickHandler.totalDailyRerolls = newDailyRerolledTimes;
             ServerTickHandler.totalWeeklyRerolls = newWeeklyRerolledTimes;
+            context.getSource().sendFeedback(Text.literal(player.getName().getString()+" uploaded new Missions Reroll Times!"), true);
+            context.getSource().sendFeedback(Text.literal("Daily: " + newDailyRerolledTimes + "; Weekly: " + newWeeklyRerolledTimes), true);
         }
 
         return 1;

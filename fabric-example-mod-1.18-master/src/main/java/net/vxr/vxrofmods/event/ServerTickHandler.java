@@ -1,23 +1,15 @@
 package net.vxr.vxrofmods.event;
 
+import com.eliotlash.mclib.math.functions.limit.Min;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.particle.ParticleTypes;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.PersistentState;
-import net.minecraft.world.World;
-import net.vxr.vxrofmods.ModPersistentStateManager;
-import net.vxr.vxrofmods.command.MissionsCommand;
+import net.minecraft.util.Identifier;
+import net.vxr.vxrofmods.WW2Mod;
 import net.vxr.vxrofmods.util.*;
 
 import java.util.ArrayList;
@@ -27,16 +19,49 @@ public class ServerTickHandler implements ServerTickEvents.StartTick{
     @Override
     public void onStartTick(MinecraftServer server) {
         // Server stuff
+        if(serverRestartedForMissionTime) {
+            LoadMissionsTime(server);
+            serverRestartedForMissionTime = false;
+        }
         DailyMissionsTime(server);
         WeeklyMissionsTime(server);
-
+        SaveAndLoadMissionsRerolledTime(server);
         // Sync with Players
         for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
             PlayerDailyMissionsTime(player);
             PlayerWeeklyMissionsTime(player);
         }
 
+
     }
+
+    private void SaveAndLoadMissionsRerolledTime(MinecraftServer server) {
+        NbtCompound nbt = new NbtCompound();
+        if(server.getDataCommandStorage().get(saveMissionsRerollTimesID) != null) {
+            nbt = server.getDataCommandStorage().get(saveMissionsRerollTimesID);
+            if(nbt.getInt(dailyMissionRerollTimesKey) > 0) {
+                totalDailyRerolls = nbt.getInt(dailyMissionRerollTimesKey);
+            } if(nbt.getInt(weeklyMissionRerollTimesKey)  > 0) {
+                totalWeeklyRerolls = nbt.getInt(weeklyMissionRerollTimesKey);
+            }
+        }
+        nbt.putInt(dailyMissionRerollTimesKey, totalDailyRerolls);
+        nbt.putInt(weeklyMissionRerollTimesKey, totalWeeklyRerolls);
+        nbt.putInt(dailyMissionCountdownKey, DailyMissionCountdown);
+        nbt.putInt(weeklyMissionCountdownKey, WeeklyMissionCountdown);
+        server.getDataCommandStorage().set(saveMissionsRerollTimesID, nbt);
+    }
+
+    private void LoadMissionsTime(MinecraftServer server) {
+        DailyMissionCountdown = server.getDataCommandStorage().get(saveMissionsRerollTimesID).getInt(dailyMissionCountdownKey);
+        WeeklyMissionCountdown = server.getDataCommandStorage().get(saveMissionsRerollTimesID).getInt(weeklyMissionCountdownKey);
+    }
+
+    public static final Identifier saveMissionsRerollTimesID = new Identifier(WW2Mod.MOD_ID + "_save_missions_reroll_times");
+    public static final String dailyMissionRerollTimesKey = "daily_mission_reroll_times";
+    public static final String weeklyMissionRerollTimesKey = "weekly_mission_reroll_times";
+    public static final String dailyMissionCountdownKey = "daily_mission_countdown";
+    public static final String weeklyMissionCountdownKey = "weekly_mission_countdown";
 
     private void PlayerDailyMissionsTime(ServerPlayerEntity player) {
         MissionsData.setDailyMissionTime(((IEntityDataSaver) player), DailyMissionCountdown);
@@ -346,4 +371,5 @@ public class ServerTickHandler implements ServerTickEvents.StartTick{
     public static List<Integer> amountOfMobToKillForWeeklyMission = new ArrayList<>();
 
     public static boolean serverRestarted = true;
+    public static boolean serverRestartedForMissionTime = true;
 }

@@ -63,7 +63,7 @@ public class ModLeggingsItem extends ArmorItem {
 
         if(hasCorrectLeggingsOn(mapArmorMaterial, player) && !hasPlayerEffect) {
             player.addStatusEffect(new StatusEffectInstance(mapStatusEffect.getEffectType(),
-                    mapStatusEffect.getDuration(), mapStatusEffect.getAmplifier()));
+                    mapStatusEffect.getDuration(), mapStatusEffect.getAmplifier(), false, false, true));
 
             // if(new Random().nextFloat() > 0.6f) { // 40% of damaging the armor! Possibly!
             //     player.getInventory().damageArmor(DamageSource.MAGIC, 1f, new int[]{0, 1, 2, 3});

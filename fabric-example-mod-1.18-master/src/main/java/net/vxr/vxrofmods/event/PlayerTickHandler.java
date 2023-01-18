@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -34,11 +35,21 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
     private void rerollMissionsIfNeeded(ServerPlayerEntity player) {
         IEntityDataSaver playerSaver = ((IEntityDataSaver) player);
         if(MissionsData.hasServerRerollTimes(playerSaver) && serverRestarted) {
-            totalDailyRerolls = MissionsData.getServerDailyRerollTimesFromPlayer(playerSaver);
-            totalWeeklyRerolls = MissionsData.getServerWeeklyRerollTimesFromPlayer(playerSaver);
-            MissionsData.setHasRerollTimes(playerSaver, false);
-            serverRestarted = false;
-            System.out.println("Uploaded Mission Reroll Times from " + player.getName().getString() + "!");
+            MinecraftServer server = player.getServer();
+            if(server != null) {
+                NbtCompound nbt = new NbtCompound();
+                if(server.getDataCommandStorage().get(saveMissionsRerollTimesID) != null) {
+                    nbt = server.getDataCommandStorage().get(saveMissionsRerollTimesID);
+                }
+                nbt.putInt(dailyMissionRerollTimesKey, MissionsData.getServerDailyRerollTimesFromPlayer(playerSaver));
+                nbt.putInt(weeklyMissionRerollTimesKey, MissionsData.getServerWeeklyRerollTimesFromPlayer(playerSaver));
+                server.getDataCommandStorage().set(saveMissionsRerollTimesID, nbt);
+                totalDailyRerolls = MissionsData.getServerDailyRerollTimesFromPlayer(playerSaver);
+                totalWeeklyRerolls = MissionsData.getServerWeeklyRerollTimesFromPlayer(playerSaver);
+                MissionsData.setHasRerollTimes(playerSaver, false);
+                serverRestarted = false;
+                System.out.println("Uploaded Mission Reroll Times from " + player.getName().getString() + "!");
+            }
         } else {
             if(MissionsData.getPlayerDailyRerollTimes(playerSaver) != totalDailyRerolls ||
             MissionsData.getDailyMission1(playerSaver) == MissionsData.getDailyMission2(playerSaver)) {
@@ -101,7 +112,7 @@ public class PlayerTickHandler implements ServerTickEvents.StartTick{
                     }
                 }*/
                 DreamJetpackData.setFuelTick(playerSaver, DreamJetpackData.getFuelTick(playerSaver) + 1);
-                System.out.println("FuelTick: " + DreamJetpackData.getFuelTick(playerSaver));
+                //System.out.println("FuelTick: " + DreamJetpackData.getFuelTick(playerSaver));
                 int remainder = 160;
                 if(DreamJetpackData.getFuelTick(playerSaver) % remainder == 0) {
                     if(InventoryUtil.hasPlayerStackInInventory(player, Items.FIREWORK_ROCKET)) {
