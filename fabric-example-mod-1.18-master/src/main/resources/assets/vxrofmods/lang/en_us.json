@@ -12,6 +12,8 @@
   "item.vxrofmods.dream_axe.no_wood": "No Wood",
   "item.vxrofmods.dream_axe": "§dDream Axe§r",
   "item.vxrofmods.dream_sword": "§dDream Sword§r",
+  "item.vxrofmods.dream_sword.tooltip.shift": "Every 3rd hit is stronger",
+  "item.vxrofmods.dream_sword.tooltip": "Press §bSHIFT§r for more Information",
   "item.vxrofmods.dream_helmet": "§dDream Helmet§r",
   "item.vxrofmods.dream_chestplate": "§dDream Chestplate§r",
   "item.vxrofmods.dream_leggings": "§dDream Leggings§r",
