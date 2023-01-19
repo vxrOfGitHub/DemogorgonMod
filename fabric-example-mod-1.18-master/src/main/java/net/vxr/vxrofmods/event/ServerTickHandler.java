@@ -93,7 +93,13 @@ public class ServerTickHandler implements ServerTickEvents.StartTick{
         if(DailyMissionCountdown > 0) {
             DailyMissionCountdown--;
         } else {
+            NbtCompound nbt = new NbtCompound();
+            if(server.getDataCommandStorage().get(saveMissionsRerollTimesID) != null) {
+                nbt = server.getDataCommandStorage().get(saveMissionsRerollTimesID);
+            }
             totalDailyRerolls++;
+            nbt.putInt(dailyMissionRerollTimesKey, totalDailyRerolls);
+            server.getDataCommandStorage().set(saveMissionsRerollTimesID, nbt);
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                 IEntityDataSaver playerSaver = ((IEntityDataSaver) player);
                 PlayerSetDailyMission1(player);
@@ -114,6 +120,11 @@ public class ServerTickHandler implements ServerTickEvents.StartTick{
             WeeklyMissionCountdown--;
         } else {
             totalWeeklyRerolls++;
+            NbtCompound nbt = new NbtCompound();
+            if(server.getDataCommandStorage().get(saveMissionsRerollTimesID) != null) {
+                nbt = server.getDataCommandStorage().get(saveMissionsRerollTimesID);
+            }
+            nbt.putInt(weeklyMissionRerollTimesKey, totalWeeklyRerolls);
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                 IEntityDataSaver playerSaver = ((IEntityDataSaver) player);
                 PlayerSetWeeklyMission1(playerSaver);
