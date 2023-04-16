@@ -16,7 +16,7 @@ public class AfterRespawnHandler implements ServerPlayerEvents.AfterRespawn{
     @Override
     public void afterRespawn(ServerPlayerEntity oldPlayer, ServerPlayerEntity newPlayer, boolean alive) {
         if(!alive) {
-            giveNegativeEffects(newPlayer);
+            //giveNegativeEffects(newPlayer);
         }
     }
 

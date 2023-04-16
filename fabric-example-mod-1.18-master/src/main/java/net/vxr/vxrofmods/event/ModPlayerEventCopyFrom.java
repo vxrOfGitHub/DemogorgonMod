@@ -52,6 +52,8 @@ public class ModPlayerEventCopyFrom implements ServerPlayerEvents.CopyFrom {
             nbt.putInt("weekly_mission_" + i + "_progress", MissionsWeeklyData.getWeeklyMissionProgress(player, i));
         }
         // Saving Both Reroll Times
+
+
         MissionsData.setPlayerDailyRerollTimes(player, MissionsData.getPlayerDailyRerollTimes(original));
         MissionsData.setPlayerWeeklyRerollTimes(player, MissionsData.getPlayerWeeklyRerollTimes(original));
     }
@@ -63,7 +65,7 @@ public class ModPlayerEventCopyFrom implements ServerPlayerEvents.CopyFrom {
         if(alive) {
             System.out.println("Is Alive");
             player.getPersistentData().putInt("current_money", originalMoneyAmount);
-        } else {
+        } else if(originalMoneyAmount / 20 > 0){
             int looseAmount = originalMoneyAmount / 10;
             int newMoneyAmount = originalMoneyAmount - looseAmount;
             int amountToDrop = looseAmount / 2;

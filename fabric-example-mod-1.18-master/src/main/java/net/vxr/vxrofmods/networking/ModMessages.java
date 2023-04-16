@@ -20,6 +20,7 @@ public class ModMessages {
 
     //public static final Identifier ITEM_SYNC = new Identifier(WW2Mod.MOD_ID, "item_sync");
     public static final Identifier DREAM_JETPACK_PARTICLE_SPAWN = new Identifier(WW2Mod.MOD_ID, "dream_jetpack_particle_spawn");
+    //public static final Identifier SPAWN_PARTICLES_ID = new Identifier(WW2Mod.MOD_ID, "spawn_particles_id");
 
     public static void registerC2SPackets() {
         ServerPlayNetworking.registerGlobalReceiver(DREAM_VISION_ID, DreamVisionC2SPacket::receive);
@@ -37,6 +38,7 @@ public class ModMessages {
         ClientPlayNetworking.registerGlobalReceiver(DREAM_JETPACK_PARTICLE_SPAWN, DreamJetpackParticleSpawnS2CPacket::receive);
         //ClientPlayNetworking.registerGlobalReceiver(TEST_FOR_FLYING_ID, TestForFlyingS2CPacket::receive);
         ClientPlayNetworking.registerGlobalReceiver(PLAY_FIRE_EXTINCTION_SOUND_ID, PlayFireExtinctionSoundS2CPacket::receive);
+        //ClientPlayNetworking.registerGlobalReceiver(SPAWN_PARTICLES_ID, SpawnParticlesS2CPacket::receive);
     }
 
 }
