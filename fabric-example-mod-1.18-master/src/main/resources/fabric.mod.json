@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "id": "vxrofmods",
+  "id": "demogorgonmod",
   "version": "${version}",
 
-  "name": "WonderWorlds 2 Mods",
+  "name": "Demogorgon Mod",
   "description": "This is an example description! Tell everyone what your mod is about!",
   "authors": [
-    "vxr!"
+    "vxrOfMods"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
@@ -14,15 +14,18 @@
   },
 
   "license": "MIT",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/demogorgonmod/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.vxr.vxrofmods.WW2Mod"
+      "net.vxrofmods.demogorgonmod.DemogorgonMod"
     ],
     "client": [
-      "net.vxr.vxrofmods.WW2ClientMod"
+      "net.vxrofmods.demogorgonmod.DemogorgonModClient"
+    ],
+    "fabric-datagen": [
+      "net.vxrofmods.demogorgonmod.DemogorgonModDataGenerator"
     ]
   },
   "mixins": [
@@ -34,6 +37,7 @@
     "fabric": "*",
     "minecraft": "~1.19",
     "java": ">=17",
+    "geckolib": ">=4.1.1",
     "fabric-key-binding-api-v1": "*"
   },
   "suggests": {

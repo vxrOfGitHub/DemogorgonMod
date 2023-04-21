@@ -1,6 +1,0 @@
-{
-  "parent": "vxrofmods:item/dream_bow",
-  "textures": {
-    "layer0": "vxrofmods:item/dream_bow_pulling_1"
-  }
-}

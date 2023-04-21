@@ -1,6 +1,0 @@
-{
-  "variants": {
-    "clicked=false": {"model": "vxrofmods:block/dream_block_off"},
-    "clicked=true": {"model": "vxrofmods:block/dream_block_on"}
-  }
-}

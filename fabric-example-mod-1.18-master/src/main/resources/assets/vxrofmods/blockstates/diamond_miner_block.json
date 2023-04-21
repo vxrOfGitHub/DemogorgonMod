@@ -1,8 +1,0 @@
-{
-  "variants": {
-    "facing=north": { "model":  "vxrofmods:block/diamond_miner_block"},
-    "facing=east": { "model":  "vxrofmods:block/diamond_miner_block", "y": 90},
-    "facing=south": { "model":  "vxrofmods:block/diamond_miner_block", "y": 180},
-    "facing=west": { "model":  "vxrofmods:block/diamond_miner_block", "y": 270}
-  }
-}

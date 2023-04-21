@@ -41,5 +41,30 @@
       <option name="name" value="UserLocalRemappedMods" />
       <option name="url" value="file:/$PROJECT_DIR$/../../Für%20Games/WonderWorldsFinal/fabric-example-mod-1.18-master/.gradle/loom-cache/remapped_mods/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="UserLocalRemappedMods" />
+      <option name="name" value="UserLocalRemappedMods" />
+      <option name="url" value="file:/$PROJECT_DIR$/../../../../../Für%20Games/Minecraft%20Modding/ModPacks/Wonder%20Worlds%202%20Mod%201.19.2/WonderWorldsFinal/fabric-example-mod-1.18-master/.gradle/loom-cache/remapped_mods/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="UserLocalRemappedMods" />
+      <option name="name" value="UserLocalRemappedMods" />
+      <option name="url" value="file:/$PROJECT_DIR$/../../../../../Für%20Games/Minecraft%20Modding/ModPacks/Wonder%20Worlds%202%20Mod%201.19.2/!WonderWorldsFinal/fabric-example-mod-1.18-master/.gradle/loom-cache/remapped_mods/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="UserLocalRemappedMods" />
+      <option name="name" value="UserLocalRemappedMods" />
+      <option name="url" value="file:/$PROJECT_DIR$/../../../../Für%20Games/Minecraft%20Modding/ModPacks/Template%20Mod%20Fabric%201.19.2/fabric-example-mod-1.18-master/.gradle/loom-cache/remapped_mods/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="UserLocalRemappedMods" />
+      <option name="name" value="UserLocalRemappedMods" />
+      <option name="url" value="file:/$PROJECT_DIR$/../../../../Für%20Games/Minecraft%20Modding/ModPacks/Template%20Mod%20Fabric%201.19.4/fabric-example-mod-1.18-master/.gradle/loom-cache/remapped_mods/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="UserLocalRemappedMods" />
+      <option name="name" value="UserLocalRemappedMods" />
+      <option name="url" value="file:/$PROJECT_DIR$/../../../../Für%20Games/Minecraft%20Modding/ModPacks/Demogorgon%20Mod%201.19.4/fabric-example-mod-1.18-master/.gradle/loom-cache/remapped_mods/" />
+    </remote-repository>
   </component>
 </project>
