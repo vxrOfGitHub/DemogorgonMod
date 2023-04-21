@@ -6,6 +6,7 @@ import net.vxrofmods.demogorgonmod.entity.ModEntities;
 import net.vxrofmods.demogorgonmod.entity.custom.DemogorgonEntity;
 import net.vxrofmods.demogorgonmod.item.ModItemGroup;
 import net.vxrofmods.demogorgonmod.item.ModItems;
+import net.vxrofmods.demogorgonmod.networking.ModMessages;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,6 +24,8 @@ public class DemogorgonMod implements ModInitializer {
 		ModItems.registerModItems();
 
 		FabricDefaultAttributeRegistry.register(ModEntities.DEMOGORGON, DemogorgonEntity.setAttributes());
+
+		ModMessages.registerC2SPackets();
 	}
 }
 
