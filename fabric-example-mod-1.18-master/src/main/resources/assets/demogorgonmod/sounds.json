@@ -1,0 +1,22 @@
+{
+  "demogorgon_hurt": {
+    "subtitle": "subtitles.demogorgonmod.demogorgon_hurt",
+    "sounds": [
+      "demogorgonmod:demogorgon_hurt"
+    ]
+  },
+  "demogorgon_idle": {
+    "subtitle": "subtitles.demogorgonmod.demogorgon_idle",
+    "sounds": [
+      "demogorgonmod:demogorgon_idle_1",
+      "demogorgonmod:demogorgon_idle_2",
+      "demogorgonmod:demogorgon_idle_3"
+    ]
+  },
+  "demogorgon_death": {
+    "subtitle": "subtitles.demogorgonmod.demogorgon_death",
+    "sounds": [
+      "demogorgonmod:demogorgon_death"
+    ]
+  }
+}

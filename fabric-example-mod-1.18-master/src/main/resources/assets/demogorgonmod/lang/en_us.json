@@ -2,5 +2,9 @@
   "item.demogorgonmod.test_item": "Test Item",
   "item.demogorgonmod.demogorgon_spawn_egg": "Demogorgon Spawn Egg",
 
-  "entity.demogorgonmod.demogorgon": "Demogorgon"
+  "entity.demogorgonmod.demogorgon": "Demogorgon",
+
+  "subtitles.demogorgonmod.demogorgon_hurt": "Demogorgon hurts",
+  "subtitles.demogorgonmod.demogorgon_idle": "Demogorgon growls",
+  "subtitles.demogorgonmod.demogorgon_death": "Demogorgon dies"
 }

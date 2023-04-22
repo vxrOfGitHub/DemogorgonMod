@@ -9,6 +9,7 @@ import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.BossBar;
 import net.minecraft.entity.boss.ServerBossBar;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -25,6 +26,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -37,6 +39,7 @@ import net.minecraft.world.World;
 import net.vxrofmods.demogorgonmod.DemogorgonMod;
 import net.vxrofmods.demogorgonmod.entity.variant.DemogorgonVariant;
 import net.vxrofmods.demogorgonmod.networking.ModMessages;
+import net.vxrofmods.demogorgonmod.sound.ModSounds;
 import net.vxrofmods.demogorgonmod.util.DemogorgonData;
 import net.vxrofmods.demogorgonmod.util.EntityUtil;
 import net.vxrofmods.demogorgonmod.util.IEntityDataSaver;
@@ -66,7 +69,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     private final int dimensionDriftDamage = 10;
     private final double syncToClientsRadius = 256;
     private int targetDamageDelayTick = 0;
-    private final int targetDamageMaxDelayTick = 60;
+    private final int targetDamageMaxDelayTick = 200;
     private int dimensionDriftTargetID;
     private boolean hasDimensionDriftTarget = false;
     private boolean shouldSpawnDimensionDriftParticles = false;
@@ -94,8 +97,10 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         this.goalSelector.add(1, new RevengeGoal(this));
         this.goalSelector.add(2, new MeleeAttackGoal(this, 2d, false));
         this.goalSelector.add(7, new WanderAroundFarGoal(this, 1.0));
-        this.goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.add(8, new LookAroundGoal(this));
+        if(DemogorgonData.getPlayDimensionDriftSubmergeAnimation(((IEntityDataSaver) this))) {
+            this.goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
+            this.goalSelector.add(8, new LookAroundGoal(this));
+        }
         this.goalSelector.add(8, new WanderAroundPointOfInterestGoal(this, movementSpeed, false));
 
         this.targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, false, false));
@@ -143,7 +148,6 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         super.mobTick();
         this.bossBar.setPercent(this.getHealth() / this.getMaxHealth());
         this.ticksSinceLastAttack++;
-
     }
 
     @Override
@@ -158,28 +162,21 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         this.bossBar.removePlayer(player);
     }
 
-    /* @Override
+    @Override
     protected SoundEvent getAmbientSound() {
         return ModSounds.DEMOGORGON_IDLE;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return ModSounds.DEMOGORGON_HURT;
+        return ModSounds.DEMOGORGON_HURT_SOUND;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
         return ModSounds.DEMOGORGON_DEATH;
-    }*/
+    }
 
-    /*@Override
-    public boolean isAttacking() {
-
-        this.ticksSinceLastAttack = 0;
-
-        return super.isAttacking();
-    }*/
 
     @Override
     public void onAttacking(Entity target) {
@@ -245,9 +242,19 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
             }
         }
     }
+
+
+
+    @Override
+    public void onPlayerCollision(PlayerEntity player) {
+
+        if(!DemogorgonData.getPlayDimensionDriftSubmergeAnimation(((IEntityDataSaver) this))) {
+            super.onPlayerCollision(player);
+        }
+    }
+
     @Override
     public void tick() {
-
         MinecraftServer server = world.getServer();
         if(server != null) {
             BossBar bossBar = server.getBossBarManager().add(new Identifier(DemogorgonMod.MOD_ID  + "demogorgon_bossbar"),
@@ -267,6 +274,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
                         DemogorgonData.setPlayDimensionDriftSubmergeAnimation(((IEntityDataSaver) this), true);
                         this.syncPlayDimensionDriftSubmergeAnimation(true, syncToClientsRadius);
                         livingTarget.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 100));
+                        this.setInvulnerable(true);
                     }
                 }
             }
@@ -360,6 +368,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
             } else {
                 DemogorgonData.setPlayDimensionDriftSubmergeAnimation(((IEntityDataSaver) this), false);
                 this.syncPlayDimensionDriftSubmergeAnimation(false, syncToClientsRadius);
+                this.setInvulnerable(false);
                 if(target != null && this.hasDimensionDriftTarget && target.isAlive()) {
                     this.world.playSound(null, this.getBlockPos(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.PLAYERS, 1.0f, 1.0f);
                     this.teleport(target.getX(), target.getY(), target.getZ());
