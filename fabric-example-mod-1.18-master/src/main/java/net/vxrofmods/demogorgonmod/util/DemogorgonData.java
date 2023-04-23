@@ -26,4 +26,15 @@ public class DemogorgonData {
         return nbt.getBoolean("shouldSpawnDDParticles");
     }
 
+    public static void writeTargetToDDTargetNBT(IEntityDataSaver target, boolean isTarget) {
+        NbtCompound nbt = target.getPersistentData();
+        nbt.putBoolean("isDDTarget", isTarget);
+    }
+
+    public static boolean getDDTargetinNBT(IEntityDataSaver target) {
+        NbtCompound nbt = target.getPersistentData();
+
+        return nbt.getBoolean("isDDTarget");
+    }
+
 }

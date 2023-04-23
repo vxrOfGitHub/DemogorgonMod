@@ -2,10 +2,12 @@ package net.vxrofmods.demogorgonmod.entity.custom;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.BossBar;
 import net.minecraft.entity.boss.ServerBossBar;
@@ -20,8 +22,6 @@ import net.minecraft.entity.passive.MerchantEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.particle.DustParticleEffect;
-import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -44,7 +44,6 @@ import net.vxrofmods.demogorgonmod.util.DemogorgonData;
 import net.vxrofmods.demogorgonmod.util.EntityUtil;
 import net.vxrofmods.demogorgonmod.util.IEntityDataSaver;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -75,6 +74,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     private boolean shouldSpawnDimensionDriftParticles = false;
     private static final float movementSpeed = 0.2f;
     private int ticksSinceLastAttack = 0;
+    private double slownessPerTickToDDTarget = 0;
 
     private final ServerBossBar bossBar = (ServerBossBar)new ServerBossBar(this.getDisplayName(), BossBar.Color.RED, BossBar.Style.PROGRESS).setDarkenSky(true);
 
@@ -116,6 +116,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         nbt.putInt("demogorgon.dimension_drift.targetDamageDelayTick", targetDamageDelayTick);
         nbt.putInt("demogorgon.dimension_drift.target_id", dimensionDriftTargetID);
         nbt.putInt("demogorgon.ticks_since_last_attack", ticksSinceLastAttack);
+        nbt.putDouble("demogorgon.slowness_per_tick_to_dd_target", slownessPerTickToDDTarget);
         nbt.putBoolean("demogorgon.dimension_drift.has_target", hasDimensionDriftTarget);
         nbt.putBoolean("demogorgon.dimension_drift.spawn_particles", shouldSpawnDimensionDriftParticles);
     }
@@ -128,6 +129,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         this.targetDamageDelayTick = nbt.getInt("demogorgon.dimension_drift.targetDamageDelayTick");
         this.dimensionDriftTargetID = nbt.getInt("demogorgon.dimension_drift.target_id");
         this.ticksSinceLastAttack = nbt.getInt("demogorgon.ticks_since_last_attack");
+        this.slownessPerTickToDDTarget = nbt.getDouble("demogorgon.slowness_per_tick_to_dd_target");
         this.hasDimensionDriftTarget = nbt.getBoolean("demogorgon.dimension_drift.has_target");
         this.shouldSpawnDimensionDriftParticles = nbt.getBoolean("demogorgon.dimension_drift.spawn_particles");
         if (this.hasCustomName()) {
@@ -141,6 +143,20 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     public void setCustomName(@Nullable Text name) {
         super.setCustomName(name);
         this.bossBar.setName(this.getDisplayName());
+    }
+
+    @Override
+    public void onDeath(DamageSource damageSource) {
+        super.onDeath(damageSource);
+        if(!world.isClient()) {
+            Entity target = world.getEntityById(this.dimensionDriftTargetID);
+            if(target instanceof LivingEntity living) {
+                EntityAttributeInstance movementSpeed = living.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);
+                if(movementSpeed != null) {
+                    movementSpeed.setBaseValue(((IEntityDataSaver) target).getPersistentData().getDouble("normal_movement_speed"));
+                }
+            }
+        }
     }
 
     @Override
@@ -243,6 +259,13 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         }
     }
 
+    private void syncNbtToDDTarget(ServerPlayerEntity player , boolean isTarget) {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeInt(player.getId());
+        buf.writeBoolean(isTarget);
+
+        ServerPlayNetworking.send(player, ModMessages.GET_DD_TARGET_IN_NBT_SYNC_ID, buf);
+    }
 
 
     @Override
@@ -359,8 +382,28 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         if(this.hasDimensionDriftTarget) {
             Entity target = world.getEntityById(this.dimensionDriftTargetID);
             this.targetDamageDelayTick++;
-            if(this.targetDamageDelayTick <= targetDamageMaxDelayTick && target != null && target.isAlive()) {
-                //target.world.addParticle(ParticleTypes.FLAME, target.getX(), target.getY(), target.getZ(), 0.0, 0.1, 0.0);
+            if(this.targetDamageDelayTick <= targetDamageMaxDelayTick && target != null && target.isAlive() && target instanceof LivingEntity living) {
+
+                DemogorgonData.writeTargetToDDTargetNBT(((IEntityDataSaver) target), true);
+                if(target instanceof  ServerPlayerEntity serverPlayer) {
+                    syncNbtToDDTarget(serverPlayer, true);
+                }
+
+                // Apply increasing Slowness to Target
+                EntityAttributeInstance movementSpeed = living.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);
+
+                if(movementSpeed != null) {
+                    if(this.slownessPerTickToDDTarget == 0) {
+                        this.slownessPerTickToDDTarget = movementSpeed.getBaseValue() / targetDamageMaxDelayTick;
+                        ((IEntityDataSaver) target).getPersistentData().putDouble("normal_movement_speed", movementSpeed.getBaseValue());
+                    }
+                    movementSpeed.setBaseValue(movementSpeed.getBaseValue() - this.slownessPerTickToDDTarget);
+                    if(movementSpeed.getBaseValue() <= 0) {
+                        this.slownessPerTickToDDTarget = 0;
+                        movementSpeed.setBaseValue(((IEntityDataSaver) target).getPersistentData().getDouble("normal_movement_speed"));
+                    }
+                }
+
                 if(this.targetDamageDelayTick % 4 == 0) {
                     DemogorgonData.setSpawnDimensionDriftParticles(((IEntityDataSaver) this), true);
                     //this.spawnDDParticlesOnClient(true, syncToClientsRadius);
@@ -372,6 +415,10 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
                 if(target != null && this.hasDimensionDriftTarget && target.isAlive()) {
                     this.world.playSound(null, this.getBlockPos(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.PLAYERS, 1.0f, 1.0f);
                     this.teleport(target.getX(), target.getY(), target.getZ());
+                    DemogorgonData.writeTargetToDDTargetNBT(((IEntityDataSaver) target), false);
+                    if(target instanceof  ServerPlayerEntity serverPlayer) {
+                        syncNbtToDDTarget(serverPlayer, false);
+                    }
                 }
                 this.dimensionDriftCooldown = 0;
                 this.targetDamageDelayTick = 0;
