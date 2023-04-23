@@ -147,9 +147,12 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
 
     @Override
     public void onDeath(DamageSource damageSource) {
-        super.onDeath(damageSource);
+        Entity target = world.getEntityById(this.dimensionDriftTargetID);
         if(!world.isClient()) {
-            Entity target = world.getEntityById(this.dimensionDriftTargetID);
+            if(target instanceof ServerPlayerEntity serverPlayer) {
+                DemogorgonData.writeTargetToDDTargetNBT(((IEntityDataSaver) target), false);
+                syncNbtToDDTarget(serverPlayer, false);
+            }
             if(target instanceof LivingEntity living) {
                 EntityAttributeInstance movementSpeed = living.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);
                 if(movementSpeed != null) {
@@ -157,6 +160,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
                 }
             }
         }
+        super.onDeath(damageSource);
     }
 
     @Override
@@ -298,6 +302,9 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
                         this.syncPlayDimensionDriftSubmergeAnimation(true, syncToClientsRadius);
                         livingTarget.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 100));
                         this.setInvulnerable(true);
+                        if(target instanceof  ServerPlayerEntity serverPlayer) {
+                            syncNbtToDDTarget(serverPlayer, true);
+                        }
                     }
                 }
             }
@@ -309,7 +316,6 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         //Spawn Particles
         if(DemogorgonData.getSpawnDimensionDriftParticles(((IEntityDataSaver) this)) && this.hasDimensionDriftTarget) {
             Entity target = world.getEntityById(this.dimensionDriftTargetID);
-            World tWorld = target.getWorld();
             int particleCount = 20;
             double centerX = target.getX();
             double centerY = target.getY();
@@ -385,9 +391,6 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
             if(this.targetDamageDelayTick <= targetDamageMaxDelayTick && target != null && target.isAlive() && target instanceof LivingEntity living) {
 
                 DemogorgonData.writeTargetToDDTargetNBT(((IEntityDataSaver) target), true);
-                if(target instanceof  ServerPlayerEntity serverPlayer) {
-                    syncNbtToDDTarget(serverPlayer, true);
-                }
 
                 // Apply increasing Slowness to Target
                 EntityAttributeInstance movementSpeed = living.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);

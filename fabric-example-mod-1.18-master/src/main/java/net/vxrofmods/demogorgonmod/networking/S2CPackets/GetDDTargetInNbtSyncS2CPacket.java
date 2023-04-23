@@ -9,14 +9,15 @@ import net.minecraft.network.PacketByteBuf;
 import net.vxrofmods.demogorgonmod.util.DemogorgonData;
 import net.vxrofmods.demogorgonmod.util.IEntityDataSaver;
 
-public class getDDTargetInNbtSyncS2CPacket {
+public class GetDDTargetInNbtSyncS2CPacket {
 
     public static void receive(MinecraftClient minecraftClient, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender packetSender) {
         if(minecraftClient.world != null) {
             Entity entity = minecraftClient.world.getEntityById(buf.readInt());
             if(entity instanceof LivingEntity target) {
+                boolean isTarget = buf.readBoolean();
                 DemogorgonData.writeTargetToDDTargetNBT(((IEntityDataSaver) target),
-                        buf.readBoolean());
+                        isTarget);
             }
         }
     }
