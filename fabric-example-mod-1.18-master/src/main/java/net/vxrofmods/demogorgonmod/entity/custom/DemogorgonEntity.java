@@ -2,7 +2,6 @@ package net.vxrofmods.demogorgonmod.entity.custom;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
@@ -63,7 +62,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     private AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
 
     private int dimensionDriftCooldown = 0;
-    private final int dimensionDriftMaxCooldown = 100;
+    private final int dimensionDriftMaxCooldown = 250;
     private final int dimensionDriftRadius = 20;
     private final int dimensionDriftDamage = 10;
     private final double syncToClientsRadius = 256;
@@ -75,6 +74,15 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     private static final float movementSpeed = 0.2f;
     private int ticksSinceLastAttack = 0;
     private double slownessPerTickToDDTarget = 0;
+
+    private int currentAnimation;
+    private final int idleAnimation = 0;
+    private final int walkAnimation = 1;
+    private final int attack1Animation = 2;
+    private final int attack2Animation = 3;
+    private final int ddSubmergeAnimation = 4;
+    private final int ddEmergeAnimation = 5;
+    private final int ddAttack1Animation = 6;
 
     private final ServerBossBar bossBar = (ServerBossBar)new ServerBossBar(this.getDisplayName(), BossBar.Color.RED, BossBar.Style.PROGRESS).setDarkenSky(true);
 
@@ -112,6 +120,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putInt("Variant", this.getTypeVariant());
+        nbt.putInt("currentAnimation", this.currentAnimation);
         nbt.putInt("demogorgon.dimension_drift.cooldown", dimensionDriftCooldown);
         nbt.putInt("demogorgon.dimension_drift.targetDamageDelayTick", targetDamageDelayTick);
         nbt.putInt("demogorgon.dimension_drift.target_id", dimensionDriftTargetID);
@@ -125,6 +134,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         this.dataTracker.set(DATA_ID_TYPE_VARIANT, nbt.getInt("Variant"));
+        this.currentAnimation = nbt.getInt("currentAnimation");
         this.dimensionDriftCooldown = nbt.getInt("demogorgon.dimension_drift.cooldown");
         this.targetDamageDelayTick = nbt.getInt("demogorgon.dimension_drift.targetDamageDelayTick");
         this.dimensionDriftTargetID = nbt.getInt("demogorgon.dimension_drift.target_id");
@@ -184,17 +194,26 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return ModSounds.DEMOGORGON_IDLE;
+        if(this.getAnimation() != ddSubmergeAnimation) {
+            return ModSounds.DEMOGORGON_IDLE;
+        }
+        return null;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return ModSounds.DEMOGORGON_HURT_SOUND;
+        if(this.getAnimation() != ddSubmergeAnimation) {
+            return ModSounds.DEMOGORGON_HURT_SOUND;
+        }
+        return null;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return ModSounds.DEMOGORGON_DEATH;
+        if(this.getAnimation() != ddSubmergeAnimation) {
+            return ModSounds.DEMOGORGON_DEATH;
+        }
+        return null;
     }
 
 
@@ -208,17 +227,35 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
-        this.playSound(SoundEvents.ENTITY_IRON_GOLEM_STEP, 1.0F, 1.0F);
+        if(this.getAnimation() != ddSubmergeAnimation) {
+            this.playSound(SoundEvents.ENTITY_IRON_GOLEM_STEP, 1.0F, 1.0F);
+        }
     }
 
     protected void initDataTracker() {
         super.initDataTracker();
         this.dataTracker.startTracking(DATA_ID_TYPE_VARIANT, 0);
+        this.dataTracker.startTracking(ANIMATION, idleAnimation);
     }
-    // VARIANTS
 
+    public void setAnimation(int animation) {
+        this.currentAnimation = animation;
+        System.out.println("Animation: " + animation);
+        System.out.println("currentAnimation: " + this.currentAnimation);
+        this.dataTracker.set(ANIMATION, currentAnimation);
+    }
+
+    public int getAnimation() {
+        return this.dataTracker.get(ANIMATION);
+    }
+
+    // VARIANTS Datatracker
     private static final TrackedData<Integer> DATA_ID_TYPE_VARIANT =
             DataTracker.registerData(DemogorgonEntity.class, TrackedDataHandlerRegistry.INTEGER);
+
+    // Animation Datatracker
+    public static final TrackedData<Integer> ANIMATION = DataTracker.registerData(DemogorgonEntity.class, TrackedDataHandlerRegistry.INTEGER);
+
 
     @Nullable
     @Override
@@ -245,12 +282,12 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     @Override
     public void move(MovementType movementType, Vec3d movement) {
 
-        if(!DemogorgonData.getPlayDimensionDriftSubmergeAnimation(((IEntityDataSaver) this))) {
+        if(this.getAnimation() != ddSubmergeAnimation || this.getAnimation() != ddEmergeAnimation || this.getAnimation() != ddAttack1Animation) {
             super.move(movementType, movement);
         }
     }
 
-    private void syncPlayDimensionDriftSubmergeAnimation(boolean shouldPlay, double radiusOfPlayerSyncedTo) {
+    /*private void syncPlayDimensionDriftSubmergeAnimation(boolean shouldPlay, double radiusOfPlayerSyncedTo) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeInt(this.getId());
         buf.writeBoolean(shouldPlay);
@@ -261,7 +298,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
                 ServerPlayNetworking.send(player, ModMessages.DEMOGORGON_PLAY_ANIMATION_SYNC_ID, buf);
             }
         }
-    }
+    }*/
 
     private void syncNbtToDDTarget(ServerPlayerEntity player , boolean isTarget) {
         PacketByteBuf buf = PacketByteBufs.create();
@@ -275,45 +312,48 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     @Override
     public void onPlayerCollision(PlayerEntity player) {
 
-        if(!DemogorgonData.getPlayDimensionDriftSubmergeAnimation(((IEntityDataSaver) this))) {
+        if(this.getAnimation() != ddSubmergeAnimation || this.getAnimation() != ddEmergeAnimation || this.getAnimation() != ddAttack1Animation) {
             super.onPlayerCollision(player);
         }
     }
 
     @Override
     public void tick() {
-        MinecraftServer server = world.getServer();
-        if(server != null) {
-            BossBar bossBar = server.getBossBarManager().add(new Identifier(DemogorgonMod.MOD_ID  + "demogorgon_bossbar"),
-                    Text.literal("Demogorgon"));
-            bossBar.setColor(BossBar.Color.RED);
-            bossBar.setPercent(this.getMaxHealth() / this.getHealth());
+        super.tick();
+
+        updateBossbar();
+        checkForDDTarget();
+        if(!world.isClient()) {
+            System.out.println("Server Animation: " + this.getAnimation());
         }
+    }
+
+    private void checkForDDTarget() {
         //if(!world.isClient()) {
-            if (EntityUtil.areLivingEntitiesInRadiusOfEntity(this, dimensionDriftRadius) && !this.hasDimensionDriftTarget) {
-                this.dimensionDriftCooldown++;
-                //Get Dimension Drift Target & save it's ID
-                if(this.dimensionDriftCooldown >= dimensionDriftMaxCooldown && this.ticksSinceLastAttack >= 40) {
-                    Entity target = getTargetForDimensionDrift(this, dimensionDriftRadius);
-                    if(target != null && target.isAlive() && target instanceof LivingEntity livingTarget) {
-                        this.dimensionDriftTargetID = target.getId();
-                        this.hasDimensionDriftTarget = true;
-                        DemogorgonData.setPlayDimensionDriftSubmergeAnimation(((IEntityDataSaver) this), true);
-                        this.syncPlayDimensionDriftSubmergeAnimation(true, syncToClientsRadius);
-                        livingTarget.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 100));
-                        this.setInvulnerable(true);
-                        if(target instanceof  ServerPlayerEntity serverPlayer) {
-                            syncNbtToDDTarget(serverPlayer, true);
-                        }
+        if (EntityUtil.areLivingEntitiesInRadiusOfEntity(this, dimensionDriftRadius) && !this.hasDimensionDriftTarget) {
+            this.dimensionDriftCooldown++;
+            //Get Dimension Drift Target & save it's ID
+            if(this.dimensionDriftCooldown >= dimensionDriftMaxCooldown && this.ticksSinceLastAttack >= 40) {
+                Entity target = getTargetForDimensionDrift(this, dimensionDriftRadius);
+                if(target != null && target.isAlive() && target instanceof LivingEntity livingTarget) {
+                    this.dimensionDriftTargetID = target.getId();
+                    this.hasDimensionDriftTarget = true;
+                    DemogorgonData.setPlayDimensionDriftSubmergeAnimation(((IEntityDataSaver) this), true);
+                    this.setAnimation(ddSubmergeAnimation);
+                    livingTarget.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 100));
+                    this.setInvulnerable(true);
+                    if(target instanceof  ServerPlayerEntity serverPlayer) {
+                        syncNbtToDDTarget(serverPlayer, true);
                     }
                 }
             }
+        }
 
-            this.attackEntitiesInRadius(/*dimensionDriftRadius,*/ dimensionDriftDamage);
+        this.attackEntitiesInRadius(/*dimensionDriftRadius,*/ dimensionDriftDamage);
         //}
 
 
-        //Spawn Particles
+        //Spawn DD Particles
         if(DemogorgonData.getSpawnDimensionDriftParticles(((IEntityDataSaver) this)) && this.hasDimensionDriftTarget) {
             Entity target = world.getEntityById(this.dimensionDriftTargetID);
             int particleCount = 20;
@@ -337,7 +377,16 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
             DemogorgonData.setSpawnDimensionDriftParticles(((IEntityDataSaver) this), false);
             //this.spawnDDParticlesOnClient(false, syncToClientsRadius);
         }
-        super.tick();
+    }
+
+    private void updateBossbar() {
+        MinecraftServer server = world.getServer();
+        if(server != null) {
+            BossBar bossBar = server.getBossBarManager().add(new Identifier(DemogorgonMod.MOD_ID  + "demogorgon_bossbar"),
+                    Text.literal("Demogorgon"));
+            bossBar.setColor(BossBar.Color.RED);
+            bossBar.setPercent(this.getMaxHealth() / this.getHealth());
+        }
     }
 
     private void spawnDDParticlesOnClient(double x, double y, double z,
@@ -413,7 +462,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
                 }
             } else {
                 DemogorgonData.setPlayDimensionDriftSubmergeAnimation(((IEntityDataSaver) this), false);
-                this.syncPlayDimensionDriftSubmergeAnimation(false, syncToClientsRadius);
+                this.setAnimation(ddEmergeAnimation);
                 this.setInvulnerable(false);
                 if(target != null && this.hasDimensionDriftTarget && target.isAlive()) {
                     this.world.playSound(null, this.getBlockPos(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.PLAYERS, 1.0f, 1.0f);
@@ -444,7 +493,24 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
 
     private <T extends GeoAnimatable> PlayState predicate(software.bernie.geckolib.core.animation.AnimationState<T> tAnimationState) {
 
-        if(DemogorgonData.getPlayDimensionDriftSubmergeAnimation(((IEntityDataSaver) this))) {
+        //System.out.println("Animation in predicate: " + this.getAnimation());
+
+        if(this.getAnimation() == ddAttack1Animation) {
+            //System.out.println("DDAttackAnimation");
+            tAnimationState.getController().setAnimation(RawAnimation.begin().then("animation.demogorgon.dimension_drift_attack_1", Animation.LoopType.PLAY_ONCE));
+            if(tAnimationState.getController().hasAnimationFinished()) {
+                System.out.println("Finished Animation");
+                this.setAnimation(idleAnimation);
+            }
+        }
+        else if(this.getAnimation() == ddEmergeAnimation) {
+            tAnimationState.getController().setAnimation(RawAnimation.begin().then("animation.demogorgon.emerge", Animation.LoopType.PLAY_ONCE));
+            if(tAnimationState.getController().hasAnimationFinished()) {
+                System.out.println("Finished Animation");
+                this.setAnimation(ddAttack1Animation);
+            }
+        }
+        else if(this.getAnimation() == ddSubmergeAnimation) {
             tAnimationState.getController().setAnimation(RawAnimation.begin().then("animation.demogorgon.dimension_drift_submerge", Animation.LoopType.HOLD_ON_LAST_FRAME));
         }
         else if(this.handSwinging) {
