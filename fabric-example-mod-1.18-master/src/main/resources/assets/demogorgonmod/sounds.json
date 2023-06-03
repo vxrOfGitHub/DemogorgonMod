@@ -18,5 +18,11 @@
     "sounds": [
       "demogorgonmod:demogorgon_death"
     ]
+  },
+  "demogorgon_scream_1": {
+    "subtitle": "subtitles.demogorgonmod.demogorgon_scream_1",
+    "sounds": [
+      "demogorgonmod:demogorgon_scream_1"
+    ]
   }
 }

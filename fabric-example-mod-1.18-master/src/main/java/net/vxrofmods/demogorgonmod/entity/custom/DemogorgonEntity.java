@@ -1,5 +1,6 @@
 package net.vxrofmods.demogorgonmod.entity.custom;
 
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
@@ -84,6 +85,8 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     private final int ddEmergeAnimation = 5;
     private final int ddAttack1Animation = 6;
 
+    public static final int timedSoundsCount = 1;
+
     private final ServerBossBar bossBar = (ServerBossBar)new ServerBossBar(this.getDisplayName(), BossBar.Color.RED, BossBar.Style.PROGRESS).setDarkenSky(true);
 
     public DemogorgonEntity(EntityType<? extends HostileEntity> entityType, World world) {
@@ -105,7 +108,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         this.goalSelector.add(1, new RevengeGoal(this));
         this.goalSelector.add(2, new MeleeAttackGoal(this, 2d, false));
         this.goalSelector.add(7, new WanderAroundFarGoal(this, 1.0));
-        if(DemogorgonData.getPlayDimensionDriftSubmergeAnimation(((IEntityDataSaver) this))) {
+        if(this.isInDDAnimation()) {
             this.goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
             this.goalSelector.add(8, new LookAroundGoal(this));
         }
@@ -120,7 +123,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putInt("Variant", this.getTypeVariant());
-        nbt.putInt("currentAnimation", this.currentAnimation);
+        nbt.putInt("demogorgon.animation", this.currentAnimation);
         nbt.putInt("demogorgon.dimension_drift.cooldown", dimensionDriftCooldown);
         nbt.putInt("demogorgon.dimension_drift.targetDamageDelayTick", targetDamageDelayTick);
         nbt.putInt("demogorgon.dimension_drift.target_id", dimensionDriftTargetID);
@@ -134,7 +137,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         this.dataTracker.set(DATA_ID_TYPE_VARIANT, nbt.getInt("Variant"));
-        this.currentAnimation = nbt.getInt("currentAnimation");
+        this.currentAnimation = nbt.getInt("demogorgon.animation");
         this.dimensionDriftCooldown = nbt.getInt("demogorgon.dimension_drift.cooldown");
         this.targetDamageDelayTick = nbt.getInt("demogorgon.dimension_drift.targetDamageDelayTick");
         this.dimensionDriftTargetID = nbt.getInt("demogorgon.dimension_drift.target_id");
@@ -194,7 +197,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        if(this.getAnimation() != ddSubmergeAnimation) {
+        if(this.isInDDAnimation()) {
             return ModSounds.DEMOGORGON_IDLE;
         }
         return null;
@@ -202,7 +205,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        if(this.getAnimation() != ddSubmergeAnimation) {
+        if(this.isInDDAnimation()) {
             return ModSounds.DEMOGORGON_HURT_SOUND;
         }
         return null;
@@ -210,7 +213,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
 
     @Override
     protected SoundEvent getDeathSound() {
-        if(this.getAnimation() != ddSubmergeAnimation) {
+        if(this.isInDDAnimation()) {
             return ModSounds.DEMOGORGON_DEATH;
         }
         return null;
@@ -227,7 +230,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
-        if(this.getAnimation() != ddSubmergeAnimation) {
+        if(this.isInDDAnimation()) {
             this.playSound(SoundEvents.ENTITY_IRON_GOLEM_STEP, 1.0F, 1.0F);
         }
     }
@@ -282,7 +285,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     @Override
     public void move(MovementType movementType, Vec3d movement) {
 
-        if(this.getAnimation() != ddSubmergeAnimation || this.getAnimation() != ddEmergeAnimation || this.getAnimation() != ddAttack1Animation) {
+        if(this.isInDDAnimation()) {
             super.move(movementType, movement);
         }
     }
@@ -312,7 +315,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     @Override
     public void onPlayerCollision(PlayerEntity player) {
 
-        if(this.getAnimation() != ddSubmergeAnimation || this.getAnimation() != ddEmergeAnimation || this.getAnimation() != ddAttack1Animation) {
+        if(this.isInDDAnimation()) {
             super.onPlayerCollision(player);
         }
     }
@@ -323,9 +326,41 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
 
         updateBossbar();
         checkForDDTarget();
-        if(!world.isClient()) {
-            System.out.println("Server Animation: " + this.getAnimation());
+        setInvulnerability();
+        playTimedSounds();
+
+    }
+
+    private void playTimedSounds() {
+
+        IEntityDataSaver saver = ((IEntityDataSaver) this);
+
+        if(world.isClient()) {
+
+            if(this.getAnimation() == ddAttack1Animation) {
+                if(!DemogorgonData.getPlayedDDAttack1Sound(saver)) {
+                    world.playSound(this.getX(), this.getY(), this.getZ(), ModSounds.DEMOGORGON_SCREAM_1_SOUND, SoundCategory.HOSTILE, 1f, 1f, true);
+                    DemogorgonData.writePlayedDDAttack1Sound(saver, true);
+                }
+            } else {
+                DemogorgonData.writePlayedDDAttack1Sound(saver, false);
+            }
+
+
         }
+
+    }
+
+    private void setInvulnerability() {
+        if(!world.isClient()) {
+            if(isInDDAnimation()) {
+                this.setInvulnerable(true);
+            }
+        }
+    }
+
+    private boolean isInDDAnimation() {
+        return this.getAnimation() == ddSubmergeAnimation || this.getAnimation() == ddEmergeAnimation || this.getAnimation() == ddAttack1Animation;
     }
 
     private void checkForDDTarget() {
@@ -341,7 +376,6 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
                     DemogorgonData.setPlayDimensionDriftSubmergeAnimation(((IEntityDataSaver) this), true);
                     this.setAnimation(ddSubmergeAnimation);
                     livingTarget.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 100));
-                    this.setInvulnerable(true);
                     if(target instanceof  ServerPlayerEntity serverPlayer) {
                         syncNbtToDDTarget(serverPlayer, true);
                     }
@@ -463,7 +497,6 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
             } else {
                 DemogorgonData.setPlayDimensionDriftSubmergeAnimation(((IEntityDataSaver) this), false);
                 this.setAnimation(ddEmergeAnimation);
-                this.setInvulnerable(false);
                 if(target != null && this.hasDimensionDriftTarget && target.isAlive()) {
                     this.world.playSound(null, this.getBlockPos(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.PLAYERS, 1.0f, 1.0f);
                     this.teleport(target.getX(), target.getY(), target.getZ());
@@ -491,6 +524,14 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         controllerRegistrar.add(new AnimationController<>(this,"controller", 0, this::predicate));
     }
 
+    private void updateAnimationStateC2S(int currentAnimationState) {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeInt(this.getId());
+        buf.writeInt(currentAnimationState);
+        ClientPlayNetworking.send(ModMessages.DEMOGORGON_ANIMATION_SYNC_ID, buf);
+
+    }
+
     private <T extends GeoAnimatable> PlayState predicate(software.bernie.geckolib.core.animation.AnimationState<T> tAnimationState) {
 
         //System.out.println("Animation in predicate: " + this.getAnimation());
@@ -501,6 +542,8 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
             if(tAnimationState.getController().hasAnimationFinished()) {
                 System.out.println("Finished Animation");
                 this.setAnimation(idleAnimation);
+                this.updateAnimationStateC2S(idleAnimation);
+
             }
         }
         else if(this.getAnimation() == ddEmergeAnimation) {
@@ -508,6 +551,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
             if(tAnimationState.getController().hasAnimationFinished()) {
                 System.out.println("Finished Animation");
                 this.setAnimation(ddAttack1Animation);
+                this.updateAnimationStateC2S(ddAttack1Animation);
             }
         }
         else if(this.getAnimation() == ddSubmergeAnimation) {

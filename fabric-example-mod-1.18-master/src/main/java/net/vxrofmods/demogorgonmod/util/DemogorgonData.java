@@ -1,6 +1,9 @@
 package net.vxrofmods.demogorgonmod.util;
 
 import net.minecraft.nbt.NbtCompound;
+import net.vxrofmods.demogorgonmod.entity.custom.DemogorgonEntity;
+
+import java.util.ArrayList;
 
 public class DemogorgonData {
 
@@ -35,6 +38,29 @@ public class DemogorgonData {
         NbtCompound nbt = target.getPersistentData();
 
         return nbt.getBoolean("isDDTarget");
+    }
+
+    public static void writeAnimationToNBT(IEntityDataSaver demogorgon, int animation) {
+        NbtCompound nbt = demogorgon.getPersistentData();
+        nbt.putInt("demogorgon.animation", animation);
+    }
+
+    public static int getAnimationInNBT(IEntityDataSaver demogorgon) {
+        NbtCompound nbt = demogorgon.getPersistentData();
+
+        return nbt.getInt("demogorgon.animation");
+    }
+
+
+    public static void writePlayedDDAttack1Sound(IEntityDataSaver demogorgon, boolean played) {
+        NbtCompound nbt = demogorgon.getPersistentData();
+        nbt.putBoolean("played_dd_attack_1_sound", played);
+    }
+
+    public static boolean getPlayedDDAttack1Sound(IEntityDataSaver demogorgon) {
+        NbtCompound nbt = demogorgon.getPersistentData();
+
+        return nbt.getBoolean("played_dd_attack_1_sound");
     }
 
 }
