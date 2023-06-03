@@ -1,9 +1,6 @@
 package net.vxrofmods.demogorgonmod.util;
 
 import net.minecraft.nbt.NbtCompound;
-import net.vxrofmods.demogorgonmod.entity.custom.DemogorgonEntity;
-
-import java.util.ArrayList;
 
 public class DemogorgonData {
 
@@ -62,5 +59,18 @@ public class DemogorgonData {
 
         return nbt.getBoolean("played_dd_attack_1_sound");
     }
+
+
+    public static void writeDDAttack1CurrentTick(IEntityDataSaver demogorgon, int startTick) {
+        NbtCompound nbt = demogorgon.getPersistentData();
+        nbt.putInt("demogorgon.dd_attack_1_start_tick", startTick);
+    }
+
+    public static int readDDAttack1CurrentTick(IEntityDataSaver demogorgon) {
+        NbtCompound nbt = demogorgon.getPersistentData();
+
+        return nbt.getInt("demogorgon.dd_attack_1_start_tick");
+    }
+
 
 }

@@ -8,9 +8,6 @@ import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.vxrofmods.demogorgonmod.entity.custom.DemogorgonEntity;
-import net.vxrofmods.demogorgonmod.util.DemogorgonAnimationData;
-import net.vxrofmods.demogorgonmod.util.DemogorgonData;
-import net.vxrofmods.demogorgonmod.util.IEntityDataSaver;
 
 public class DemogorgonAnimationSyncC2SPacket {
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender packetSender) {
