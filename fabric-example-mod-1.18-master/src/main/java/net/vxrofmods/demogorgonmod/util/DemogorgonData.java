@@ -1,6 +1,7 @@
 package net.vxrofmods.demogorgonmod.util;
 
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.Vec3d;
 
 public class DemogorgonData {
 
@@ -72,5 +73,58 @@ public class DemogorgonData {
         return nbt.getInt("demogorgon.dd_attack_1_start_tick");
     }
 
+
+    public static void writeDDTargetsPositionToTarget(IEntityDataSaver target, Vec3d pos) {
+
+        writeDDTargetsXPositionToTarget(target, pos.x);
+        writeDDTargetsYPositionToTarget(target, pos.y);
+        writeDDTargetsZPositionToTarget(target, pos.z);
+    }
+    public static void writeDDTargetsPositionToTarget(IEntityDataSaver target, double x, double y, double z) {
+
+        writeDDTargetsXPositionToTarget(target, x);
+        writeDDTargetsYPositionToTarget(target, y);
+        writeDDTargetsZPositionToTarget(target, z);
+    }
+
+    public static Vec3d readDDTargetsPositionFromTarget(IEntityDataSaver target) {
+        double x = readDDTargetsXPositionFromTarget(target);
+        double y = readDDTargetsYPositionFromTarget(target);
+        double z = readDDTargetsZPositionFromTarget(target);
+
+        return new Vec3d(x, y, z);
+    }
+
+    public static void writeDDTargetsXPositionToTarget(IEntityDataSaver target, double posX) {
+        NbtCompound nbt = target.getPersistentData();
+        nbt.putDouble("demogorgon.dd_target_position_x", posX);
+    }
+
+    public static double readDDTargetsXPositionFromTarget(IEntityDataSaver target) {
+        NbtCompound nbt = target.getPersistentData();
+
+        return nbt.getInt("demogorgon.dd_target_position_x");
+    }
+
+    public static void writeDDTargetsYPositionToTarget(IEntityDataSaver target, double posY) {
+        NbtCompound nbt = target.getPersistentData();
+        nbt.putDouble("demogorgon.dd_target_position_y", posY);
+    }
+
+    public static double readDDTargetsYPositionFromTarget(IEntityDataSaver target) {
+        NbtCompound nbt = target.getPersistentData();
+
+        return nbt.getInt("demogorgon.dd_target_position_y");
+    }
+    public static void writeDDTargetsZPositionToTarget(IEntityDataSaver target, double posZ) {
+        NbtCompound nbt = target.getPersistentData();
+        nbt.putDouble("demogorgon.dd_target_position_z", posZ);
+    }
+
+    public static double readDDTargetsZPositionFromTarget(IEntityDataSaver target) {
+        NbtCompound nbt = target.getPersistentData();
+
+        return nbt.getInt("demogorgon.dd_target_position_z");
+    }
 
 }
