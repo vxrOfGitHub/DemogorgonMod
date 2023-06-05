@@ -19,7 +19,6 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.entity.passive.MerchantEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -40,6 +39,7 @@ import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.vxrofmods.demogorgonmod.DemogorgonMod;
+import net.vxrofmods.demogorgonmod.entity.ModEntities;
 import net.vxrofmods.demogorgonmod.entity.variant.DemogorgonVariant;
 import net.vxrofmods.demogorgonmod.networking.ModMessages;
 import net.vxrofmods.demogorgonmod.sound.ModSounds;
@@ -73,11 +73,12 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     private final int dimensionDriftDamage = 10;
     private final double syncToClientsRadius = 256;
     private int targetDamageDelayTick = 0;
+
+    private int targetDamageDelayTickSinceEmerge = 0;
     private final int targetDamageMaxDelayTick = 200;
     private int dimensionDriftTargetID;
     private boolean hasDimensionDriftTarget = false;
     private boolean shouldSpawnDimensionDriftParticles = false;
-    private static final float movementSpeed = 0.2f;
     private int ticksSinceLastAttack = 0;
     private double slownessPerTickToDDTarget = 0;
 
@@ -89,6 +90,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     private final int ddSubmergeAnimation = 4;
     private final int ddEmergeAnimation = 5;
     private final int ddAttack1Animation = 6;
+    private final int emergeAnimation = 7;
 
     public static final int timedSoundsCount = 1;
     private static final int ddAttack1AnimationDuration = 127;
@@ -101,6 +103,11 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
 
     private static final UUID MAX_HEALTH_MODIFIER_ID = UUID.randomUUID();
     private static final double maxHealth = 200D;
+    private static final float attackDamage = 20f;
+    private static final float attackSpeed = 2f;
+    private static final float knockbackResistance = 0.5f;
+    private static final float attackKnockback = 1f;
+    private static final float movementSpeed = 0.2f;
 
     public DemogorgonEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
@@ -109,9 +116,9 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     public static DefaultAttributeContainer.Builder setAttributes() {
         return HostileEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, maxHealth)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 20f)
-                .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2f)
-                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.5f)
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, attackDamage)
+                .add(EntityAttributes.GENERIC_ATTACK_SPEED, attackSpeed)
+                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, knockbackResistance)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, movementSpeed);
     }
 
@@ -127,7 +134,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
             this.goalSelector.add(8, new WanderAroundPointOfInterestGoal(this, movementSpeed, false));
             this.targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, false, false));
             this.targetSelector.add(3, new ActiveTargetGoal<>(this, MerchantEntity.class, true));
-            this.targetSelector.add( 4, new ActiveTargetGoal<>(this, LivingEntity.class, true, true));
+            //this.targetSelector.add( 4, new ActiveTargetGoal<>(this, LivingEntity.class, true, true));
         }
 
 
@@ -140,7 +147,8 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         nbt.putInt("Variant", this.getTypeVariant());
         nbt.putInt("demogorgon.animation", this.currentAnimation);
         nbt.putInt("demogorgon.custom_attack.cooldown", customAttackCooldown);
-        nbt.putInt("demogorgon.dimension_drift.targetDamageDelayTick", targetDamageDelayTick);
+        nbt.putInt("demogorgon.dimension_drift.target_damage_delay_tick", targetDamageDelayTick);
+        nbt.putInt("demogorgon.dimension_drift.target_damage_delay_tick_since_emerge", targetDamageDelayTickSinceEmerge);
         nbt.putInt("demogorgon.dimension_drift.target_id", dimensionDriftTargetID);
         nbt.putInt("demogorgon.ticks_since_last_attack", ticksSinceLastAttack);
         nbt.putInt("demogorgon.next_perform_attack", nextPerformAttack);
@@ -158,7 +166,8 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         this.dataTracker.set(DATA_ID_TYPE_VARIANT, nbt.getInt("Variant"));
         this.currentAnimation = nbt.getInt("demogorgon.animation");
         this.customAttackCooldown = nbt.getInt("demogorgon.custom_attack.cooldown");
-        this.targetDamageDelayTick = nbt.getInt("demogorgon.dimension_drift.targetDamageDelayTick");
+        this.targetDamageDelayTick = nbt.getInt("demogorgon.dimension_drift.target_damage_delay_tick");
+        this.targetDamageDelayTickSinceEmerge = nbt.getInt("demogorgon.dimension_drift.target_damage_delay_tick_since_emerge");
         this.dimensionDriftTargetID = nbt.getInt("demogorgon.dimension_drift.target_id");
         this.ticksSinceLastAttack = nbt.getInt("demogorgon.ticks_since_last_attack");
         this.nextPerformAttack = nbt.getInt("demogorgon.next_perform_attack");
@@ -343,6 +352,15 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         }
     }*/
 
+    @Override
+    protected void attackLivingEntity(LivingEntity target) {
+
+        if(!this.isInDDAnimation()) {
+
+            super.attackLivingEntity(target);
+        }
+    }
+
     private void syncNbtToDDTarget(ServerPlayerEntity player , boolean isTarget) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeInt(player.getId());
@@ -350,6 +368,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
 
         ServerPlayNetworking.send(player, ModMessages.GET_DD_TARGET_IN_NBT_SYNC_ID, buf);
     }
+
 
 
     @Override
@@ -385,6 +404,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
             }
             if(this.switch2Stage2Began || this.getHealth() <= this.getMaxHealth() * 0.4 && !this.doneSwitch2Stage2) {
                 switch2Stage2();
+                this.customAttackCooldown = 0;
 
             }
             if(this.customAttackCooldown >= maxCustomAttackCooldown) {
@@ -402,17 +422,12 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         if(!switch2Stage2Began) {
             this.setAnimation(ddSubmergeAnimation);
 
-            getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)
-                    .addTemporaryModifier(new EntityAttributeModifier(MAX_HEALTH_MODIFIER_ID,
-                            "Max Health Modifier",
-                            maxHealth, // Adjust the modifier value to double the maximum health
-                            EntityAttributeModifier.Operation.ADDITION));
-            //setHealth(getHealth() * 2); // Increase the current health accordingly
+            this.modifyStage2Attributes();
 
             // Spawning Demodogs
             for(int i = 0; i < nextInt(8, 13); i++) {
                 // Zombie as placeholder for DemoDog
-                EntityType.ZOMBIE.spawn(((ServerWorld) world), this.getBlockPos(), SpawnReason.REINFORCEMENT);
+                ModEntities.DEMO_DOG.spawn(((ServerWorld) world), this.getBlockPos(), SpawnReason.REINFORCEMENT);
             }
 
             switch2Stage2Began = true;
@@ -423,7 +438,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         List<Entity> entities = EntityUtil.getLivingEntitiesInRadius(this, 100);
         boolean areDemoDogsAlive = false;
         for (Entity e : entities) {
-            if(e.isAlive() && e.getType().equals(EntityType.ZOMBIE)) { // Zombie as placeholder for DemoDog
+            if(e.isAlive() && e.getType().equals(ModEntities.DEMO_DOG)) { // Zombie as placeholder for DemoDog
                 areDemoDogsAlive = true;
                 //System.out.println("Zombies Alive");
             }
@@ -435,12 +450,51 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
                 this.heal(this.getMaxHealth() / 50);
             }
         } else {
+            // at the End
             this.doneSwitch2Stage2 = true;
-            // Once at the end
-            this.setAnimation(ddEmergeAnimation);
             switch2Stage2Began = false;
+            this.setAnimation(emergeAnimation);
             switch2Stage2Ticks = 0;
         }
+    }
+
+    private void modifyStage2Attributes() {
+        EntityAttributeInstance attackDamageAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        if (attackDamageAttribute != null) {
+            attackDamageAttribute.setBaseValue(attackDamage * 1.5); // Set the attack damage value to 10.0
+        }
+
+        EntityAttributeInstance movementSpeedAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);
+        if (movementSpeedAttribute != null) {
+            movementSpeedAttribute.setBaseValue(movementSpeed * 3); // Set the movement speed value to 0.3
+        }
+
+        EntityAttributeInstance attackSpeedAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_SPEED);
+        if (attackSpeedAttribute != null) {
+            attackSpeedAttribute.setBaseValue(attackSpeed * 1.2); // Set the attack speed value to 20.0
+        }
+
+        EntityAttributeInstance knockbackResistanceAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE);
+        if (knockbackResistanceAttribute != null) {
+            knockbackResistanceAttribute.setBaseValue(knockbackResistance * 3); // Set the knockback resistance value to 0.5
+        }
+
+        EntityAttributeInstance knockbackAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_KNOCKBACK);
+        if (knockbackAttribute != null) {
+            knockbackAttribute.setBaseValue(attackKnockback * 3); // Set the knockback value to 2.0
+        }
+
+        // Doubling max Health
+        EntityAttributeInstance maxHealthAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
+        if (maxHealthAttribute != null) {
+            maxHealthAttribute.addTemporaryModifier(new EntityAttributeModifier(MAX_HEALTH_MODIFIER_ID,
+                "Max Health Modifier",
+                maxHealth, // Adjust the modifier value to double the maximum health
+                EntityAttributeModifier.Operation.ADDITION));
+            //setHealth(getHealth() * 2); // Increase the current health accordingly
+        }
+
+
     }
 
     private void checkForDDTarget() {
@@ -453,6 +507,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
                 this.targetDamageDelayTick = 0;
                 this.dimensionDriftTargetID = 0;
                 this.hasDimensionDriftTarget = false;
+                nextPerformAttack = 0;
 
             }
         }
@@ -460,6 +515,9 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         if(this.customAttackCooldown >= maxCustomAttackCooldown && this.ticksSinceLastAttack >= 40 && nextPerformAttack == 1) {
             // Get Dimension Drift Target & save it's ID
             Entity target = getTargetForDimensionDrift(this, customAttackRadius);
+            if(target == null) {
+                this.nextPerformAttack = 0;
+            }
             if(target != null && target.isAlive() && target instanceof LivingEntity livingTarget) {
                 this.dimensionDriftTargetID = target.getId();
                 this.hasDimensionDriftTarget = true;
@@ -656,7 +714,16 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     }
 
     private boolean isInDDAnimation() {
-        return this.getAnimation() == ddSubmergeAnimation || this.getAnimation() == ddEmergeAnimation || this.getAnimation() == ddAttack1Animation;
+        return this.getAnimation() == ddSubmergeAnimation || this.getAnimation() == ddEmergeAnimation || this.getAnimation() == ddAttack1Animation
+                || this.getAnimation() == emergeAnimation;
+    }
+
+    @Override
+    public boolean tryAttack(Entity target) {
+        if(!isInDDAnimation()) {
+            return false;
+        }
+        return super.tryAttack(target);
     }
 
     private void updateBossbar() {
@@ -699,13 +766,14 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
                 return target;
             }
         }
-        return possibleTargets.get(nextInt(0,possibleTargets.size()));
+        return null;
+        //possibleTargets.get(nextInt(0,possibleTargets.size()));
     }
 
     @Override
     public void setTarget(@Nullable LivingEntity target) {
 
-        if(this.hasDimensionDriftTarget) {
+        if(isInDDAnimation()) {
             target = null;
         }
 
@@ -779,16 +847,25 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
             } else if(this.getAnimation() == ddSubmergeAnimation) {
                 DemogorgonData.setPlayDimensionDriftSubmergeAnimation(((IEntityDataSaver) this), false);
                 this.setAnimation(ddEmergeAnimation);
+                targetDamageDelayTickSinceEmerge = targetDamageDelayTick;
+                this.nextPerformAttack = 0;
+
                 if(target != null && this.hasDimensionDriftTarget && target.isAlive()) {
                     //this.world.playSound(null, this.getBlockPos(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.PLAYERS, 1.0f, 1.0f);
 
-
-                    System.out.println("Writing Players Pos");
                     writeDDTargetsPositionToTarget(((IEntityDataSaver) target), target.getPos());
 
                     this.teleportInFrontOfTarget(target, 2);
                 }
 
+            }
+            if (this.getAnimation() == ddEmergeAnimation && this.targetDamageDelayTick - targetDamageDelayTickSinceEmerge >= 60) {
+                this.setAnimation(ddAttack1Animation);
+                this.targetDamageDelayTickSinceEmerge = targetDamageDelayTick;
+
+            } else if (this.getAnimation() == ddAttack1Animation && this.targetDamageDelayTick - targetDamageDelayTickSinceEmerge >= 133) {
+                this.setAnimation(idleAnimation);
+                targetDamageDelayTickSinceEmerge = 0;
             }
             if(!this.isInDDAnimation()) {
 
@@ -810,6 +887,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
                 this.targetDamageDelayTick = 0;
                 this.dimensionDriftTargetID = 0;
                 this.hasDimensionDriftTarget = false;
+                nextPerformAttack = 0;
             }
         }
     }
@@ -835,24 +913,26 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
 
     private <T extends GeoAnimatable> PlayState predicate(software.bernie.geckolib.core.animation.AnimationState<T> tAnimationState) {
 
-        //System.out.println("Animation in predicate: " + this.getAnimation());
-
-        if(this.getAnimation() == ddAttack1Animation) {
+        if(this.getAnimation() == emergeAnimation) {
+            //System.out.println("DDAttackAnimation");
+            tAnimationState.getController().setAnimation(RawAnimation.begin().then("animation.demogorgon.emerge", Animation.LoopType.PLAY_ONCE));
+            if(tAnimationState.getController().hasAnimationFinished()) {
+                updateAnimationStateC2S(idleAnimation);
+                this.setAnimation(idleAnimation);
+            }
+        } else if(this.getAnimation() == ddAttack1Animation) {
             //System.out.println("DDAttackAnimation");
             tAnimationState.getController().setAnimation(RawAnimation.begin().then("animation.demogorgon.dimension_drift_attack_1", Animation.LoopType.PLAY_ONCE));
             if(tAnimationState.getController().hasAnimationFinished()) {
-                //System.out.println("Finished Animation");
+                updateAnimationStateC2S(idleAnimation);
                 this.setAnimation(idleAnimation);
-                this.updateAnimationStateC2S(idleAnimation);
-
             }
         }
         else if(this.getAnimation() == ddEmergeAnimation) {
             tAnimationState.getController().setAnimation(RawAnimation.begin().then("animation.demogorgon.emerge", Animation.LoopType.PLAY_ONCE));
             if(tAnimationState.getController().hasAnimationFinished()) {
-                //System.out.println("Finished Animation");
+                updateAnimationStateC2S(ddAttack1Animation);
                 this.setAnimation(ddAttack1Animation);
-                this.updateAnimationStateC2S(ddAttack1Animation);
             }
         }
         else if(this.getAnimation() == ddSubmergeAnimation) {

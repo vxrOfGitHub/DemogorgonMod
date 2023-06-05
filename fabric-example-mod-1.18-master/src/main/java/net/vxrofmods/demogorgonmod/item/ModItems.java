@@ -20,6 +20,9 @@ public class ModItems {
     public static final Item DEMOGORGON_SPAWN_EGG = registerItem("demogorgon_spawn_egg",
             new SpawnEggItem(ModEntities.DEMOGORGON, 0x707070, 0x755b5b,
                     new FabricItemSettings()));
+    public static final Item DEMO_DOG_SPAWN_EGG = registerItem("demo_dog_spawn_egg",
+            new SpawnEggItem(ModEntities.DEMO_DOG, 0x707070, 0x755b5b,
+                    new FabricItemSettings()));
 
 
     private static Item registerItem(String name, Item item) {
@@ -29,6 +32,8 @@ public class ModItems {
     public static void addItemsToItemGroup() {
         addToItemGroup(ItemGroups.SPAWN_EGGS, DEMOGORGON_SPAWN_EGG);
         addToItemGroup(ModItemGroup.DEMOGORGON_MOD, DEMOGORGON_SPAWN_EGG);
+        addToItemGroup(ItemGroups.SPAWN_EGGS, DEMO_DOG_SPAWN_EGG);
+        addToItemGroup(ModItemGroup.DEMOGORGON_MOD, DEMO_DOG_SPAWN_EGG);
     }
 
     private static void addToItemGroup (ItemGroup group, Item item) {

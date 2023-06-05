@@ -8,6 +8,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.vxrofmods.demogorgonmod.DemogorgonMod;
+import net.vxrofmods.demogorgonmod.entity.custom.DemoDogEntity;
 import net.vxrofmods.demogorgonmod.entity.custom.DemogorgonEntity;
 
 public class ModEntities {
@@ -15,4 +16,9 @@ public class ModEntities {
             Registries.ENTITY_TYPE, new Identifier(DemogorgonMod.MOD_ID, "demogorgon"),
             FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, DemogorgonEntity::new)
                     .dimensions(EntityDimensions.fixed(1.8f, 3.0f)).build());
+
+    public static final EntityType<DemoDogEntity> DEMO_DOG = Registry.register(
+            Registries.ENTITY_TYPE, new Identifier(DemogorgonMod.MOD_ID, "demo_dog"),
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, DemoDogEntity::new)
+                    .dimensions(EntityDimensions.fixed(1.5f, 1f)).build());
 }
