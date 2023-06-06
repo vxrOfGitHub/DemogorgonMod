@@ -20,6 +20,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.MerchantEntity;
+import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
@@ -108,6 +109,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     private static final float knockbackResistance = 0.5f;
     private static final float attackKnockback = 1f;
     private static final float movementSpeed = 0.2f;
+    private int nearPlayers = 0;
 
     public DemogorgonEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
@@ -153,6 +155,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         nbt.putInt("demogorgon.ticks_since_last_attack", ticksSinceLastAttack);
         nbt.putInt("demogorgon.next_perform_attack", nextPerformAttack);
         nbt.putInt("demogorgon.switch_to_stage_2_ticks", switch2Stage2Ticks);
+        nbt.putInt("demogorgon.near_players", nearPlayers);
         nbt.putDouble("demogorgon.slowness_per_tick_to_dd_target", slownessPerTickToDDTarget);
         nbt.putBoolean("demogorgon.dimension_drift.has_target", hasDimensionDriftTarget);
         nbt.putBoolean("demogorgon.dimension_drift.spawn_particles", shouldSpawnDimensionDriftParticles);
@@ -172,6 +175,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         this.ticksSinceLastAttack = nbt.getInt("demogorgon.ticks_since_last_attack");
         this.nextPerformAttack = nbt.getInt("demogorgon.next_perform_attack");
         this.switch2Stage2Ticks = nbt.getInt("demogorgon.switch_to_stage_2_ticks");
+        this.nearPlayers = nbt.getInt("demogorgon.near_players");
         this.slownessPerTickToDDTarget = nbt.getDouble("demogorgon.slowness_per_tick_to_dd_target");
         this.hasDimensionDriftTarget = nbt.getBoolean("demogorgon.dimension_drift.has_target");
         this.shouldSpawnDimensionDriftParticles = nbt.getBoolean("demogorgon.dimension_drift.spawn_particles");
@@ -384,11 +388,99 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         super.tick();
 
         updateBossbar();
+        modifyAttributesWhenMorePlayers(false);
         customAttackControl();
         setInvulnerability();
         playTimedSounds();
         applyTimedDamage();
         rotationControl();
+    }
+
+    private void modifyAttributesWhenMorePlayers(boolean forceUpdate) {
+
+        if(!world.isClient()) {
+
+        int nearPlayers = 0;
+
+        // Get Amount of near Players
+        List<Entity> entities = EntityUtil.getLivingEntitiesInRadius(this, 256);
+        for (Entity entity : entities) {
+            if(entity instanceof VillagerEntity) {
+                nearPlayers++;
+            }
+        }
+        // If near Players = 0 than it's set to 1, so later the Attributes don't go below normal
+        if(nearPlayers <= 0) {
+            nearPlayers = 1;
+        }
+
+        // checking if the Attributes needs to be updated
+        if(nearPlayers != this.nearPlayers || forceUpdate) {
+
+            // getting a float from an integer
+            float n = this.nearPlayers;
+
+            // getting the difference, so the current health can be set equally
+            float difference = (float) nearPlayers / n;
+
+            //updating the current nearPlayers
+            this.nearPlayers = nearPlayers;
+
+            // making the maxHealthAttribute
+            EntityAttributeInstance maxHealthAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
+            if (maxHealthAttribute != null) {
+                // if this Attribute has a modifier already, then it's removing it
+                EntityAttributeModifier maxHealthModifier = maxHealthAttribute.getModifier(MAX_HEALTH_MODIFIER_ID);
+                if(maxHealthModifier != null && maxHealthAttribute.hasModifier(maxHealthModifier)) {
+                    maxHealthAttribute.removeModifier(MAX_HEALTH_MODIFIER_ID);
+                }
+                // checking if the Switch to Stage 2 has happened or is happening and setting the Attributes accordingly
+                if(this.switch2Stage2Began || this.doneSwitch2Stage2) {
+
+                    System.out.println("here");
+
+                    // Adjusting the Attack Damage Attribute
+                    EntityAttributeInstance attackDamageAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+                    if (attackDamageAttribute != null) {
+                        attackDamageAttribute.setBaseValue(attackDamage * nearPlayers * 1.2f); // Set the attack damage value to 10.0
+                    }
+
+                    // setting the maxHealth Modifier
+                    maxHealthAttribute.addTemporaryModifier(new EntityAttributeModifier(MAX_HEALTH_MODIFIER_ID,
+                            "Max Health Modifier",
+                            this.getMaxHealth() * nearPlayers * 2 - this.getMaxHealth(),
+                            EntityAttributeModifier.Operation.ADDITION));
+                    // Setting the current Health
+                    setHealth(getHealth() * nearPlayers); // Increase the current health accordingly
+                }
+                else {
+
+                    // Adjusting the Attack Damage Attribute
+                    EntityAttributeInstance attackDamageAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+                    if (attackDamageAttribute != null) {
+                        attackDamageAttribute.setBaseValue(attackDamage * nearPlayers); // Set the attack damage value to 10.0
+                    }
+
+                    // setting the maxHealth Modifier
+                    maxHealthAttribute.addTemporaryModifier(new EntityAttributeModifier(MAX_HEALTH_MODIFIER_ID,
+                            "Max Health Modifier",
+                            this.getMaxHealth() * nearPlayers - this.getMaxHealth(),
+                            EntityAttributeModifier.Operation.ADDITION));
+                    // Setting the current Health
+                    setHealth(getHealth() * difference); // Increase the current health accordingly
+                }
+            }
+
+            System.out.println("Updated Attributes: " + forceUpdate);
+            System.out.println("New MaxHealth: " + this.getMaxHealth());
+            System.out.println("New Current Health: " + this.getHealth());
+
+            EntityAttributeInstance attackDamage = this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+            if(attackDamage != null) {
+                System.out.println("New AttackDamage: " + attackDamage.getBaseValue());
+            }
+        }
+        }
     }
 
 
@@ -421,16 +513,30 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         // Should happen ones
         if(!switch2Stage2Began) {
             this.setAnimation(ddSubmergeAnimation);
+            switch2Stage2Began = true;
 
             this.modifyStage2Attributes();
 
+            int nearPlayers = 0;
+
+            List<Entity> nearEntities = EntityUtil.getLivingEntitiesInRadius(this, 256);
+            for (Entity entity : nearEntities) {
+                if(entity instanceof VillagerEntity) {
+
+                    nearPlayers++;
+                }
+            }
+            if(nearPlayers <= 0) {
+                nearPlayers = 1;
+            }
+
             // Spawning Demodogs
-            for(int i = 0; i < nextInt(8, 13); i++) {
+            for(int i = 0; i < nearPlayers * 2; i++) {
                 // Zombie as placeholder for DemoDog
                 ModEntities.DEMO_DOG.spawn(((ServerWorld) world), this.getBlockPos(), SpawnReason.REINFORCEMENT);
             }
 
-            switch2Stage2Began = true;
+
         }
 
         // should happen repeatedly
@@ -459,14 +565,16 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     }
 
     private void modifyStage2Attributes() {
-        EntityAttributeInstance attackDamageAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        /*EntityAttributeInstance attackDamageAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
         if (attackDamageAttribute != null) {
             attackDamageAttribute.setBaseValue(attackDamage * 1.5); // Set the attack damage value to 10.0
-        }
+        }*/
+
+        modifyAttributesWhenMorePlayers(true);
 
         EntityAttributeInstance movementSpeedAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);
         if (movementSpeedAttribute != null) {
-            movementSpeedAttribute.setBaseValue(movementSpeed * 3); // Set the movement speed value to 0.3
+            movementSpeedAttribute.setBaseValue(movementSpeed * 2); // Set the movement speed value to 0.3
         }
 
         EntityAttributeInstance attackSpeedAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_SPEED);
@@ -484,15 +592,15 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
             knockbackAttribute.setBaseValue(attackKnockback * 3); // Set the knockback value to 2.0
         }
 
-        // Doubling max Health
+        /*// Doubling max Health
         EntityAttributeInstance maxHealthAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
         if (maxHealthAttribute != null) {
             maxHealthAttribute.addTemporaryModifier(new EntityAttributeModifier(MAX_HEALTH_MODIFIER_ID,
                 "Max Health Modifier",
-                maxHealth, // Adjust the modifier value to double the maximum health
+                this.getMaxHealth(), // Adjust the modifier value to double the maximum health
                 EntityAttributeModifier.Operation.ADDITION));
             //setHealth(getHealth() * 2); // Increase the current health accordingly
-        }
+        }*/
 
 
     }
