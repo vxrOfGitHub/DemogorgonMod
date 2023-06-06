@@ -1,6 +1,7 @@
 package net.vxrofmods.demogorgonmod.util;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
@@ -30,6 +31,20 @@ public class EntityUtil {
         }
 
         return false;
+    }
+
+    public static List<Entity> getCertainEntitiesInRadius(Entity entity, EntityType<?> type, double radius) {
+        List<Entity> entities = getLivingEntitiesInRadius(entity, radius);
+        List<Entity> certainEntities = new ArrayList<>();
+
+        for (Entity e:entities) {
+            if(e.getType() == type) {
+                certainEntities.add(e);
+            }
+        }
+
+        return certainEntities;
+
     }
 
     public static List<Entity> getLivingEntitiesInRadius(Entity entity, double radius) {

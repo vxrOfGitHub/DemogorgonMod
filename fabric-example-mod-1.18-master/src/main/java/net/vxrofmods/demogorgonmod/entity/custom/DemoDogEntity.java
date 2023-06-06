@@ -35,7 +35,7 @@ public class DemoDogEntity extends HostileEntity implements GeoEntity {
     public static DefaultAttributeContainer.Builder setAttributes() {
         return AnimalEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 40D)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 6.0f)
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 12.0f)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2f)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4f)
                 .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 1.2f);
@@ -46,7 +46,7 @@ public class DemoDogEntity extends HostileEntity implements GeoEntity {
         this.goalSelector.add(0, new SwimGoal(this));
         this.goalSelector.add(1, new RevengeGoal(this));
         this.goalSelector.add(2, new MeleeAttackGoal(this, 2d, false));
-        this.goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 30F));
         this.goalSelector.add(8, new LookAroundGoal(this));
         this.goalSelector.add(8, new WanderAroundPointOfInterestGoal(this, 0.3f, false));
         this.targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, false, false));

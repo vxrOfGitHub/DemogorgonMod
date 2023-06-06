@@ -22,6 +22,7 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.MerchantEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
@@ -70,7 +71,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
 
     private int customAttackCooldown = 0;
     private final int maxCustomAttackCooldown = 100;
-    private final int customAttackRadius = 20;
+    private final int customAttackRadius = 60;
     private final int dimensionDriftDamage = 10;
     private final double syncToClientsRadius = 256;
     private int targetDamageDelayTick = 0;
@@ -131,7 +132,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
             this.goalSelector.add(1, new RevengeGoal(this));
             this.goalSelector.add(2, new MeleeAttackGoal(this, 2d, false));
             this.goalSelector.add(7, new WanderAroundFarGoal(this, 1.0));
-            this.goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
+            this.goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 30F));
             this.goalSelector.add(8, new LookAroundGoal(this));
             this.goalSelector.add(8, new WanderAroundPointOfInterestGoal(this, movementSpeed, false));
             this.targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, false, false));
@@ -187,6 +188,20 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     }
 
 
+    /*@Override
+    public void travel(Vec3d movementInput) {
+
+        if (this.isSwimming()) {
+            double swimSpeed = 20; // Change this value to adjust the swimming speed
+            Vec3d motion = new Vec3d(movementInput.getX() * swimSpeed,
+                    movementInput.getY() * swimSpeed,
+                    movementInput.getZ() * swimSpeed);
+            super.travel(motion);
+        }
+        else {
+            super.travel(movementInput);
+        }
+    }*/
 
     @Override
     public void setCustomName(@Nullable Text name) {
@@ -388,7 +403,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         super.tick();
 
         updateBossbar();
-        modifyAttributesWhenMorePlayers(false);
+        modifyAttributesWhenMorePlayers();
         customAttackControl();
         setInvulnerability();
         playTimedSounds();
@@ -396,7 +411,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         rotationControl();
     }
 
-    private void modifyAttributesWhenMorePlayers(boolean forceUpdate) {
+    private void modifyAttributesWhenMorePlayers() {
 
         if(!world.isClient()) {
 
@@ -412,10 +427,12 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         // If near Players = 0 than it's set to 1, so later the Attributes don't go below normal
         if(nearPlayers <= 0) {
             nearPlayers = 1;
+        } else if (nearPlayers > 5) {
+            nearPlayers = 5;
         }
 
-        // checking if the Attributes needs to be updated
-        if(nearPlayers != this.nearPlayers || forceUpdate) {
+            // checking if the Attributes needs to be updated
+        if(nearPlayers != this.nearPlayers) {
 
             // getting a float from an integer
             float n = this.nearPlayers;
@@ -434,52 +451,16 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
                 if(maxHealthModifier != null && maxHealthAttribute.hasModifier(maxHealthModifier)) {
                     maxHealthAttribute.removeModifier(MAX_HEALTH_MODIFIER_ID);
                 }
-                // checking if the Switch to Stage 2 has happened or is happening and setting the Attributes accordingly
-                if(this.switch2Stage2Began || this.doneSwitch2Stage2) {
 
-                    System.out.println("here");
-
-                    // Adjusting the Attack Damage Attribute
-                    EntityAttributeInstance attackDamageAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-                    if (attackDamageAttribute != null) {
-                        attackDamageAttribute.setBaseValue(attackDamage * nearPlayers * 1.2f); // Set the attack damage value to 10.0
-                    }
-
-                    // setting the maxHealth Modifier
-                    maxHealthAttribute.addTemporaryModifier(new EntityAttributeModifier(MAX_HEALTH_MODIFIER_ID,
-                            "Max Health Modifier",
-                            this.getMaxHealth() * nearPlayers * 2 - this.getMaxHealth(),
-                            EntityAttributeModifier.Operation.ADDITION));
-                    // Setting the current Health
-                    setHealth(getHealth() * nearPlayers); // Increase the current health accordingly
-                }
-                else {
-
-                    // Adjusting the Attack Damage Attribute
-                    EntityAttributeInstance attackDamageAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-                    if (attackDamageAttribute != null) {
-                        attackDamageAttribute.setBaseValue(attackDamage * nearPlayers); // Set the attack damage value to 10.0
-                    }
-
-                    // setting the maxHealth Modifier
-                    maxHealthAttribute.addTemporaryModifier(new EntityAttributeModifier(MAX_HEALTH_MODIFIER_ID,
-                            "Max Health Modifier",
-                            this.getMaxHealth() * nearPlayers - this.getMaxHealth(),
-                            EntityAttributeModifier.Operation.ADDITION));
-                    // Setting the current Health
-                    setHealth(getHealth() * difference); // Increase the current health accordingly
+                // setting the maxHealth Modifier
+                maxHealthAttribute.addTemporaryModifier(new EntityAttributeModifier(MAX_HEALTH_MODIFIER_ID,
+                        "Max Health Modifier",
+                        this.getMaxHealth() * nearPlayers - this.getMaxHealth(),
+                        EntityAttributeModifier.Operation.ADDITION));
+                // Setting the current Health
+                setHealth(getHealth() * difference); // Increase the current health accordingly
                 }
             }
-
-            System.out.println("Updated Attributes: " + forceUpdate);
-            System.out.println("New MaxHealth: " + this.getMaxHealth());
-            System.out.println("New Current Health: " + this.getHealth());
-
-            EntityAttributeInstance attackDamage = this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-            if(attackDamage != null) {
-                System.out.println("New AttackDamage: " + attackDamage.getBaseValue());
-            }
-        }
         }
     }
 
@@ -489,6 +470,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         if(!world.isClient()) {
 
             checkForDDTarget();
+            checkForJumpAttack();
 
             // Decreasing Cooldown if living entities are in range
             if (EntityUtil.areLivingEntitiesInRadiusOfEntity(this, customAttackRadius) && this.nextPerformAttack == 0) {
@@ -501,9 +483,44 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
             }
             if(this.customAttackCooldown >= maxCustomAttackCooldown) {
                 int a = nextInt(0, 11);
-                nextPerformAttack = 1;
+                if(a < 4) {
+                    nextPerformAttack = 1;
+                }
+                else {
+                    nextPerformAttack = 2;
+                }
+
             }
         }
+    }
+
+    private void checkForJumpAttack() {
+
+        List<Entity> possibleTagets = EntityUtil.getCertainEntitiesInRadius(this, EntityType.PLAYER, 40);
+        boolean targetsInReach = !possibleTagets.isEmpty();
+
+        if(targetsInReach) {
+            System.out.println("in Reach");
+
+        }
+
+        if(!doneSwitch2Stage2 || !targetsInReach) {
+            nextPerformAttack = 0;
+
+        } else if(nextPerformAttack == 2){
+
+            System.out.println("Jump");
+
+            Entity target = possibleTagets.get(nextInt(0, possibleTagets.size()));
+
+            double launchSpeed = this.distanceTo(target) / 7; // Change this value to adjust the launch speed
+            Vec3d motion = target.getPos().subtract(this.getPos()).normalize().multiply(launchSpeed);
+            this.addVelocity(motion.x, motion.y + 0.5, motion.z);
+
+            this.customAttackCooldown = 0;
+            this.nextPerformAttack = 0;
+        }
+
     }
 
     private void switch2Stage2() {
@@ -565,16 +582,14 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     }
 
     private void modifyStage2Attributes() {
-        /*EntityAttributeInstance attackDamageAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        EntityAttributeInstance attackDamageAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
         if (attackDamageAttribute != null) {
             attackDamageAttribute.setBaseValue(attackDamage * 1.5); // Set the attack damage value to 10.0
-        }*/
-
-        modifyAttributesWhenMorePlayers(true);
+        }
 
         EntityAttributeInstance movementSpeedAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);
         if (movementSpeedAttribute != null) {
-            movementSpeedAttribute.setBaseValue(movementSpeed * 2); // Set the movement speed value to 0.3
+            movementSpeedAttribute.setBaseValue(movementSpeed * 1.5); // Set the movement speed value to 0.3
         }
 
         EntityAttributeInstance attackSpeedAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_SPEED);
@@ -592,16 +607,10 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
             knockbackAttribute.setBaseValue(attackKnockback * 3); // Set the knockback value to 2.0
         }
 
-        /*// Doubling max Health
-        EntityAttributeInstance maxHealthAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
-        if (maxHealthAttribute != null) {
-            maxHealthAttribute.addTemporaryModifier(new EntityAttributeModifier(MAX_HEALTH_MODIFIER_ID,
-                "Max Health Modifier",
-                this.getMaxHealth(), // Adjust the modifier value to double the maximum health
-                EntityAttributeModifier.Operation.ADDITION));
-            //setHealth(getHealth() * 2); // Increase the current health accordingly
-        }*/
-
+        EntityAttributeInstance resistanceAttribute = this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
+        if(resistanceAttribute != null) {
+            resistanceAttribute.setBaseValue(35);
+        }
 
     }
 
@@ -620,7 +629,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
             }
         }
         // If Cooldown is ready and if last attack was at least before 2s
-        if(this.customAttackCooldown >= maxCustomAttackCooldown && this.ticksSinceLastAttack >= 40 && nextPerformAttack == 1) {
+        if(this.customAttackCooldown >= maxCustomAttackCooldown && this.ticksSinceLastAttack >= 40 && nextPerformAttack == 1 && !hasDimensionDriftTarget) {
             // Get Dimension Drift Target & save it's ID
             Entity target = getTargetForDimensionDrift(this, customAttackRadius);
             if(target == null) {
@@ -828,7 +837,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
 
     @Override
     public boolean tryAttack(Entity target) {
-        if(!isInDDAnimation()) {
+        if(isInDDAnimation()) {
             return false;
         }
         return super.tryAttack(target);
@@ -881,9 +890,9 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     @Override
     public void setTarget(@Nullable LivingEntity target) {
 
-        if(isInDDAnimation()) {
+        /*if(isInDDAnimation()) {
             target = null;
-        }
+        }*/
 
         super.setTarget(target);
     }
