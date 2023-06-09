@@ -1,8 +1,10 @@
 {
   "item.demogorgonmod.test_item": "Test Item",
   "item.demogorgonmod.demogorgon_spawn_egg": "Demogorgon Spawn Egg",
+  "item.demogorgonmod.demogo_dog_spawn_egg": "Demogodog Spawn Egg",
 
   "entity.demogorgonmod.demogorgon": "Demogorgon",
+  "entity.demogorgonmod.demo_dog": "Demogodog",
 
   "subtitles.demogorgonmod.demogorgon_hurt": "Demogorgon hurts",
   "subtitles.demogorgonmod.demogorgon_idle": "Demogorgon growls",

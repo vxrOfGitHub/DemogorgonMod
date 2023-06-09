@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.vxrofmods.demogorgonmod.entity.ModEntities;
 import net.vxrofmods.demogorgonmod.entity.custom.DemoDogEntity;
 import net.vxrofmods.demogorgonmod.entity.custom.DemogorgonEntity;
+import net.vxrofmods.demogorgonmod.entity.custom.DemogorgonPortalEntity;
 import net.vxrofmods.demogorgonmod.item.ModItemGroup;
 import net.vxrofmods.demogorgonmod.item.ModItems;
 import net.vxrofmods.demogorgonmod.networking.ModMessages;

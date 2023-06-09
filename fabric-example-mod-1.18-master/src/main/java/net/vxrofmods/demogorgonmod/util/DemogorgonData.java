@@ -127,4 +127,16 @@ public class DemogorgonData {
         return nbt.getInt("demogorgon.dd_target_position_z");
     }
 
+    public static void setPortalLivingTime(IEntityDataSaver portal, int livingTime) {
+        NbtCompound nbt = portal.getPersistentData();
+
+        nbt.putInt("demogorgon_portal.living_time", livingTime);
+    }
+
+    public static int getPortalLivingTime(IEntityDataSaver portal) {
+        NbtCompound nbt = portal.getPersistentData();
+
+        return nbt.getInt("demogorgon_portal.living_time");
+    }
+
 }

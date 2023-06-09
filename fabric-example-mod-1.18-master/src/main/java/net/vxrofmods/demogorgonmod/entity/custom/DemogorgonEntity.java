@@ -20,7 +20,6 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.MerchantEntity;
-import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -59,6 +58,7 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -71,9 +71,11 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
 
     private int customAttackCooldown = 0;
     private final int maxCustomAttackCooldown = 100;
+    private int spawnDemodogCooldown = 0;
+    private final int maxSpawnDemodogCooldown = 50;
     private final int customAttackRadius = 60;
     private final int dimensionDriftDamage = 10;
-    private final double syncToClientsRadius = 256;
+    private final double syncToClientsRadius = 128;
     private int targetDamageDelayTick = 0;
 
     private int targetDamageDelayTickSinceEmerge = 0;
@@ -150,6 +152,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         nbt.putInt("Variant", this.getTypeVariant());
         nbt.putInt("demogorgon.animation", this.currentAnimation);
         nbt.putInt("demogorgon.custom_attack.cooldown", customAttackCooldown);
+        nbt.putInt("demogorgon.spawn_demodog_attack.cooldown", spawnDemodogCooldown);
         nbt.putInt("demogorgon.dimension_drift.target_damage_delay_tick", targetDamageDelayTick);
         nbt.putInt("demogorgon.dimension_drift.target_damage_delay_tick_since_emerge", targetDamageDelayTickSinceEmerge);
         nbt.putInt("demogorgon.dimension_drift.target_id", dimensionDriftTargetID);
@@ -170,6 +173,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         this.dataTracker.set(DATA_ID_TYPE_VARIANT, nbt.getInt("Variant"));
         this.currentAnimation = nbt.getInt("demogorgon.animation");
         this.customAttackCooldown = nbt.getInt("demogorgon.custom_attack.cooldown");
+        this.spawnDemodogCooldown = nbt.getInt("demogorgon.spawn_demodog_attack.cooldown");
         this.targetDamageDelayTick = nbt.getInt("demogorgon.dimension_drift.target_damage_delay_tick");
         this.targetDamageDelayTickSinceEmerge = nbt.getInt("demogorgon.dimension_drift.target_damage_delay_tick_since_emerge");
         this.dimensionDriftTargetID = nbt.getInt("demogorgon.dimension_drift.target_id");
@@ -247,6 +251,11 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     }
 
     @Override
+    public boolean cannotDespawn() {
+        return true;
+    }
+
+    @Override
     protected void mobTick() {
         super.mobTick();
         this.bossBar.setPercent(this.getHealth() / this.getMaxHealth());
@@ -309,15 +318,44 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         super.initDataTracker();
         this.dataTracker.startTracking(DATA_ID_TYPE_VARIANT, 0);
         this.dataTracker.startTracking(ANIMATION, idleAnimation);
+        this.dataTracker.startTracking(DONE_SWITCH_TO_STAGE_2, false);
     }
 
     public void setAnimation(int animation) {
         this.currentAnimation = animation;
+
+        if(animation == emergeAnimation || animation == ddSubmergeAnimation || animation == ddEmergeAnimation) {
+            spawnPortal();
+        }
+
         this.dataTracker.set(ANIMATION, currentAnimation);
+    }
+
+    private void spawnPortal(boolean smallSizeFactor, BlockPos pos) {
+        DemogorgonPortalEntity portal = new DemogorgonPortalEntity(ModEntities.DEMOGORGON_PORTAL, world);
+        DemogorgonData.setPortalLivingTime(((IEntityDataSaver) portal), 60);
+        portal.setPos(pos.getX(), pos.getY(), pos.getZ());
+        portal.setSmallSizeFactor(smallSizeFactor);
+        world.spawnEntity(portal);
+    }
+    private void spawnPortal() {
+        DemogorgonPortalEntity portal = new DemogorgonPortalEntity(ModEntities.DEMOGORGON_PORTAL, world);
+        DemogorgonData.setPortalLivingTime(((IEntityDataSaver) portal), 60);
+        portal.setPos(this.getX(), this.getY(), this.getZ());
+        world.spawnEntity(portal);
     }
 
     public int getAnimation() {
         return this.dataTracker.get(ANIMATION);
+    }
+
+    public void setDoneSwitch2Stage2(boolean doneSwitch) {
+        this.doneSwitch2Stage2 = doneSwitch;
+        this.dataTracker.set(DONE_SWITCH_TO_STAGE_2, this.doneSwitch2Stage2);
+    }
+
+    public boolean getDoneSwitch2Stage2() {
+        return this.dataTracker.get(DONE_SWITCH_TO_STAGE_2);
     }
 
     // VARIANTS Datatracker
@@ -326,6 +364,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
 
     // Animation Datatracker
     public static final TrackedData<Integer> ANIMATION = DataTracker.registerData(DemogorgonEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    public static final TrackedData<Boolean> DONE_SWITCH_TO_STAGE_2 = DataTracker.registerData(DemogorgonEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
 
     @Nullable
@@ -418,9 +457,9 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         int nearPlayers = 0;
 
         // Get Amount of near Players
-        List<Entity> entities = EntityUtil.getLivingEntitiesInRadius(this, 256);
+        List<Entity> entities = EntityUtil.getLivingEntitiesInRadius(this, 80);
         for (Entity entity : entities) {
-            if(entity instanceof VillagerEntity) {
+            if(entity instanceof PlayerEntity) {
                 nearPlayers++;
             }
         }
@@ -473,46 +512,76 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
             checkForJumpAttack();
 
             // Decreasing Cooldown if living entities are in range
-            if (EntityUtil.areLivingEntitiesInRadiusOfEntity(this, customAttackRadius) && this.nextPerformAttack == 0) {
-                this.customAttackCooldown++;
+
+            List<Entity> playersNear = EntityUtil.getCertainEntitiesInRadius(this, EntityType.PLAYER, customAttackRadius);
+            boolean attackablePlayerNear = false;
+            for (Entity entity: playersNear) {
+                if(entity instanceof PlayerEntity player && !player.isCreative() && !player.isSpectator()) {
+                    attackablePlayerNear = true;
+                }
             }
-            if(this.switch2Stage2Began || this.getHealth() <= this.getMaxHealth() * 0.4 && !this.doneSwitch2Stage2) {
+
+            if (attackablePlayerNear) {
+                if(this.nextPerformAttack == 0) {
+                    this.customAttackCooldown++;
+                }
+                this.spawnDemodogCooldown++;
+            }
+            if(this.switch2Stage2Began || this.getHealth() <= this.getMaxHealth() * 0.4 && !this.getDoneSwitch2Stage2()) {
                 switch2Stage2();
                 this.customAttackCooldown = 0;
 
             }
             if(this.customAttackCooldown >= maxCustomAttackCooldown) {
-                int a = nextInt(0, 11);
-                if(a < 4) {
-                    nextPerformAttack = 1;
+                if(this.spawnDemodogCooldown >= maxSpawnDemodogCooldown) {
+                    int a = nextInt(0, 11);
+                    if(a < 4) {
+                        nextPerformAttack = 1;
+                    } else if (a < 8) {
+                        spawnDemoDogs();
+                        this.customAttackCooldown = 0;
+                    } else {
+                        nextPerformAttack = 2;
+                    }
+                } else {
+                    int a = nextInt(0, 11);
+                    if(a < 8) {
+                        nextPerformAttack = 1;
+                    } else {
+                        nextPerformAttack = 2;
+                    }
                 }
-                else {
-                    nextPerformAttack = 2;
-                }
-
             }
         }
     }
 
     private void checkForJumpAttack() {
 
-        List<Entity> possibleTagets = EntityUtil.getCertainEntitiesInRadius(this, EntityType.PLAYER, 40);
-        boolean targetsInReach = !possibleTagets.isEmpty();
+        List<Entity> entitiesInReach = EntityUtil.getCertainEntitiesInRadius(this, EntityType.PLAYER, 40);
+        List<PlayerEntity> possiblePlayersInReach = new ArrayList<>();
+        for (Entity e : entitiesInReach) {
+            if(e instanceof PlayerEntity player && !player.isCreative() && !player.isSpectator()) {
+                possiblePlayersInReach.add(player);
+            }
+        }
+        boolean targetsInReach = !possiblePlayersInReach.isEmpty();
 
-        if(targetsInReach) {
+        /*if(targetsInReach) {
             System.out.println("in Reach");
 
-        }
+        }*/
 
-        if(!doneSwitch2Stage2 || !targetsInReach) {
+        if(!this.getDoneSwitch2Stage2() || !targetsInReach) {
             nextPerformAttack = 0;
 
         } else if(nextPerformAttack == 2){
 
-            System.out.println("Jump");
+            //System.out.println("Jump");
 
-            Entity target = possibleTagets.get(nextInt(0, possibleTagets.size()));
+            Entity target = possiblePlayersInReach.get(nextInt(0, entitiesInReach.size()));
 
+            this.setTarget(((LivingEntity) target));
+            
             double launchSpeed = this.distanceTo(target) / 7; // Change this value to adjust the launch speed
             Vec3d motion = target.getPos().subtract(this.getPos()).normalize().multiply(launchSpeed);
             this.addVelocity(motion.x, motion.y + 0.5, motion.z);
@@ -523,35 +592,36 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
 
     }
 
+    @Override
+    public boolean damage(DamageSource source, float amount) {
+        if(world instanceof ServerWorld) {
+            if (source.getSource() instanceof ArrowEntity) {
+                return false; // Cancel the damage from arrows
+            }
+            if(this.isOnFire()) {
+                amount *= 2;
+            }
+            System.out.println("Damage amount: " + amount);
+        }
+        return super.damage(source, amount);
+    }
+
     private void switch2Stage2() {
 
         switch2Stage2Ticks++;
 
         // Should happen ones
         if(!switch2Stage2Began) {
+            /*DemogorgonPortalEntity portal = new DemogorgonPortalEntity(ModEntities.DEMOGORGON_PORTAL, world);
+            DemogorgonData.setPortalLivingTime(((IEntityDataSaver) portal), 60);
+            portal.setPos(this.getX(), this.getY(), this.getZ());
+            world.spawnEntity(portal);*/
             this.setAnimation(ddSubmergeAnimation);
             switch2Stage2Began = true;
 
             this.modifyStage2Attributes();
 
-            int nearPlayers = 0;
-
-            List<Entity> nearEntities = EntityUtil.getLivingEntitiesInRadius(this, 256);
-            for (Entity entity : nearEntities) {
-                if(entity instanceof VillagerEntity) {
-
-                    nearPlayers++;
-                }
-            }
-            if(nearPlayers <= 0) {
-                nearPlayers = 1;
-            }
-
-            // Spawning Demodogs
-            for(int i = 0; i < nearPlayers * 2; i++) {
-                // Zombie as placeholder for DemoDog
-                ModEntities.DEMO_DOG.spawn(((ServerWorld) world), this.getBlockPos(), SpawnReason.REINFORCEMENT);
-            }
+            this.spawnDemoDogs();
 
 
         }
@@ -574,11 +644,49 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
             }
         } else {
             // at the End
-            this.doneSwitch2Stage2 = true;
+            this.setDoneSwitch2Stage2(true);
             switch2Stage2Began = false;
             this.setAnimation(emergeAnimation);
             switch2Stage2Ticks = 0;
         }
+    }
+
+    private void spawnDemoDogs() {
+        int nearPlayers = 0;
+
+        List<Entity> nearEntities = EntityUtil.getLivingEntitiesInRadius(this, 60);
+        for (Entity entity : nearEntities) {
+            if(entity instanceof PlayerEntity) {
+
+                nearPlayers++;
+            }
+        }
+        if(nearPlayers <= 0) {
+            nearPlayers = 1;
+        }
+
+        // Spawning Demodogs
+        for(int i = 0; i < nearPlayers * 2; i++) {
+            // Zombie as placeholder for DemoDog
+            int addX = nextInt(0, 7) -3;
+            int addZ = nextInt(0, 7) -3;
+            int addY = 0;
+            for (int j = 0; j < 15; j++) {
+                if(world.isAir(new BlockPos(this.getBlockPos().add(addX, j, addZ)))) {
+                   addY = j;
+                   break;
+                }
+            }
+
+            BlockPos spawnPos = this.getBlockPos().add(addX, addY, addZ);
+
+            spawnPortal(true, spawnPos);
+
+            ModEntities.DEMO_DOG.spawn(((ServerWorld) world), spawnPos, SpawnReason.REINFORCEMENT);
+        }
+
+        this.spawnDemodogCooldown = 0;
+
     }
 
     private void modifyStage2Attributes() {
@@ -827,10 +935,13 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
     private void setInvulnerability() {
         if(!world.isClient()) {
             this.setInvulnerable(isInDDAnimation());
+            if(isInDDAnimation()) {
+                this.setOnFire(false);
+            }
         }
     }
 
-    private boolean isInDDAnimation() {
+    public boolean isInDDAnimation() {
         return this.getAnimation() == ddSubmergeAnimation || this.getAnimation() == ddEmergeAnimation || this.getAnimation() == ddAttack1Animation
                 || this.getAnimation() == emergeAnimation;
     }
@@ -879,7 +990,7 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
             return null;
         }
         for (Entity target : possibleTargets) {
-            if(target instanceof PlayerEntity) {
+            if(target instanceof PlayerEntity player && !player.isSpectator() && !player.isCreative()) {
                 return target;
             }
         }
@@ -1054,14 +1165,17 @@ public class DemogorgonEntity extends HostileEntity implements GeoEntity {
         }
         else if(this.getAnimation() == ddSubmergeAnimation) {
             tAnimationState.getController().setAnimation(RawAnimation.begin().then("animation.demogorgon.dimension_drift_submerge", Animation.LoopType.HOLD_ON_LAST_FRAME));
-        }
-        else if(this.handSwinging) {
+        } else if (this.handSwinging && this.getDoneSwitch2Stage2()) {
+            tAnimationState.getController().setAnimation(RawAnimation.begin().then("animation.demogorgon.stage_2_attack", Animation.LoopType.LOOP));
+        } else if(this.handSwinging) {
             tAnimationState.getController().setAnimation(RawAnimation.begin().then("animation.demogorgon.attack1", Animation.LoopType.LOOP));
-        }
-        else if(tAnimationState.isMoving()) {
+        } else if (tAnimationState.isMoving() && this.getDoneSwitch2Stage2()) {
+            tAnimationState.getController().setAnimation(RawAnimation.begin().then("animation.demogorgon.run", Animation.LoopType.LOOP));
+        } else if(tAnimationState.isMoving()) {
             tAnimationState.getController().setAnimation(RawAnimation.begin().then("animation.demogorgon.walk", Animation.LoopType.LOOP));
-        }
-        else {
+        } else if (this.getDoneSwitch2Stage2()) {
+            tAnimationState.getController().setAnimation(RawAnimation.begin().then("animation.demogorgon.stage_2_idle", Animation.LoopType.LOOP));
+        } else {
             tAnimationState.getController().setAnimation(RawAnimation.begin().then("animation.demogorgon.idle", Animation.LoopType.LOOP));
         }
 

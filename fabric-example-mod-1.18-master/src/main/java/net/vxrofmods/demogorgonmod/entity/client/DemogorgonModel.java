@@ -30,7 +30,12 @@ public class DemogorgonModel extends GeoModel<DemogorgonEntity> {
     public void setCustomAnimations(DemogorgonEntity animatable, long instanceId, AnimationState<DemogorgonEntity> animationState) {
         CoreGeoBone head = getAnimationProcessor().getBone("head");
 
-        if(head !=null) {
+        if(head != null && animatable.getDoneSwitch2Stage2() && !animatable.isInDDAnimation()) {
+            EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
+            head.setRotX(entityData.headPitch() * MathHelper.RADIANS_PER_DEGREE + 1.15f);
+            head.setRotY(entityData.netHeadYaw() * MathHelper.RADIANS_PER_DEGREE);
+        }
+        else if(head !=null) {
             EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
             head.setRotX(entityData.headPitch() * MathHelper.RADIANS_PER_DEGREE);
             head.setRotY(entityData.netHeadYaw() * MathHelper.RADIANS_PER_DEGREE);
