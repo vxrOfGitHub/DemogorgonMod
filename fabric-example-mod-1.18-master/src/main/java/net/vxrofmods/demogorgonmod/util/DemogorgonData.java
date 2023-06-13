@@ -139,4 +139,52 @@ public class DemogorgonData {
         return nbt.getInt("demogorgon_portal.living_time");
     }
 
+    public static void setDemogorgonHeadUserState(IEntityDataSaver player, int state) {
+        NbtCompound nbt = player.getPersistentData();
+
+        nbt.putInt("demogorgon_head_user.state", state);
+    }
+
+    public static int getDemogorgonHeadUserState(IEntityDataSaver player) {
+        NbtCompound nbt = player.getPersistentData();
+
+        return nbt.getInt("demogorgon_head_user.state");
+    }
+
+    public static void writeDogsIDToOwner(IEntityDataSaver player, int ID) {
+        NbtCompound nbt = player.getPersistentData();
+
+        nbt.putInt("demogorgon_head_user.dog.id", ID);
+    }
+
+    public static int readDogsIDFromOwner(IEntityDataSaver player) {
+        NbtCompound nbt = player.getPersistentData();
+
+        return nbt.getInt("demogorgon_head_user.dog.id");
+    }
+
+    public static void writeDogNameToNbt(IEntityDataSaver player, String name) {
+        NbtCompound nbt = player.getPersistentData();
+
+        nbt.putString("demogorgon_head_user.spawned_dog.name", name);
+    }
+    public static String readDogNameFromNbt(IEntityDataSaver player) {
+        NbtCompound nbt = player.getPersistentData();
+
+        return nbt.getString("demogorgon_head_user.spawned_dog.name");
+    }
+
+    public static void setDogSpawnCooldownForHelmet(IEntityDataSaver player, int cooldown) {
+        NbtCompound nbt = player.getPersistentData();
+
+        nbt.putInt("demogorgon_head_user.spawn_dog_ability.cooldown", cooldown);
+    }
+    public static int getDogSpawnCooldownForHelmet(IEntityDataSaver player) {
+        NbtCompound nbt = player.getPersistentData();
+
+        return nbt.getInt("demogorgon_head_user.spawn_dog_ability.cooldown");
+    }
+
+    public static final int maxDogSpawnCooldownForHelmet = 120;
+
 }

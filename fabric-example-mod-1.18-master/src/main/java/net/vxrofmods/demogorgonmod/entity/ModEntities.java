@@ -11,6 +11,7 @@ import net.vxrofmods.demogorgonmod.DemogorgonMod;
 import net.vxrofmods.demogorgonmod.entity.custom.DemoDogEntity;
 import net.vxrofmods.demogorgonmod.entity.custom.DemogorgonEntity;
 import net.vxrofmods.demogorgonmod.entity.custom.DemogorgonPortalEntity;
+import net.vxrofmods.demogorgonmod.entity.custom.FriendlyDemoDogEntity;
 
 public class ModEntities {
     public static final EntityType<DemogorgonEntity> DEMOGORGON = Registry.register(
@@ -21,6 +22,11 @@ public class ModEntities {
     public static final EntityType<DemoDogEntity> DEMO_DOG = Registry.register(
             Registries.ENTITY_TYPE, new Identifier(DemogorgonMod.MOD_ID, "demo_dog"),
             FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, DemoDogEntity::new)
+                    .dimensions(EntityDimensions.fixed(1.5f, 1f)).build());
+
+    public static final EntityType<FriendlyDemoDogEntity> FRIENDLY_DEMO_DOG = Registry.register(
+            Registries.ENTITY_TYPE, new Identifier(DemogorgonMod.MOD_ID, "friendly_demo_dog"),
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, FriendlyDemoDogEntity::new)
                     .dimensions(EntityDimensions.fixed(1.5f, 1f)).build());
 
     public static final EntityType<DemogorgonPortalEntity> DEMOGORGON_PORTAL = Registry.register(

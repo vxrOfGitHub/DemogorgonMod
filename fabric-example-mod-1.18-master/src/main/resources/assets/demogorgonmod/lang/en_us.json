@@ -1,5 +1,6 @@
 {
   "item.demogorgonmod.test_item": "Test Item",
+  "item.demogorgonmod.demogorgon_head_helmet": "Demogorgon Head",
   "item.demogorgonmod.demogorgon_spawn_egg": "Demogorgon Spawn Egg",
   "item.demogorgonmod.demogo_dog_spawn_egg": "Demogodog Spawn Egg",
 
@@ -8,5 +9,8 @@
 
   "subtitles.demogorgonmod.demogorgon_hurt": "Demogorgon hurts",
   "subtitles.demogorgonmod.demogorgon_idle": "Demogorgon growls",
-  "subtitles.demogorgonmod.demogorgon_death": "Demogorgon dies"
+  "subtitles.demogorgonmod.demogorgon_death": "Demogorgon dies",
+
+  "key.category.demogorgon_mod": "Demogorgon Mod Keybindings",
+  "key.demogorgon_mod.use_ability.demogorgon_head": "Use Ability of Demogorgon Head"
 }

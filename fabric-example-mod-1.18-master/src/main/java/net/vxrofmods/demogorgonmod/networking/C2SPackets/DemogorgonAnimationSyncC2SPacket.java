@@ -12,7 +12,7 @@ import net.vxrofmods.demogorgonmod.entity.custom.DemogorgonEntity;
 public class DemogorgonAnimationSyncC2SPacket {
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender packetSender) {
 
-        ServerWorld world = player.getWorld();
+        ServerWorld world = player.getServerWorld();
 
         Entity entity = world.getEntityById(buf.readInt());
 

@@ -13,7 +13,7 @@
 			"bones": [
 				{
 					"name": "whole_body",
-					"pivot": [0, 2, 0]
+					"pivot": [0, 0, 0]
 				},
 				{
 					"name": "upper_body",
@@ -98,7 +98,7 @@
 				{
 					"name": "foot",
 					"parent": "lower",
-					"pivot": [2, 3.09907, -2.60407],
+					"pivot": [2.04663, 4.65095, -9.89315],
 					"cubes": [
 						{
 							"origin": [3.24337, 4.28387, -11.10887],
@@ -226,7 +226,7 @@
 				{
 					"name": "foot4",
 					"parent": "lower2",
-					"pivot": [-2, 3.09907, -2.60407],
+					"pivot": [-2.04663, 4.90095, -10.89315],
 					"cubes": [
 						{
 							"origin": [-3.74337, 4.28387, -11.10887],
@@ -320,8 +320,13 @@
 					]
 				},
 				{
-					"name": "head",
+					"name": "head_2_rotate",
 					"parent": "head_neck",
+					"pivot": [0, 12, -5]
+				},
+				{
+					"name": "head",
+					"parent": "head_2_rotate",
 					"pivot": [0, 12, -5],
 					"cubes": [
 						{
@@ -653,7 +658,7 @@
 				{
 					"name": "foot2",
 					"parent": "lower_leg",
-					"pivot": [2, 3.09907, -2.60407],
+					"pivot": [1.78982, 0.78897, 8.15126],
 					"cubes": [
 						{
 							"origin": [0.75, -0.15093, 6.64593],

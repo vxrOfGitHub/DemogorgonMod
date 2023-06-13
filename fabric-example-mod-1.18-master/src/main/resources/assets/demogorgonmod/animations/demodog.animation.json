@@ -409,6 +409,91 @@
 					}
 				}
 			}
+		},
+		"animation.demodog.sit": {
+			"loop": true,
+			"bones": {
+				"whole_body": {
+					"rotation": {
+						"vector": [-47.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, 1, -5.75]
+					}
+				},
+				"front_leg_left": {
+					"rotation": {
+						"vector": [0, 0, -35]
+					}
+				},
+				"lower": {
+					"rotation": {
+						"vector": [41.17023, 28.02432, 22.79588]
+					}
+				},
+				"foot": {
+					"rotation": {
+						"vector": [15, 0, 0]
+					},
+					"position": {
+						"vector": [0, -0.5, 0]
+					}
+				},
+				"front_leg_right": {
+					"rotation": {
+						"vector": [0, 0, 42.5]
+					}
+				},
+				"lower2": {
+					"rotation": {
+						"vector": [44.93305, -25.73828, -31.74297]
+					}
+				},
+				"foot4": {
+					"rotation": {
+						"vector": [10, 0, 0]
+					},
+					"position": {
+						"vector": [0, -0.5, 0]
+					}
+				},
+				"mouthpad": {
+					"rotation": {
+						"vector": [0, -22.5, 0]
+					}
+				},
+				"mouthpad2": {
+					"rotation": {
+						"vector": [0, 22.5, 0]
+					}
+				},
+				"mouthpad3": {
+					"rotation": {
+						"vector": [0, 22.5, 0]
+					}
+				},
+				"mouthpad4": {
+					"rotation": {
+						"vector": [0, 22.5, 0]
+					}
+				},
+				"back_legs": {
+					"rotation": {
+						"vector": [-42.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, 7.75, -3.75]
+					}
+				},
+				"head_2_rotate": {
+					"rotation": {
+						"vector": [50, 0, 0]
+					},
+					"position": {
+						"vector": [0, 2, -0.5]
+					}
+				}
+			}
 		}
 	},
 	"geckolib_format_version": 2

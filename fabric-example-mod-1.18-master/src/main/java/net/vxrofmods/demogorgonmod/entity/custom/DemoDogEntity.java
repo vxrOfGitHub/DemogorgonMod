@@ -38,7 +38,7 @@ public class DemoDogEntity extends HostileEntity implements GeoEntity {
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 12.0f)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2f)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4f)
-                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 1.2f);
+                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.6f);
     }
 
     @Override
