@@ -4,10 +4,13 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import net.vxrofmods.demogorgonmod.item.ModItems;
 import net.vxrofmods.demogorgonmod.util.DemogorgonData;
 import net.vxrofmods.demogorgonmod.util.IEntityDataSaver;
+
+import java.util.UUID;
 
 public class ServerPlayerTickHandler implements ServerTickEvents.StartTick{
     @Override
@@ -22,14 +25,20 @@ public class ServerPlayerTickHandler implements ServerTickEvents.StartTick{
     private void checkDemogorgonHeadAbility(ServerPlayerEntity player) {
 
         IEntityDataSaver playerSaver = ((IEntityDataSaver) player);
-        World world = player.getWorld();
-        Entity entity = world.getEntityById(DemogorgonData.readDogsIDFromOwner(playerSaver));
+        ServerWorld world = player.getServerWorld();
+
+
 
         // Despawn Dog if Player doesn't have Demogorgon Head on
         // Switch Player Stages if dog dies
         // Cooldown when in Stage 2
 
         if(DemogorgonData.getDemogorgonHeadUserState(playerSaver) == 1) {
+            Entity entity = null;
+            UUID uuid = DemogorgonData.readDogsUUIDFromOwner(playerSaver);
+            if(uuid != null && !DemogorgonData.isDogsUUIDFromOwnerNull(playerSaver)) {
+                entity = world.getEntity(uuid);
+            }
             if(entity == null) {
                 DemogorgonData.setDemogorgonHeadUserState(playerSaver, 2);
             } else {

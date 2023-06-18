@@ -99,7 +99,8 @@ public class FriendlyDemoDogEntity extends WolfEntity implements GeoEntity {
             this.setTicksSinceLastAttack(39);
         }
         if(this.getOwner() == null || !this.getOwner().isAlive()) {
-            this.kill();
+            System.out.println("No Owner");
+            //this.kill();
         }
     }
 

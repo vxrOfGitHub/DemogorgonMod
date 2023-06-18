@@ -1,16 +1,16 @@
 package net.vxrofmods.demogorgonmod.item.custom;
 
 import net.minecraft.client.render.entity.model.BipedEntityModel;
+import net.minecraft.client.render.item.BuiltinModelItemRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 import net.vxrofmods.demogorgonmod.item.client.DemogorgonArmorRenderer;
-import net.vxrofmods.demogorgonmod.util.DemogorgonData;
+import net.vxrofmods.demogorgonmod.item.client.DemogorgonHeadItemRenderer;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.client.RenderProvider;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
@@ -18,6 +18,7 @@ import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.RenderUtils;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -52,12 +53,25 @@ public class DemogorgonArmorItem extends ArmorItem implements GeoItem {
 
                 return this.renderer;
             }
+
+            private final DemogorgonHeadItemRenderer renderer2 = new DemogorgonHeadItemRenderer();
+
+            @Override
+            public BuiltinModelItemRenderer getCustomRenderer() {
+                return this.renderer2;
+            }
+
         });
     }
 
     @Override
     public Supplier<Object> getRenderProvider() {
         return this.renderProvider;
+    }
+
+    @Override
+    public double getTick(Object itemStack) {
+        return RenderUtils.getCurrentTick();
     }
 
     @Override

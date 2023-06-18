@@ -16,7 +16,7 @@ public class ModItems {
             new Item(new FabricItemSettings()));
 
     public static final Item DEMOGORGON_HEAD_HELMET = registerItem("demogorgon_head_helmet",
-            new DemogorgonArmorItem(ArmorMaterials.IRON, ArmorItem.Type.HELMET , new FabricItemSettings()));
+            new DemogorgonArmorItem(ModArmorMaterials.DEMOGORGON, ArmorItem.Type.HELMET , new FabricItemSettings()));
 
     public static final Item DEMOGORGON_SPAWN_EGG = registerItem("demogorgon_spawn_egg",
             new SpawnEggItem(ModEntities.DEMOGORGON, 0x707070, 0x755b5b,

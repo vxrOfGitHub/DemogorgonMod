@@ -6,14 +6,16 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import net.vxrofmods.demogorgonmod.entity.ModEntities;
 import net.vxrofmods.demogorgonmod.entity.custom.FriendlyDemoDogEntity;
 import net.vxrofmods.demogorgonmod.item.ModItems;
-import net.vxrofmods.demogorgonmod.item.custom.DemogorgonArmorItem;
 import net.vxrofmods.demogorgonmod.util.DemogorgonData;
 import net.vxrofmods.demogorgonmod.util.IEntityDataSaver;
+
+import java.util.UUID;
 
 public class DemogorgonHeadKeybindSyncC2SPacket {
 
@@ -31,7 +33,7 @@ public class DemogorgonHeadKeybindSyncC2SPacket {
             demoDog.setTamed(true);
             demoDog.setBaby(false);
             //DemogorgonArmorItem.writeDogIDToNbt(headItem, demoDog.getId());
-            DemogorgonData.writeDogsIDToOwner(((IEntityDataSaver) player), demoDog.getId());
+            DemogorgonData.writeDogsUUIDToOwner(((IEntityDataSaver) player), demoDog.getUuid(), false);
             if(!DemogorgonData.readDogNameFromNbt(((IEntityDataSaver) player)).equals("")) {
                 demoDog.setCustomName(Text.literal(DemogorgonData.readDogNameFromNbt(((IEntityDataSaver) player))));
             }
@@ -42,9 +44,9 @@ public class DemogorgonHeadKeybindSyncC2SPacket {
                 && player.getInventory().getArmorStack(3).isOf(ModItems.DEMOGORGON_HEAD_HELMET)) {
 
             //ItemStack headItem = player.getInventory().getArmorStack(3);
-            int id = DemogorgonData.readDogsIDFromOwner(((IEntityDataSaver) player));
-            if(id != 0) {
-                Entity entity = world.getEntityById(id);
+            UUID id = DemogorgonData.readDogsUUIDFromOwner(((IEntityDataSaver) player));
+            if(id != null) {
+                Entity entity = ((ServerWorld) world).getEntity(id);
                 if(entity != null) {
                     DemogorgonData.writeDogNameToNbt(((IEntityDataSaver) player), "");
                     if(entity.hasCustomName()) {
@@ -53,7 +55,7 @@ public class DemogorgonHeadKeybindSyncC2SPacket {
                     }
                     entity.kill();
                     //DemogorgonArmorItem.writeDogIDToNbt(headItem, 0);
-                    DemogorgonData.writeDogsIDToOwner(((IEntityDataSaver) player), 0);
+                    DemogorgonData.writeDogsUUIDToOwner(((IEntityDataSaver) player), UUID.randomUUID(), true);
                 }
             }
             DemogorgonData.setDemogorgonHeadUserState(((IEntityDataSaver) player), 2);

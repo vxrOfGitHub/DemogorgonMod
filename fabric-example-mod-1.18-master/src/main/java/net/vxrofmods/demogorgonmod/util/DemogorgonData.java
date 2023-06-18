@@ -3,6 +3,8 @@ package net.vxrofmods.demogorgonmod.util;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.UUID;
+
 public class DemogorgonData {
 
     public static void setPlayDimensionDriftSubmergeAnimation(IEntityDataSaver demogorgon, boolean playing) {
@@ -151,16 +153,23 @@ public class DemogorgonData {
         return nbt.getInt("demogorgon_head_user.state");
     }
 
-    public static void writeDogsIDToOwner(IEntityDataSaver player, int ID) {
+    public static void writeDogsUUIDToOwner(IEntityDataSaver player, UUID ID, boolean isNull) {
         NbtCompound nbt = player.getPersistentData();
 
-        nbt.putInt("demogorgon_head_user.dog.id", ID);
+        nbt.putBoolean("demogorgon_head_user.dog.id.is_null", isNull);
+        nbt.putUuid("demogorgon_head_user.dog.id", ID);
     }
 
-    public static int readDogsIDFromOwner(IEntityDataSaver player) {
+    public static boolean isDogsUUIDFromOwnerNull(IEntityDataSaver player) {
         NbtCompound nbt = player.getPersistentData();
 
-        return nbt.getInt("demogorgon_head_user.dog.id");
+        return nbt.getBoolean("demogorgon_head_user.dog.id.is_null");
+    }
+
+    public static UUID readDogsUUIDFromOwner(IEntityDataSaver player) {
+        NbtCompound nbt = player.getPersistentData();
+
+        return nbt.getUuid("demogorgon_head_user.dog.id");
     }
 
     public static void writeDogNameToNbt(IEntityDataSaver player, String name) {
